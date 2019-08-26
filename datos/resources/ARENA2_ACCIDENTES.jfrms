@@ -1,0 +1,48 @@
+-- encoding: utf-8 ; lang: COSA
+
+create function form_onLoad(form)
+  print('form_onLoad');
+end function
+ 
+create function form_onSetvalues(form, values)
+  print('form_onSetvalues');
+end function
+  
+create function form_onFieldEnter(form, field)
+  print('form_onFieldEnter ' || field.getName());
+end function
+
+create function form_onFieldExit(form, field)
+  print('form_onFieldExit ' || field.getName());
+end function
+
+create function form_onFieldChanged(form, field)
+  print('form_onFieldChanged ' || field.getName());
+end function
+
+create function form_validate(form)
+  print('form_validate');
+  return True;
+end function
+
+create function form_clear(form)
+  print('form_clear');
+end function
+
+create function form_isReadOnly(form)
+  print('form_isReadOnly');
+  if not user().isAuthenticated() then
+    return true;
+  end if
+  set fecha_accidente = form.getField('FECHA_ACCIDENTE').getValue();
+  if fecha_accidente = null then
+    return false;
+  end if
+  set workspace = application().getDataManager().getDatabaseWorkspace('ARENA2_DB');
+  set fecha_de_cierre = workspace.get('CEGESEV.accidentes.fecha_de_cierre');
+  if fecha_de_cierre = null then
+    return true;
+  end if
+  return Date(fecha_de_cierre, 'dd/MM/yyyy') > fecha_accidente;
+end function
+  
