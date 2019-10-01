@@ -9,8 +9,33 @@ from ConfigParser import SafeConfigParser
 
 from java.io import File
 
+from org.gvsig.fmap.dal.store.jdbc import JDBCServerExplorerParameters 
+from org.gvsig.fmap.dal import DALLocator
 from org.gvsig.scripting import ScriptingLocator
 
+"""
+
+* Carreteras
+  - Repasar codigo asociado a forms
+  - Los puntos no estan en su sitio.
+  - Filtro en la importacion y fix
+
+Transformaviones
+
+
+report List<Incidencia>
+
+Regla 
+- execute(report)
+- fix(params)
+- getparameters
+
+Inicdencia
+ - fr
+ - regla 
+ - mensaje
+ - applyfix
+"""
 def getDataFolder():
   return ScriptingLocator.getManager().getDataFolder("CEGESEV").getAbsolutePath()
 
@@ -39,9 +64,21 @@ def disableArena2():
   script = manager.getScript(File(fname))
   script.setEnabled(False)
   script.save()
- 
+
+def addArena2Workspace():
+  dataManager = DALLocator.getDataManager()
+  pool = dataManager.getDataServerExplorerPool()
+
+  for entry in pool:
+      if isinstance(entry.getExplorerParameters(), JDBCServerExplorerParameters):
+        if entry.getName()=="ARENA2_DB":
+          workspace = dataManager.createDatabaseWorkspaceManager(entry.getExplorerParameters())
+          if workspace.isValidStoresRepository():
+            dataManager.addDatabaseWorkspace(workspace)
+          break
 
 def main(*args):
+  #addArena2Workspace()
   pass
   
   

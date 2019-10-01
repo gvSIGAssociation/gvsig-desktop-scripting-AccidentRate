@@ -2,6 +2,7 @@
 
 import gvsig
 from gvsig import getResource
+from gvsig.commonsdialog import msgbox
 
 
 from java.io import File
@@ -10,6 +11,12 @@ from org.gvsig.app import ApplicationLocator
 from org.gvsig.scripting.app.extension import ScriptingExtension
 from org.gvsig.tools import ToolsLocator
 from org.gvsig.tools.swing.api import ToolsSwingLocator
+
+from org.gvsig.tools.swing.api.windowmanager import WindowManager
+
+from org.gvsig.fmap.dal import DALLocator
+from org.gvsig.fmap.dal.swing import DALSwingLocator 
+from org.gvsig.fmap.mapcontext import MapContextLocator
 
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 
@@ -37,6 +44,10 @@ class AccidentRateExtension(ScriptingExtension):
       self.createTables()
     elif actionCommand == "accidentrate-closingdate-showdialog":
       self.closingDate()
+    elif actionCommand == "accidentrate-addlayer":
+      self.addAccidentsLayer()
+    elif actionCommand == "accidentrate-search":
+      self.showAccidentsSearch()
         
   def createTables(self):
     manager = getArena2ImportManager()
@@ -51,9 +62,35 @@ class AccidentRateExtension(ScriptingExtension):
   def closingDate(self):
     dialog = FechaDeCierreDialog()
     dialog.showWindow("Accidentes - Fecha de cierre")
+
+  def addAccidentsLayer(self):
+    dataManager = DALLocator.getDataManager()
+    workspace = dataManager.getDatabaseWorkspace("ARENA2_DB")
+    if workspace == None:
+      msgbox("Debera conectarse al espacio de trabajo de ARENA2_DB")
+      return
+    repo = workspace.getStoresRepository()
+    store = repo.getStore("ARENA2_ACCIDENTES")
+    layer = MapContextLocator.getMapContextManager().createLayer("Accidentes", store)
+    gvsig.currentView().getMainWindow().getMapControl().addLayer(layer)
+  
+  def showAccidentsSearch(self):
+    dataSwingManager = DALSwingLocator.getSwingManager()
+    dataManager = DALLocator.getDataManager()
+    winManager = ToolsSwingLocator.getWindowManager()
+    workspace = dataManager.getDatabaseWorkspace("ARENA2_DB")
+    if workspace == None:
+      msgbox("Debera conectarse al espacio de trabajo de ARENA2_DB")
+      return
+    repo = workspace.getStoresRepository()
+    store = repo.getStore("ARENA2_ACCIDENTES")
+    panel = dataSwingManager.createFeatureStoreSearchPanel(store)
+    winManager.showWindow(
+      panel.asJComponent(), 
+      "Busqueda de accidentes", 
+      WindowManager.MODE.WINDOW
+    )
     
-
-
 def selfRegister():
 
   config = AccidentRateConfig()
@@ -82,23 +119,16 @@ def selfRegister():
   icon = File(getResource(__file__,"images","accidentrate-closingdate-showdialog.png")).toURI().toURL()
   iconTheme.registerDefault("scripting.AccidentRateExtension", "action", "accidentrate-closingdate-showdialog", None, icon)
 
+  icon = File(getResource(__file__,"images","accidentrate-search.png")).toURI().toURL()
+  iconTheme.registerDefault("scripting.AccidentRateExtension", "action", "accidentrate-search", None, icon)
+
+  icon = File(getResource(__file__,"images","accidentrate-addlayer.png")).toURI().toURL()
+  iconTheme.registerDefault("scripting.AccidentRateExtension", "action", "accidentrate-addlayer", None, icon)
+
   #
   # Creamos la accion 
   actionManager = PluginsLocator.getActionInfoManager()
   extension = AccidentRateExtension()
-  
-  action = actionManager.createAction(
-    extension, 
-    "accidentrate-importer-showimporter", # Action name
-    "Importador de accidentes", # Text
-    "accidentrate-importer-showimporter", # Action command
-    "accidentrate-importer-showimporter", # Icon name
-    None, # Accelerator
-    650700600, # Position 
-    "_Show_the_accidents_import_tool" # Tooltip
-  )
-  action = actionManager.registerAction(action)
-  application.addMenu(action, "tools/CEGESEV/Importador de accidentes")
   
   action = actionManager.createAction(
     extension, 
@@ -110,9 +140,23 @@ def selfRegister():
     650700600, # Position 
     "_Show_the_accidents_tables_creator_tool" # Tooltip
   )
-  action = actionManager.registerAction(action)
-  application.addMenu(action, "tools/CEGESEV/Crear tablas de accidentes")
 
+  action = actionManager.registerAction(action)
+  application.addMenu(action, u"_AccidentRate/Administration/Crear tablas de accidentes")
+
+  action = actionManager.createAction(
+    extension, 
+    "accidentrate-importer-showimporter", # Action name
+    "Importador de accidentes", # Text
+    "accidentrate-importer-showimporter", # Action command
+    "accidentrate-importer-showimporter", # Icon name
+    None, # Accelerator
+    1009000900, # Position 
+    "_Show_the_accidents_import_tool" # Tooltip
+  )
+  action = actionManager.registerAction(action)
+  application.addMenu(action, u"_AccidentRate/Gesti\u00F3n de accidentes/Importador de accidentes")
+  
   action = actionManager.createAction(
     extension, 
     "accidentrate-closingdate-showdialog", # Action name
@@ -120,12 +164,40 @@ def selfRegister():
     "accidentrate-closingdate-showdialog", # Action command
     "accidentrate-closingdate-showdialog", # Icon name
     None, # Accelerator
-    650700600, # Position 
+    1009000800, # Position 
     "_Show_the_accidents_closing_date_tool" # Tooltip
   )
   action = actionManager.registerAction(action)
-  application.addMenu(action, "tools/CEGESEV/Fecha de cierre")
+  application.addMenu(action, u"_AccidentRate/Gesti\u00F3n de accidentes/Fecha de cierre")
+
+  action = actionManager.createAction(
+    extension, 
+    "accidentrate-search", # Action name
+    "Busqueda de accidentes", # Text
+    "accidentrate-search", # Action command
+    "accidentrate-search", # Icon name
+    None, # Accelerator
+    1009000100, # Position 
+    "Busqueda de accidentes" # Tooltip
+  )
+  action = actionManager.registerAction(action)
+  application.addMenu(action, u"_AccidentRate/Gesti\u00F3n de accidentes/Busqueda de accidentes")
+
+  action = actionManager.createAction(
+    extension, 
+    "accidentrate-addlayer", # Action name
+    "Añadir capa de accidentes", # Text
+    "accidentrate-addlayer", # Action command
+    "accidentrate-addlayer", # Icon name
+    None, # Accelerator
+    1009000200, # Position 
+    "Añadir capa de accidentes" # Tooltip
+  )
+  action = actionManager.registerAction(action)
+  application.addMenu(action, u"_AccidentRate/Gesti\u00F3n de accidentes/A\u00F1adir capa de accidentes")
 
 def main(*args):
-  selfRegister()
+  #selfRegister()
+  x = AccidentRateExtension()
+  x.showAccidentsSearch()
   

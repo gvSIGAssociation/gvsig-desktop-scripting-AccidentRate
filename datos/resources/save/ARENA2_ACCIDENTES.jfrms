@@ -13,7 +13,7 @@ create function form_onFieldEnter(form, field)
 end function
 
 create function form_onFieldExit(form, field)
-  print('form_onFieldExit ' || field.getName());
+  print('form_onFieldExit XXXXXXXXXXXXXXXXXXXX' || field.getName());
 end function
 
 create function form_onFieldChanged(form, field)
@@ -27,6 +27,10 @@ end function
 
 create function form_clear(form)
   print('form_clear');
+end function
+
+create function pp_onclick(form,event)
+  print("hola");
 end function
 
 create function form_isReadOnly(form)
