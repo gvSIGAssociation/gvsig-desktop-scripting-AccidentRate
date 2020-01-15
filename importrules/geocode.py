@@ -5,7 +5,7 @@ import gvsig
 from addons.AccidentRate.roadcatalog import geocodificar
 
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
-from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory
+from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory, RuleFixer
 
 class GeocodeTransform(Transform):
   def __init__(self, factory):
@@ -20,9 +20,12 @@ class GeocodeTransform(Transform):
       feature.get("CARRETERA"), 
       feature.get("KM")
     )
-    if p!=None:
-      print "GeocodeTransform.apply: update MAPA to ", p
+    if p==None:
+      feature.set("MAPA",None)
+    else:
+      #print "GeocodeTransform.apply: update MAPA to ", p
       feature.set("MAPA",p)
+    
       
 
 class GeocodeTransformFactory(TransformFactory):
@@ -32,9 +35,15 @@ class GeocodeTransformFactory(TransformFactory):
   def create(self, *args):
     return GeocodeTransform(self)
     
+class IgnoreGeocodeErrorAction(RuleFixer):
+  def __init__(self):
+    RuleFixer.__init__(self, "IgnoreGeocodeError", "Ignora errores de geocodificacion", True)
+
+  def fix(self,feature, args):
+    pass
 
 class GeocodeRule(Rule):
-  def __init__(self, factory):
+  def __init__(self, factory, **args):
     Rule.__init__(self, factory)
     
   def execute(self, report, feature):
@@ -51,23 +60,30 @@ class GeocodeRule(Rule):
       report.add(
         feature.get("ID_ACCIDENTE"), 
         self.getName(), 
-        msg
+        100,
+        msg,
+        fixedID="IgnoreGeocodeError"
       )
 
 
 class GeocodeRuleFactory(RuleFactory):
   def __init__(self):
-    RuleFactory.__init__(self,"Geocode (LRS)")
+    RuleFactory.__init__(self,"Fail if not Geocode (LRS)")
 
-  def create(self, *args):
-    rule = GeocodeRule(self)
+  def create(self, **args):
+    rule = GeocodeRule(self, **args)
     #print "GeocodeRuleFactory.create: ", rule
     return rule
+
+  def isSelectedByDefault(self):
+    return False
 
 def selfRegister():
   manager = getArena2ImportManager()
   manager.addTransformFactory(GeocodeTransformFactory())
   manager.addRuleFactory(GeocodeRuleFactory())
+  manager.addRuleFixer(IgnoreGeocodeErrorAction())
+  manager.addRuleErrorCode(100,"100 - Carretera/km no encontrada")
   
 def test():
   from java.util import Date

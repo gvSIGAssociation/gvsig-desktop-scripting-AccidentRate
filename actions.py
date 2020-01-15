@@ -137,12 +137,12 @@ def selfRegister():
     "accidentrate-importer-showtablecreator", # Action command
     "accidentrate-importer-showtablecreator", # Icon name
     None, # Accelerator
-    650700600, # Position 
+    1009000901, # Position 
     "_Show_the_accidents_tables_creator_tool" # Tooltip
   )
 
   action = actionManager.registerAction(action)
-  application.addMenu(action, u"_AccidentRate/Administration/Crear tablas de accidentes")
+  application.addMenu(action, u"_AccidentRate/Administration/Gesti\u00F3n de accidentes/Crear tablas de accidentes")
 
   action = actionManager.createAction(
     extension, 
@@ -151,11 +151,11 @@ def selfRegister():
     "accidentrate-importer-showimporter", # Action command
     "accidentrate-importer-showimporter", # Icon name
     None, # Accelerator
-    1009000900, # Position 
+    1009000902, # Position 
     "_Show_the_accidents_import_tool" # Tooltip
   )
   action = actionManager.registerAction(action)
-  application.addMenu(action, u"_AccidentRate/Gesti\u00F3n de accidentes/Importador de accidentes")
+  application.addMenu(action, u"_AccidentRate/Administration/Gesti\u00F3n de accidentes/Importador de accidentes")
   
   action = actionManager.createAction(
     extension, 
@@ -164,11 +164,11 @@ def selfRegister():
     "accidentrate-closingdate-showdialog", # Action command
     "accidentrate-closingdate-showdialog", # Icon name
     None, # Accelerator
-    1009000800, # Position 
+    1009000903, # Position 
     "_Show_the_accidents_closing_date_tool" # Tooltip
   )
   action = actionManager.registerAction(action)
-  application.addMenu(action, u"_AccidentRate/Gesti\u00F3n de accidentes/Fecha de cierre")
+  application.addMenu(action, u"_AccidentRate/Administration/Gesti\u00F3n de accidentes/Fecha de cierre")
 
   action = actionManager.createAction(
     extension, 

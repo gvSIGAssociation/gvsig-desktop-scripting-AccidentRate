@@ -4,14 +4,15 @@ import gvsig
 
 
 from addons.AccidentRate import actions 
-from addons.AccidentRate import geocode
 from addons.AccidentRate import accidentrateutils
 from addons.Arena2Importer import Arena2ImportLocator 
+from addons.AccidentRate import importrules
+
 
 def main(*args):
   script.registerDataFolder("CEGESEV")
   Arena2ImportLocator.selfRegister()
   actions.selfRegister()
-  geocode.selfRegister()
+  importrules.selfRegister()
   accidentrateutils.addArena2Workspace()
   
