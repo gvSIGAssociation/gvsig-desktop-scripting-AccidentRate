@@ -7,15 +7,19 @@ from gvsig.uselib import use_plugin
 use_plugin("org.gvsig.cegesev.roadcatalog.app.mainplugin")
 use_plugin("org.gvsig.lrs.app.mainplugin")
 
+from java.text import SimpleDateFormat
 from org.gvsig.tools.dispose import DisposeUtils
-
+from org.gvsig.fmap.dal import DALLocator
 from org.gvsig.fmap.geom import GeometryUtils
 
 try:
   from org.gvsig.cegesev.roadcatalog import AccidentCatalogLocator
-  from org.gvsig.lrs.lib.api import LrsAlgorithmsLocator
 except:
   AccidentCatalogLocator = None
+
+try:
+  from org.gvsig.lrs.lib.api import LrsAlgorithmsLocator
+except:
   LrsAlgorithmsLocator = None
 
 carreterasManager = None
@@ -33,11 +37,33 @@ def getLRSManager():
     lrsManager = LrsAlgorithmsLocator.getLrsAlgorithmsManager()
   return lrsManager
 
+def getStretchFeatureStore():
+  #store = getCarreterasManager().getStretchFeatureStore()
+  dataManager = DALLocator.getDataManager()
+  pool = dataManager.getDataServerExplorerPool()
+  params = pool.get("carreteras_gva")
+  params.setSchema("layers");
+  params.setTable("tramos_carreteras");
+  store = dataManager.openStore(params.getProviderName(), params);
+  return store 
+
+def getVigentStretchesQuery(store, fecha):
+  #query = getCarreterasManager().getVigentStretchesQuery(store, fecha) 
+  dateFormatter = SimpleDateFormat("dd/MM/yyyy")
+  formatedDate = dateFormatter.format(fecha)
+  filtro = "( fecha_entrada <= '%s' OR fecha_entrada IS NULL) AND ('%s' <= fecha_salida OR fecha_salida IS NULL)" % (
+    formatedDate,
+    formatedDate
+  )
+  query = store.createFeatureQuery()
+  query.addFilter(filtro)
+  return query
+
 def geocodificar(fecha, carretera, pk):
   if fecha == None or carretera == None or pk == None:
     return (None, "Fecha, carretera o pk nulo")
-  strechesStore = getCarreterasManager().getStretchFeatureStore()
-  query = getCarreterasManager().getVigentStretchesQuery(strechesStore, fecha) 
+  strechesStore = getStretchFeatureStore()
+  query = getVigentStretchesQuery(strechesStore, fecha) 
 
   expression = "matricula = '%s'" % carretera
   try:
@@ -60,8 +86,8 @@ def geocodificar(fecha, carretera, pk):
 def findOwnership(fecha, carretera, pk):
   if fecha == None or carretera == None or pk == None:
     return None
-  strechesStore = getCarreterasManager().getStretchFeatureStore()
-  query = getCarreterasManager().getVigentStretchesQuery(strechesStore, fecha) 
+  strechesStore = getStretchFeatureStore()
+  query = getVigentStretchesQuery(strechesStore, fecha) 
 
   expression = "matricula = '%s' and pk_i >= %s and pk_f <= %s" % (carretera, pk, pk)
   query.addFilter(expression)
