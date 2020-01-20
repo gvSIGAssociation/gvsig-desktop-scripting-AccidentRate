@@ -58,7 +58,7 @@ class ConflictRule(Rule):
     
 class ConflictRuleFactory(RuleFactory):
   def __init__(self):
-    RuleFactory.__init__(self,"Conflicto en CARRETERA/TIPO_VIA/KM/TITULARIDAD_VIA")
+    RuleFactory.__init__(self,"[GVA] Conflicto en CARRETERA/TIPO_VIA/KM/TITULARIDAD_VIA")
 
   def create(self, **args):
     return ConflictRule(self, **args)

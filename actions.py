@@ -104,8 +104,8 @@ def selfRegister():
 
   #
   # Registramos las traducciones
-  #i18n = ToolsLocator.getI18nManager()
-  #i18n.addResourceFamily("text",File(getResource(__file__,"i18n")))
+  i18n = ToolsLocator.getI18nManager()
+  i18n.addResourceFamily("text",File(getResource(__file__,"i18n")))
 
   #
   # Registramos los iconos en el tema de iconos

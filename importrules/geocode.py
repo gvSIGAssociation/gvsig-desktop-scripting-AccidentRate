@@ -30,7 +30,7 @@ class GeocodeTransform(Transform):
 
 class GeocodeTransformFactory(TransformFactory):
   def __init__(self):
-    TransformFactory.__init__(self,"Geocode (LRS)")
+    TransformFactory.__init__(self,"[GVA] Geocode (LRS)")
 
   def create(self, *args):
     return GeocodeTransform(self)
@@ -68,7 +68,7 @@ class GeocodeRule(Rule):
 
 class GeocodeRuleFactory(RuleFactory):
   def __init__(self):
-    RuleFactory.__init__(self,"Fail if not Geocode (LRS)")
+    RuleFactory.__init__(self,"[GVA] Fail if not Geocode (LRS)")
 
   def create(self, **args):
     rule = GeocodeRule(self, **args)

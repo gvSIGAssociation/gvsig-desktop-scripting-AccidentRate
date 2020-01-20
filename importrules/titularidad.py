@@ -128,7 +128,7 @@ class OwnershipRule(Rule):
     
 class OwnershipRuleFactory(RuleFactory):
   def __init__(self):
-    RuleFactory.__init__(self,"Titularidad")
+    RuleFactory.__init__(self,"[GVA] Titularidad")
 
   def create(self, **args):
     return OwnershipRule(self, **args)

@@ -9,6 +9,7 @@ use_plugin("org.gvsig.lrs.app.mainplugin")
 
 from java.text import SimpleDateFormat
 from org.gvsig.tools.dispose import DisposeUtils
+from org.gvsig.tools.util import CachedValue
 from org.gvsig.fmap.dal import DALLocator
 from org.gvsig.fmap.geom import GeometryUtils
 
@@ -22,8 +23,21 @@ try:
 except:
   LrsAlgorithmsLocator = None
 
+class StretchFeatureStoreCache(CachedValue):
+  def reload(self):
+    #store = getCarreterasManager().getStretchFeatureStore()
+    dataManager = DALLocator.getDataManager()
+    pool = dataManager.getDataServerExplorerPool()
+    explorerParams = pool.get("carreteras_gva").getExplorerParameters()
+    explorerParams.setSchema("layers")
+    explorer = dataManager.openServerExplorer(explorerParams.getProviderName(), explorerParams)
+    params = explorer.get("tramos_carreteras")
+    store = dataManager.openStore(params.getProviderName(), params)
+    self.setValue(store)
+
 carreterasManager = None
 lrsManager = None
+stretchFeatureStore = StretchFeatureStoreCache(5000);
 
 def getCarreterasManager():
   global carreterasManager
@@ -38,14 +52,7 @@ def getLRSManager():
   return lrsManager
 
 def getStretchFeatureStore():
-  #store = getCarreterasManager().getStretchFeatureStore()
-  dataManager = DALLocator.getDataManager()
-  pool = dataManager.getDataServerExplorerPool()
-  params = pool.get("carreteras_gva")
-  params.setSchema("layers");
-  params.setTable("tramos_carreteras");
-  store = dataManager.openStore(params.getProviderName(), params);
-  return store 
+  return stretchFeatureStore.get()
 
 def getVigentStretchesQuery(store, fecha):
   #query = getCarreterasManager().getVigentStretchesQuery(store, fecha) 
