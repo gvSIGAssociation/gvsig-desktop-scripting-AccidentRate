@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% encoding utf-8 %}
 
 ## Ficha de Búsqueda
@@ -29,6 +28,3 @@ busuqedas con mas o menos funcionalidades. Estos son:
 
 ### Ejemplos
 
-
-=======
->>>>>>> branch 'master' of https://github.com/gvSIGAssociation/gvsig-desktop-scripting-AccidentRate
