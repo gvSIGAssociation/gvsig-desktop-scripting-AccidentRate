@@ -1,4 +1,4 @@
-{% encoding utf-8 %}
+{% comment %} encoding: utf-8 {% endcomment %}
 
 # Solución adoptada
 
@@ -60,7 +60,7 @@ divide en cuatro bloques:
 En el siguiente gráfico de bloques podemos observar en que parte de la aplicación encajan cada 
 uno de estos desarrollos.
 
-![Diagrama de bloques](solucion_adoptada_files/diagrama_de_bloques.png)
+![Diagrama de bloques](solucion_adoptada_files/diagrama_de_bloques.png){ with=650 }
 
 Los desarrollos coloreados en rojo, son los desarrollos específicos realizados para la GVA.
 

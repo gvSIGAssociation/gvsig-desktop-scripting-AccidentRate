@@ -1,6 +1,4 @@
----
-encoding utf-8 %
----
+{% comment %} encoding: utf-8 {% endcomment %}
 
 ## Ficha de Búsqueda
 

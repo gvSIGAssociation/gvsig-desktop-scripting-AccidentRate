@@ -1,4 +1,4 @@
-{% rem encoding: utf-8 %}
+{% comment %} encoding: utf-8 {% endcomment %}
 
 # Importacíon de datos de ARENA2
 

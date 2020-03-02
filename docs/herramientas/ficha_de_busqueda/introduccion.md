@@ -1,6 +1,6 @@
-{% encoding utf-8 %}
+{% comment %} encoding: utf-8 {% endcomment %}
 
-{% rem Introducción %}
+{% comment %} Introducción {% endcomment %}
 
 La ficha de búsqueda presenta la siguiente lista de características:
 
@@ -15,9 +15,9 @@ Para iniciar una consulta en la ficha de búsqueda sobre una tabla de la
 base de datos hay que tener dicha tabla abierta y pulsar en el Tabla y 
 Búsqueda por atributos respectivamente. 
 
-![Menu Tabla, busqueda por atributos](introduccion_files/menu_tabla_busqueda_por_atributos.png)
+![Menu Tabla, busqueda por atributos](introduccion_files/menu_tabla_busqueda_por_atributos.png){ with=650 }
 
 A continuación se muestra el diseño de la *Ficha de búsqueda*.
 
-![Ficha de busqueda](introduccion_files/ficha_de_busqueda_1.png)
+![Ficha de busqueda](introduccion_files/ficha_de_busqueda_1.png){ with=650 }
 

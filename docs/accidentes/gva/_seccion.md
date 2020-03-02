@@ -1,18 +1,16 @@
-{% encoding utf-8 %}
-
-[TOC html]
+{% comment %} encoding: utf-8 {% endcomment %}
 
 {% include introduccion.md %}
 
-{% include page-break %}
+{{pagebreak /}}
 
 {% include solucion_adoptada.md %}
 
-{% include page-break %}
+{{pagebreak /}}
 
 {% include importacion_datos.md %}
 
-{% include page-break %}
+{{pagebreak /}}
 
 {% include consulta_datos/introduccion.md %}
 
@@ -24,11 +22,11 @@
 
 {% include consulta_datos/exportacion.md %}
 
-{% include page-break %}
+{{pagebreak /}}
 
 {% include anadir_informacion_a_la_vista/anadir_informacion_a_la_vista.md %}
 
-{% include page-break %}
+{{pagebreak /}}
 
 {% include anexos.md %}
 
