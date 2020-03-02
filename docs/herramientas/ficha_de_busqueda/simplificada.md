@@ -1,6 +1,6 @@
-{% rem encoding: utf-8 %}
+{% comment %} encoding: utf-8 {% endcomment %}
 
-{% rem Búsqueda simplificada %}
+{% comment %} Búsqueda simplificada {% endcomment %}
 
 La ficha de búsqueda simplificada o básica es la que aparece 
 por defecto al iniciar el proceso de consulta de datos. 

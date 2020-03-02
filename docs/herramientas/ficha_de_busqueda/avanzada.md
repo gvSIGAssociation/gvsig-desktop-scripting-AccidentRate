@@ -1,6 +1,6 @@
-{% encoding utf-8 %}
+{% comment %} encoding: utf-8 {% endcomment %}
 
-{% rem Avanzada %}
+{% comment %} Avanzada {% endcomment %}
 
 La ficha de búsqueda avanzada resulta una mejora de la básica ya que permite realizar consultas más complejas gracias a la implementación del creador de expresiones o Expression Builder. Este constructor de expresiones permite un mayor grado de libertad a la hora de construir consultas, permitiendo un mayor grado de detalle en las búsquedas.
 Además la ficha de búsqueda avanzada permite la gestión de un historial de búsquedas y favoritos que facilitan en gran medida los trabajos iterativos.
