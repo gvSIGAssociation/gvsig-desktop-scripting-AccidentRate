@@ -41,7 +41,29 @@ busuqedas con mas o menos funcionalidades. Estos son:
 
 ### Ejemplos
 
+Para facilitar la comprensión de las fichas de búsqueda a continuación 
+se muestran una serie de casos o ejemplos de cómo se realizan las 
+consultas. Los ejemplos propuestos son:
+
+* Localización de accidentes mortales.
+* Localización de vehículos implicados en accidentes mortales.
+* Localización de peatones involucrados en accidentes mortales.
+
+#### Localizacion de accidentes mortales
+
+{% include accidentes/gva/consulta_datos/ficha_de_busqueda/ejemplos/accidentes_mortales.md %}
+
+#### Localizacion de peatones implicados accidentes mortales
+
+{% include accidentes/gva/consulta_datos/ficha_de_busqueda/ejemplos/peatones_en_accidentes_mortales.md %}
+
+#### Localizacion de vehiculos implicados accidentes mortales
+
+{% include accidentes/gva/consulta_datos/ficha_de_busqueda/ejemplos/peatones_en_accidentes_mortales.md %}
+
+
 ## Formularios
+
 
 ## Informes
 
