@@ -2,9 +2,9 @@
 
 # Herramientas
 
-* [El construtor de expresiones](ficha_de_busqueda/index.md)
+* [El construtor de expresiones](constructor_expresiones/index.md)
 
-* [Informes de usuario](ficha_de_busqueda/index.md)
+* [Informes definidos por el usuario](informes_usuario/index.md)
 
 * [La ficha de busqueda](ficha_de_busqueda/index.md)
 
