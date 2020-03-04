@@ -18,4 +18,4 @@
 
   * [Informes de usuario](herramientas/ficha_de_busqueda/introduccion.md)
   
-  * [La ficha de busqueda](herramientas/ficha_de_busqueda/_seccion.md)
+  * [La ficha de busqueda](herramientas/ficha_de_busqueda/index.md)
