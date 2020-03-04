@@ -12,9 +12,9 @@ TOTAL_MUERTOS, campo que almacena esa información en esta tabla, en el
 operador lógico se especifica Greater than y en el valor de búsqueda 0 (cero). 
 Ver Consulta en la siguiente imagen.
 
-XX-IMAGEN-XX
+![Ficha de busqueda](accidentes_mortales_files/accidentes_mortales_0.png)
 
 Como resultado de la consulta se muestran los accidentes que cumplen esta 
 condición
 
-XX-IMAGEN-XX
+![Ficha de busqueda](accidentes_mortales_files/accidentes_mortales_1.png)
