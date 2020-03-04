@@ -11,8 +11,8 @@ AUI VA EL INCLUDE
 En la ficha de búsqueda podemos encontrar tres paneles que nos permiten realizar
 busuqedas con mas o menos funcionalidades. Estos son:
 
-* El panel de "[búsqueda simplificada](../../../herramientas/ficha_de_busqueda/simplificada.md)".
-* El panel de "[búsqueda avanzada](../../../herramientas/ficha_de_busqueda/avanzada.md)".
-* El panel de "[búsqueda de accidentes](falta.md)".
+* El panel de "[búsqueda simplificada](../../../../herramientas/ficha_de_busqueda/simplificada.md)".
+* El panel de "[búsqueda avanzada](../../../../herramientas/ficha_de_busqueda/avanzada.md)".
+* El panel de "[búsqueda de accidentes](ficha_accidentes.md)".
 
 

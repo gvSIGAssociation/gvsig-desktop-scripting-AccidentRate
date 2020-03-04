@@ -6,12 +6,14 @@
 
 {% include_relative introduccion.md %}
 
-## Simplificada
+En la ficha de búsqueda podemos encontrar dos paneles que nos permiten realizar
+busuqedas con mas o menos funcionalidades. Estos son:
 
-{% include_relative simplificada.md %}
+* El panel de "[búsqueda simplificada](../../../herramientas/ficha_de_busqueda/simplificada.md)".
+* El panel de "[búsqueda avanzada](../../../herramientas/ficha_de_busqueda/avanzada.md)".
+* El panel de "[búsqueda de accidentes](falta.md)".
 
-## Avanzada
 
-{% include_relative avanzada.md %}
+
 
 
