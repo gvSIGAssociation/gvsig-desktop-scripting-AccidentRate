@@ -2,11 +2,12 @@
 
 # Integración de *ARENA2* de la *DGT* en *gvSIG Desktop* para la *GVA*
 
-Probando 1
+Probando 1,2,3...
+
 
 * [Introducción](accidentes/gva/introduccion.md)
 
-* [Solución adoptada](accidentes/gva/ficha_de_busqueda/introduccion.md)
+* [Solución adoptada](accidentes/gva/solucion_adoptada.md)
 
 * [Importación de datos de ARENA2](accidentes/gva/importacion_datos.md)
 
