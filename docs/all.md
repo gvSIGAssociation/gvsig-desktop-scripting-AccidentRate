@@ -98,9 +98,11 @@ consultas. Los ejemplos propuestos son:
 
 ### Funciones y operadores disponibles
 
+{% include herramientas/constructor_expresiones/funciones_y_operadores.md %}
+
 #### Operadores
 
-{% include herramientas/constructor_expresiones/funciones_y_operadores.md %}
+{% include herramientas/constructor_expresiones/operadores.md %}
 
 #### Funciones
 
