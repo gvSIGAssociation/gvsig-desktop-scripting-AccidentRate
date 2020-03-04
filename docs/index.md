@@ -13,7 +13,7 @@ Probando 1,2,3,4,5,6,7,8,9,10,...
 
 * [Consulta de datos](accidentes/gva/consulta_datos/index.md)
 
-* [Añadir informacion a la Vista](accidentes/gva/anadir_informacion_a_la_vista/index.md)
+* [Añadir informacion a la Vista](accidentes/gva/anadir_a_la_vista/index.md)
 
 * [Anexos](herramientas/index.md)
 
