@@ -1,4 +1,8 @@
-
+#
+#
+# https://github.com/daattali/beautiful-jekyll/blob/master/_config.yml
+#
+#
 # Name of website
 title: Gestion de accidentes
 
@@ -6,3 +10,7 @@ title: Gestion de accidentes
 description: Cestion de accientes con gvSIG desktop basada en la informacion de ARENA2 de la DGT.
 
 theme: jekyll-theme-slate
+
+# Exclude these files from production site
+exclude:
+  - all.md
