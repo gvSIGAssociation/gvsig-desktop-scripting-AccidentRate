@@ -1,6 +1,6 @@
 {% comment %} encoding: utf-8 {% endcomment %}
 
- {% comment %} Informes definidos por el usuario {% endcomment %}
+{% comment %} Informes definidos por el usuario {% endcomment %}
 
 A la hora de generar informes, como por ejemplo, desde la 
 herramienta de búsqueda, existe la posibilidad de crear informes que 

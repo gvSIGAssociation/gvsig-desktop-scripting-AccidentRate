@@ -19,6 +19,6 @@ Probando 1,2,3,4,5,6,7,8,9,10,...
 
   * [El construtor de expresiones](herramientas/ficha_de_busqueda/introduccion.md)
 
-  * [Informes de usuario](herramientas/ficha_de_busqueda/introduccion.md)
+  * [Informes de usuario](herramientas/ficha_de_busqueda/index.md)
   
   * [La ficha de busqueda](herramientas/ficha_de_busqueda/index.md)
