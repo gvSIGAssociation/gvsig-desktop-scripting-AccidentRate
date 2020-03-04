@@ -126,4 +126,5 @@ consultas. Los ejemplos propuestos son:
 
 ## Informes de usuario
 
+{% include herramientas/informes_usuario/informes_usuario.md %}
 

@@ -6,3 +6,5 @@
 **Funciones logicas**
 
 | -------- | -------------
+| IFNULL | Función condicional que prueba si un valor especificado es nulo y devuelve valores.
+| IFF | Función condicional para expresiones numéricas.
