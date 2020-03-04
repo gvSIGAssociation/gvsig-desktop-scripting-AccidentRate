@@ -11,7 +11,7 @@ relacionar dichos campos y para definir las búsquedas.
 Las partes que componen la *ficha de búsqueda simplificada* son 
 las siguientes.
 
-![Búsqueda simplificada](simplificada_files/simplificada_detalles.png){ width=650 }
+![Búsqueda simplificada](simplificada_files/simplificada_detalles.png)
 
 
 1. Pestaña que indica que la ficha de búsqueda es la 
@@ -32,5 +32,5 @@ las siguientes.
 El proceso de búsqueda es simple y consiste en la selección del campo 
 a realizar la consulta, el operador lógico a aplicar y el valor deseado.
 
-![Proceso de busqueda](simplificada_files/simplificada_flujo.png){ width=650 }
+![Proceso de busqueda](simplificada_files/simplificada_flujo.png)
 

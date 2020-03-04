@@ -136,7 +136,7 @@ La conexión al espacio de trabajo en gvSIG Desktop se puede realizar de dos man
 espacio de trabajo de manera directa se tiene que ejecutar el comando 
 *Connect to database workspace* dentro de la pestaña *Archivo* en la ventana principal.
 
-![Menu de conexión al espacio de trabajo](importacion_datos_files/menu_conexion_espacio_trabajo.png){ width=650 }
+![Menu de conexión al espacio de trabajo](importacion_datos_files/menu_conexion_espacio_trabajo.png)
 
 Tras la ejecución aparece una nueva ventana con celdas vacías que nos permite realizar la conexión.
 

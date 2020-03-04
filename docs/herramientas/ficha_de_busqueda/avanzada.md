@@ -6,7 +6,7 @@ La ficha de búsqueda avanzada resulta una mejora de la básica ya que permite r
 Además la ficha de búsqueda avanzada permite la gestión de un historial de búsquedas y favoritos que facilitan en gran medida los trabajos iterativos.
 Las partes que componen a la ficha de búsqueda avanzada son las siguientes.
 
-![Ficha avanzada detalles](avanzada_files/avanzada_detalles.png){ width=650 }
+![Ficha avanzada detalles](avanzada_files/avanzada_detalles.png)
 
 1. Pestaña que indica que la ficha de búsqueda es la avanzada.
 2. Cuadro de texto donde se indica la expresión para la consulta.
@@ -20,4 +20,4 @@ Las partes que componen a la ficha de búsqueda avanzada son las siguientes.
 
 El creador de expresiones presenta la siguiente forma y se trata en profundidad así como las diferentes expresiones que permite utilizar en el apartado Creador de expresiones en ANEXOS.
 
-![Constructor de expresiones](avanzada_files/avanzada_expressionbuilder.png){ width=650 }
+![Constructor de expresiones](avanzada_files/avanzada_expressionbuilder.png)
