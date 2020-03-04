@@ -13,7 +13,7 @@ busuqedas con mas o menos funcionalidades. Estos son:
 
 * El panel de "[búsqueda simplificada](../../../../herramientas/ficha_de_busqueda/simplificada.md)".
 * El panel de "[búsqueda avanzada](../../../../herramientas/ficha_de_busqueda/avanzada.md)".
-* El panel de "[búsqueda de accidentes](ficha_accidentes.md)".
+* El panel de "[búsqueda de accidentes](ficha_accidentes_t.md)".
 
 # Ejemplos
 
