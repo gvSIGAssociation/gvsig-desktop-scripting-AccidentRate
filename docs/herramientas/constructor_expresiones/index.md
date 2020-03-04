@@ -8,7 +8,7 @@
 En el constructor de expresiones podemos encontrar los siguientes grupos 
 de funciones y operadores:
 
-* (Operadores)[operadores_t.md]
+* [Operadores](operadores_t.md)
 
   * Operadores numericos
   * Operadores OGC
