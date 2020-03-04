@@ -80,9 +80,15 @@ consultas. Los ejemplos propuestos son:
 
 # Añadir informacion a la vista
 
+{% include accidentes/gva/anadir_a_la_vista/introduccion.md %}
+
 ## Leyenda
 
+{% include accidentes/gva/anadir_a_la_vista/leyenda.md %}
+
 ## Etiquetado
+
+{% include accidentes/gva/anadir_a_la_vista/etiquetado.md %}
 
 # Anexos
 
