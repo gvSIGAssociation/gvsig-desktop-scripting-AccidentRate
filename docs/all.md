@@ -64,10 +64,19 @@ consultas. Los ejemplos propuestos son:
 
 ## Formularios
 
+{% include accidentes/gva/consulta_datos/formularios.md %}
 
 ## Informes
 
+{% include accidentes/gva/consulta_datos/informes.md %}
+
 ## Exportacion
+
+{% include accidentes/gva/consulta_datos/exportacion.md %}
+
+### Exportacion a fichero CSV
+
+{% include accidentes/gva/consulta_datos/exportacion_a_csv.md %}
 
 # Añadir informacion a la vista
 
