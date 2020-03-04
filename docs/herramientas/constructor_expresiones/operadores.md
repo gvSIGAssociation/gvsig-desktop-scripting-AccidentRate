@@ -5,14 +5,14 @@
 
 **Operadores Numéricos**
 
-Operador | Información
--------- | -------------
-NEGATE | Operador negativo. 
-% | Operador que proporciona el resto de la división.
-* | Operador multiplicación
-+ | Operador suma
-- | Operador resta
-/ | Operador división
+| Operador | Información
+| -------- | -------------
+| NEGATE | Operador negativo. 
+| % | Operador que proporciona el resto de la división.
+| * | Operador multiplicación
+| + | Operador suma
+| - | Operador resta
+| / | Operador división
 
 
 
