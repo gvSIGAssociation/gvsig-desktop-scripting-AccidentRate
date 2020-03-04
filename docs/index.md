@@ -12,7 +12,7 @@
 
 * [Añadir informacion a la Vista](herramientas/ficha_de_busqueda/introduccion.md)
 
-* [Anexos](herramientas/_seccion.md)
+* [Anexos](herramientas/index.md)
 
   * [El construtor de expresiones](herramientas/ficha_de_busqueda/introduccion.md)
 
