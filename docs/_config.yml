@@ -3,6 +3,6 @@
 title: Gestion de accidentes
 
 # Short description of your site
-Aplicacion para la gestion de accidentes
+description: Cestion de accientes con gvSIG desktop basada en la informacion de ARENA2 de la DGT.
 
 theme: jekyll-theme-slate
