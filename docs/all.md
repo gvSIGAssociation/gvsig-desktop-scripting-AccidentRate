@@ -94,6 +94,8 @@ consultas. Los ejemplos propuestos son:
 
 ## Creador de expresiones
 
+{% include herramientas/constructor_expresiones/constructor_expresiones.md %}
+
 ## Informes de usuario
 
 
