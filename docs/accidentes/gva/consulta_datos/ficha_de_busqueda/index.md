@@ -17,7 +17,7 @@ busuqedas con mas o menos funcionalidades. Estos son:
 
 # Ejemplos
 
-* [Localización de accidentes mortales](ejemplos/accidentes_mortales.md).
-* [Localización de vehículos implicados en accidentes mortales](ejemplos/vihiculos_en_accidentes_mortales.md).
-* [Localización de peatones involucrados en accidentes mortales](ejemplos/peatones_en_accidentes_mortales.md).
+* [Localización de accidentes mortales](ejemplos/accidentes_mortales_t.md).
+* [Localización de vehículos implicados en accidentes mortales](ejemplos/vehiculos_en_accidentes_mortales_t.md).
+* [Localización de peatones involucrados en accidentes mortales](ejemplos/peatones_en_accidentes_mortales_t.md).
 
