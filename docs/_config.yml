@@ -14,3 +14,5 @@ theme: jekyll-theme-slate
 # Exclude these files from production site
 exclude:
   - all.md
+  - arena2.odt
+  
