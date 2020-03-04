@@ -106,7 +106,23 @@ consultas. Los ejemplos propuestos son:
 
 #### Funciones
 
+{% include herramientas/constructor_expresiones/fn_numericas.md %}
 
+{% include herramientas/constructor_expresiones/fn_carpetas.md %}
+
+{% include herramientas/constructor_expresiones/fn_ogc.md %}
+
+{% include herramientas/constructor_expresiones/fn_cadena.md %}
+
+{% include herramientas/constructor_expresiones/fn_imagenes.md %}
+
+{% include herramientas/constructor_expresiones/fn_accesodatos.md %}
+
+{% include herramientas/constructor_expresiones/fn_logicas.md %}
+
+{% include herramientas/constructor_expresiones/fn_conversion.md %}
+
+{% include herramientas/constructor_expresiones/fn_fechas.md %}
 
 ## Informes de usuario
 
