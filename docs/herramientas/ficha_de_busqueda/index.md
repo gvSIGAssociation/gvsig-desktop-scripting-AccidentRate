@@ -4,14 +4,14 @@
 
 ## Introducción
 
-{% include introduccion.md %}
+{% include_relative introduccion.md %}
 
 ## Simplificada
 
-{% include simplificada.md %}
+{% include_relative simplificada.md %}
 
 ## Avanzada
 
-{% include avanzada.md %}
+{% include_relative avanzada.md %}
 
 
