@@ -59,10 +59,10 @@ informes_t.md
 
   ## Informes
   
-  {% include informes.md %}
+  { % include informes.md %}
   
   ## Formularios
   
-  {% include formularios.md %}
+  { % include formularios.md %}
   ```
   
