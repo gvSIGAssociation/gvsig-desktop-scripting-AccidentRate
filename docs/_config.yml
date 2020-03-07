@@ -9,7 +9,7 @@ title: Gestion de accidentes
 # Short description of your site
 description: Gestion de accientes con gvSIG desktop basada en la informacion de ARENA2 de la DGT.
 
-theme: jekyll-theme-slate
+theme: jekyll-theme-hacker
 
 # Exclude these files from production site
 exclude:
