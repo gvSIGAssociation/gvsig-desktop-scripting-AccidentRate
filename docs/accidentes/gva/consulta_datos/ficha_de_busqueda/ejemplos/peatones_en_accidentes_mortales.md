@@ -5,17 +5,17 @@
 El ejemplo es muy similar al ejemplo anterior, solo que para conocer los 
 peatones implicados en accidentes mortales lo primero es ir a la tabla de 
 Peatones, desde esta tabla realizaremos la búsqueda. En esta ocasión, se 
-utilizará la búsqueda avanzada.
+utilizará la *ficha de búsqueda avanzada*.
 
-El primer paso es abrir la tabla ARENA2_PEATONES como lo anteriormente explicado 
-y acceder a la herramienta de Búsqueda. Tras esto acceder a la ficha de búsqueda 
-avanzada. Para  crear una expresión presionamos sobre el botón Fx.
+El primer paso es abrir la tabla *ARENA2_PEATONES* como lo anteriormente explicado 
+y acceder a la herramienta de Búsqueda. Tras esto acceder a la *ficha de búsqueda 
+avanzada*. Para crear una expresión presionamos sobre el *botón Fx*.
 
 ![Ficha de busqueda avanzada](peatones_en_accidentes_mortales_files/peatones_0.png)
 
 En el menú de la izquierda, buscaremos el campo de la tabla de peatones que 
 tiene relación con la tabla de accidentes, ya que el campo que necesitamos 
-TOTAL_MUERTOS, se encuentra en esa tabla. Este campo ID_ACCIDENTE es el que 
+*TOTAL_MUERTOS*, se encuentra en esa tabla. Este campo *ID_ACCIDENTE* es el que 
 relaciona ambas tablas.
 
 ![Constructor de expresiones](peatones_en_accidentes_mortales_files/peatones_1.png)

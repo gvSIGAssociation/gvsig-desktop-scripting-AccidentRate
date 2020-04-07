@@ -7,7 +7,7 @@ tradicional. Permite visualizar grandes volúmenes de información así como el
 volcado de dichos datos a formato digital y sobretodo a formato físico.
 
 El proceso para la utilización de estos elementos es simple, tras la obtención 
-de datos gracias a Fichas de búsqueda o Formularios se puede realizar la presentación 
+de datos gracias a *Fichas de búsqueda* o *Formularios* se puede realizar la presentación 
 de esta información en informes específicos pulsando el icono correspondiente
 , ![Informes](informes_files/boton_informes.png).
 

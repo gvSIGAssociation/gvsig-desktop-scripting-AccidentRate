@@ -2,7 +2,7 @@
 
 {% comment %} El constructor de expresiones {% endcomment %}
 
-Tal y como se puede ver en el apartado Ficha de búsqueda avanzada 
+Tal y como se puede ver en el apartado *Ficha de búsqueda avanzada* 
 y otras partes del documento, el uso de la herramienta 
 *Contructor de expresiones* es necesaria y útil para realizar 
 procesos de consulta de datos ya sea para visualización o procesos 

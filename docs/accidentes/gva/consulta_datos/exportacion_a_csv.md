@@ -16,15 +16,15 @@ ventana se especifica el nombre del  archivo resultante.
 
 ![Exportar](exportacion_a_csv_files/flujo_1.png)
 
-Tras lo anterior, cuarta ventana, se selecciona el tipo de codificación, 
-la columna o campo que almacena la geometría si existe, quinta ventana, y 
-el tipo de esta, sexta ventana.
+Tras lo anterior, cuarta ventana, se selecciona el tipo de codificación. 
+La columna o campo que almacena la geometría si existe se especifica en la quinta ventana, y 
+el tipo de esta en la sexta ventana.
 
 ![Exportar](exportacion_a_csv_files/flujo_2.png)
 
 Posterior a los pasos anteriores se muestra una ventana con las diferentes 
 formas de comprobación de las geometrías antes de finalizar el proceso 
-de exportar, ventana siete,. Tras la anterior aparece una nueva ventana, 
+de exportar, ventana siete. Tras la anterior aparece una nueva ventana, 
 ventana número ocho, que permite la selección de las columnas o campos a 
 exportar mediante pestañas, ofreciendo la posibilidad de convertir los 
 tipos de datos de cada campo durante el proceso de exportación. La última 
@@ -39,14 +39,14 @@ el caso de que existan geometrías, dato gráfico. Tras esto se indican los
 los elementos a exportar,  que pueden ser la totalidad de la tabla o aquellos 
 que cumplan una determinada consulta gracias a un filtro, ventana número diez. 
 La consulta se crea o define al igual que lo indicado en el apartado de 
-Ficha de búsqueda avanzada y al igual que esta presenta iconos para la gestión 
+*Ficha de búsqueda avanzada* y al igual que esta presenta iconos para la gestión 
 de un historial de búsquedas y favoritos que facilitan en gran medida los 
 trabajos iterativos. Por último solo queda iniciar el proceso de exportación, 
 ventana once.
 
 ![Exportar](exportacion_a_csv_files/flujo_4.png)
 
-NOTA IMPORTANTE; Es importante destacar que si la exportación se realiza desde 
-una Ficha de búsqueda avanzada el proceso será el mismo pero la ventana 10, 
+**NOTA IMPORTANTE**; Es importante destacar que si la exportación se realiza desde 
+una *Ficha de búsqueda avanzada* el proceso será el mismo pero la ventana 10, 
 donde se define la expresión de búsqueda, aparecerá rellena con la expresión 
 correspondiente y la pestaña de registros seleccionados marcada.

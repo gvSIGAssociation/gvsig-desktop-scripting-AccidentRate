@@ -12,30 +12,36 @@
 
 # Consulta de datos
 
+## Introducción
+
+Esta parte de la documentación se centra en definir los principales flujos o acciones consecutivas más frecuentes a la hora de consultar y gestionar información de la base de datos Arena2 gracias al software libre gvSIG.
+
+Previo a las consultas hay que realizar la conexión al espacio de trabajo ya sea de manera directa o bien a través de la herramienta *Catálogo*.
+
 ## Ficha de Búsqueda
 
 Tras realizar la conexión con la base de datos de Arena2 ya se pueden realizar 
 consultas y búsquedas sobre sus datos. Para realizar lo anterior el programa gvSIG 
-dispone de la ficha de búsqueda.
+dispone de la *ficha de búsqueda*.
 
 {% include herramientas/ficha_de_busqueda/introduccion.md %}
 
-En la ficha de búsqueda podemos encontrar tres paneles que nos permiten realizar
-busuqedas con mas o menos funcionalidades. Estos son:
+En la *ficha de búsqueda* podemos encontrar tres paneles que nos permiten realizar
+búsquedas con más o menos funcionalidades. Estos son:
 
-* El panel de "búsqueda simplificada".
-* El panel de "búsqueda avanzada".
-* El panel de "búsqueda especifica de accidentes".
+* El panel de *"búsqueda simplificada"*.
+* El panel de *"búsqueda avanzada"*.
+* El panel de *"búsqueda especifica de accidentes"*.
 
-### Busqueda simplificada
+### Búsqueda simplificada
 
 {% include herramientas/ficha_de_busqueda/simplificada.md %}
 
-### búsqueda avanzada
+### Búsqueda avanzada
 
 {% include herramientas/ficha_de_busqueda/avanzada.md %}
 
-### búsqueda especifica de accidentes
+### Búsqueda especifica de accidentes
 
 {% include accidentes/gva/consulta_datos/ficha_de_busqueda/ficha_accidentes.md %}
 
@@ -57,10 +63,9 @@ consultas. Los ejemplos propuestos son:
 
 {% include accidentes/gva/consulta_datos/ficha_de_busqueda/ejemplos/peatones_en_accidentes_mortales.md %}
 
-#### Localizacion de vehiculos implicados accidentes mortales
+#### Localización de vehículos implicados accidentes mortales
 
-{% include accidentes/gva/consulta_datos/ficha_de_busqueda/ejemplos/peatones_en_accidentes_mortales.md %}
-
+{% include accidentes/gva/consulta_datos/ficha_de_busqueda/ejemplos/vehiculos_en_accidentes_mortales.md %}
 
 ## Formularios
 

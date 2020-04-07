@@ -22,10 +22,14 @@ En la siguiente pestaña, se pueden configurar los campos que se desean que apar
 
 ![Dialogo de construccion de informes (columnas)](informes_usuario_files/report_builder_columns_0.png)
 
+La siguiente pestaña permite agrupar al igual que la herramienta extra de las fichas de búsqueda.
+
+![Dialogo de construccion de informes (agrupar por ...)](informes_usuario_files/report_agrupar_0.png)
+
 Hay diferentes opciones que permiten otras configuraciones de estilo, como por ejemplo, el título.
 
 ![Dialogo de construccion de informes (estilos)](informes_usuario_files/report_builder_style.png)
 
-Al presionar aceptar se mostraría el siguiente informe dentro de la aplicación de gvSIG. Este informe se podría consultar aquí directamente, exportarlo a PDF o ser impreso.
+Al presionar *Aceptar* se mostraría el siguiente informe dentro de la aplicación de gvSIG. Este informe se podría consultar aquí directamente, exportarlo a PDF o ser impreso.
 
 ![Visor de informes](informes_usuario_files/report_visor.png)

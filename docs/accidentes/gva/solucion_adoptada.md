@@ -47,7 +47,7 @@ sea capaz de importar los nuevos ficheros.
 
 Tras evaluar el impacto en el complemento de *"Gestión de accidentes"* se decide sobrescribir
 completamente el complemento, optando por un modelo que reduzca al mínimo los desarrollos 
-específicos e incluya de base en la aplicación "gvSIG Desktop" gran parte de la funcionalidad 
+específicos e incluya de base en la aplicación *"gvSIG Desktop"* gran parte de la funcionalidad 
 que tenia el complementos de *"Gestión de accidentes"* existente. Para esto el desarrollo se 
 divide en cuatro bloques:
 
@@ -87,7 +87,7 @@ Vamos a ver con un poco de detalle en que consisten los cuatro bloques comentado
 ### Actualizaciones en el núcleo de gvSIG Desktop
 
 Se trata de una serie de mejoras destinadas a aportar a gvSIG Desktop la funcionalidad 
-que incluía el complemento de "Gestión de accidentes" de forma que estas estén disponibles
+que incluía el complemento de *"Gestión de accidentes"* de forma que estas estén disponibles
 en la base de la aplicación. Las principales son:
 
 * Creación de una ficha de búsqueda. Se añade una nueva ficha de búsqueda en 
@@ -120,16 +120,16 @@ en la base de la aplicación. Las principales son:
 
 ### Nuevo proveedor de datos para XML ARENA2
 
-La aplicación "gvSIG Desktop" dispone de una capa de abstracción para acceso 
-a los datos. Esta capa de abstracción expone el concepto de "almacén de datos",
+La aplicación *"gvSIG Desktop"* dispone de una capa de abstracción para acceso 
+a los datos. Esta capa de abstracción expone el concepto de *"almacén de datos"*,
 ofreciendo una serie de funcionalidades hacia la aplicación independientes del 
 formato de datos al que se quiere acceder (como puede ser, la obtención de 
-"cursores", su recorrido, filtros sobre ellos, localización de registro, ...). 
+*"cursores"*, su recorrido, filtros sobre ellos, localización de registro, ...). 
 En las partes de la aplicación que precisan acceder a los datos, se utiliza esta 
 capa de abstracción, de forma que el desarrollo de la funcionalidad no esta ligado 
 a un formato de datos especifico. 
 
-Así mismo la capa de abstracción define el concepto de proveedor de datos, y a 
+Así mismo la capa de abstracción define el concepto de proveedor de datos, ya 
 que operaciones debe responder este, de forma que existe un proveedor de datos 
 para cada formato especifico que soporta la aplicación. Por ejemplo, existe un 
 proveedor de datos para acceder a ficheros CSV, otro para DBFs, otro para SHPs, 
@@ -173,7 +173,7 @@ abstracción.
 Con este concepto en mente, lo que se se ha hecho es desarrollar un proveedor 
 de datos, utilizando la herramienta de scripting, que sea capaz de leer un 
 fichero XML ARENA2, de forma que la aplicación pueda acceder a los datos de 
-este como si de cualquier otro "almacén de datos" de gvSIG Desktop se tratase. 
+este como si de cualquier otro *"almacén de datos"* de gvSIG Desktop se tratase. 
 Este proveedor de datos se despliega en la aplicación en forma de un complemento 
 independiente, de forma similar a como lo hace el de BBDD postgreSQL, DXF o ODS.
 
@@ -221,13 +221,13 @@ Y en función de las comprobaciones realizadas sobre los datos de los accidentes
 poder realizar una gestión de las incidencias producidas.
 
 Para su desarrollo se decidió preparar un importador sobre el que se pudiesen registrar 
-"reglas de comprobación" y "transformaciones de datos", y este se encargase de invocar 
+*"reglas de comprobación"* y *"transformaciones de datos"*, y este se encargase de invocar 
 a las reglas y transformaciones sobre los datos de entrada, realizar la gestión de 
 incidencias e importar los datos en la BBDD de destino.
 
 Se dejo fuera del importador la implementación de las reglas y transformaciones, de 
 forma que cada organismo que lo precisase pudiese aportar las suyas. Se trata pues 
-de un importador "genérico" que se puede usar para cargar los datos de los XML de 
+de un importador *"genérico"* que se puede usar para cargar los datos de los XML de 
 ARENA2 en una BBDD para luego poder realizar tareas de explotación sobre el conjunto 
 de datos y no sobre XML independientes.
 

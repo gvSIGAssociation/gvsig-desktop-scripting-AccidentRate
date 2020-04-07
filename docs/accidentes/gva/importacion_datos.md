@@ -15,8 +15,8 @@ Este es el paso inicial y necesario para trabajar con los datos de Arena2
 y consiste en crear e inicializar las tablas base y diccionarios necesarios 
 para poder trabajar con dichos datos.
 
-El proceso comienza al pulsar dentro de la pestaña Herramientas, dentro 
-de Arena2, el comando Crear tablas.
+El proceso comienza al pulsar dentro de la pestaña *Herramientas*, dentro 
+de *Arena2*, el comando *Crear tablas*.
 
 ![Crear tablas](importacion_datos_files/menu_crear_tablas.png)
 
@@ -26,8 +26,8 @@ Una vez realizado lo anterior se despliega una ventana siguiente.
 
 Dicha ventana permite definir los parámetros de la creación de tablas, de modo 
 que todas los checks tienen que estar marcados. Especial mención es que en 
-este caso se crea el Espacio de trabajo, elemento necesario y definido en 
-mayor medida en el apartado de Conexión a espacio de trabajo.
+este caso se crea el *Espacio de trabajo*, elemento necesario y definido en 
+mayor medida en el apartado de *Conexión a espacio de trabajo*.
 
 La conexión se realiza pulsando el icono de la esquina superior derecha,  y 
 rellenando la siguiente ventana emergente que permite especificar todo lo referente 
@@ -143,7 +143,7 @@ Tras la ejecución aparece una nueva ventana con celdas vacías que nos permite 
 ![Dialogo de conexión a espacio de trabajo](importacion_datos_files/dialogo_conexion_espacio_trabajo_1.png)
 
 Para rellenar los campos de dicha ventana se tiene que pulsar el botón con los puntos 
-suspensivos (...) adyacente a la celda de conexión, apareciendo una nueva ventana que 
+suspensivos *(...)* adyacente a la celda de conexión, apareciendo una nueva ventana que 
 permite especificar todo lo referente a la base de datos a conectar y su situación en el equipo.
 
 ![Dialogo de conexión a base de datos](importacion_datos_files/dialogo_conexion_bbdd_1.png)
@@ -153,8 +153,8 @@ el origen de nuestra base de datos.
 
 ![Dialogo de conexión a base de datos](importacion_datos_files/dialogo_conexion_bbdd_2.png)
 
-Una vez detallada toda la información se pulsa el botón Aceptar y se está en disposición de 
-iniciar la conexión de manera directa mediante el botón Connect.
+Una vez detallada toda la información se pulsa el botón *Aceptar* y se está en disposición de 
+iniciar la conexión de manera directa mediante el botón *Connect*.
 
 ![Dialogo de conexión a espacio de trabajo](importacion_datos_files/dialogo_conexion_espacio_trabajo_2.png)
 
@@ -167,11 +167,11 @@ cargados en el proyecto actual.
 
 ![Catálogo en la ventana de la Vista](importacion_datos_files/ventana_vista_catalogo.png)
 
-Tras pulsar en la pestaña "Catálogo" se muestra la siguiente estructura de carpetas.
+Tras pulsar en la pestaña *"Catálogo"* se muestra la siguiente estructura de carpetas.
 
 ![Catálogo en la ventana de la Vista](importacion_datos_files/ventana_vista_catalogo_detalle_1.png)
 
-Accederemos a la opción de "Repositorios", que tras haber realizado correctamente la 
+Accederemos a la opción de *"Repositorios"*, que tras haber realizado correctamente la 
 conexión al espacio de trabajo, aparecerá con las conexiones de las que dispone este espacio.
 
 Una vez accedemos a las tablas del repositorio de Arena2, tras pulsar botón derecho sobre 
@@ -179,7 +179,7 @@ alguna de ellas se pueden ver las opciones disponibles para estas tablas.
 
 ![Abrir tabla desde el Catálogo](importacion_datos_files/menu_catalogo_abrir_como_tabla.png)
 
-Si por ejemplo presionamos sobre Abrir como tabla se podrá visualizar la tabla de
+Si por ejemplo presionamos sobre *Abrir como tabla* se podrá visualizar la tabla de
 atributos.
 
 ![Tabla de accidentes](importacion_datos_files/tabla_accidentes.png)
@@ -195,8 +195,8 @@ gvSIG ha desarrollado para la GVA una herramienta que permite mediante
 extensiones de geocodificación y reglas de validación de accidentes corregir o
 detectar estos errores.
 
-Para visualizar esta herramienta hay que pulsar la pestaña Herramientas, dentro de
-Arena2, el comando Importador.
+Para visualizar esta herramienta hay que pulsar la pestaña *Herramientas*, dentro de
+*Arena2*, el comando *Importador*.
 
 
 ![Menu "Importador"](importacion_datos_files/menu_crear_tablas.png)
@@ -268,7 +268,7 @@ Una vez producida una incidencia esta puede tratarse de dos maneras.
 * Utilizando el botón *Modificar*.
 
 A continuación se muestra un ejemplo de cómo realizar el cambio en la pestaña de
-manera directa en el campo Titularidad.
+manera directa en el campo *Titularidad*.
 
 ![Corrección de incidencias en el dialogo de importación de datos](importacion_datos_files/dialogo_importador_correccion_incidencia.png)
 
@@ -276,21 +276,21 @@ Tal y como se aprecia en la imagen anterior aparece una ventana desplegable con
 las opciones disponibles para dicho campo. Esta opción es útil si el número de
 incidencias es reducido puesto que la modificación se realiza caso a caso.
 
-La otra opción de cambio se realiza al pulsar el botón Modificar, el cual crea una
+La otra opción de cambio se realiza al pulsar el botón *Modificar*, el cual crea una
 ventana emergente. Ver imagen siguiente.
 
 ![Modificación de incidencias](importacion_datos_files/dialogo_modificar_incidencia.png)
 
-En dicha ventana emergente aparece el campo, en este caso Titularidad, y un
+En dicha ventana emergente aparece el campo, en este caso *Titularidad*, y un
 desplegable con las diferentes opciones de igual manera que en el caso anterior,
 pero como diferencia, la modificación mediante esta forma permite realizar cambios
 a multitud de casos. Este proceso se realiza seleccionando dichos casos o el campo
 concreto y pulsando dicho icono.
 
 Otro aspecto destacable en este apartado es la exportación de las incidencias. Para
-realizar dicha exportación estas tiene que estar marcadas en la pestaña Importar
-dentro del cuadro de incidencias y se tiene que pulsar el botón Exportar. Tras
-realizar lo anterior se ejecuta el Exportador que permite realizar ese proceso en
+realizar dicha exportación estas tiene que estar marcadas en la pestaña *Importar*
+dentro del cuadro de incidencias y se tiene que pulsar el botón *Exportar*. Tras
+realizar lo anterior se ejecuta el *Exportador* que permite realizar ese proceso en
 multitud de formatos.
 
 Una vez completada la gestión de incidencias, se podría pasar a la importación de
