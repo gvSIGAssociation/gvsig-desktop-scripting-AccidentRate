@@ -48,7 +48,7 @@ Las herramientas extra, icono 12, a utilizar en la ficha e búsqueda simplificad
 
   1. Barra que nos permite realizar búsqueda de columnas por teclado.
   2. Zona donde se muestran las columnas resultado de la búsqueda con la barra anterior.
-  3. Iconos que permiten llevar columnas de la zona de busqueda a la zona donde se agruopan las que van a ser mostradas. Este icono también permite quitar columnas del grupo a representar.
+  3. Iconos que permiten llevar columnas de la zona de busqueda a la zona donde se agrupan las que van a ser mostradas. Este icono también permite quitar columnas del grupo a representar.
   4. Zona donde se encuentran las columnas a representar.
   5. Iconos que permiten ordenar las columnas a representar.
   6. Icono que permite aceptar las columnas selecionadas.
@@ -84,12 +84,45 @@ Las herramientas extra, icono 12, a utilizar en la ficha e búsqueda simplificad
   17. Icono que permite acertar y finalizar los procesos asociados a las columnas calculadas.
   18. Icono que cierra la ventana de gestión de columnas calculadas.
 
-* Agrupar por... 
-* Ordenar por...
+* Agrupar por... Esta herramienta permite como su propio nombre indica agrupar por campos. La ventana se estructura en dos pestañas, una de selección de columnas o campos igual a la de *Seleccionar columnas a visualizar* y otra donde se especifica la funcion de agregación. Ambas ventanas se muestran acontinuación.
 
+  ![ventanas Agrupar por...](simplificada_files/agrupar_por.png)
 
+  La primera pestaña como se ha comentado anteriormente permite selecionar la columna o campo por el cual vaos a agrupar. La segunda ventana introduce los campos a mostrar información y la función de agregación a aplicar en estos. 
+  
+  Importante mencionar que se pueden tener diferentes funciones de agregación en cada columna o campo a representar y que los campos sin función de agregación apareceran en blanco.
+  
+  A continuación se muestra detallada la pestaña *Funciones de agregado*, la segunda pestaña de la herramienta *Agrupar por...*. No se muestra la primera pestaña ya que como se dijo anteriormente esta es igual a *Seleccionar columnas a visualizar*.
+ 
+  ![ventana Agrupar por... pestaña Función de agregado detallada](simplificada_files/agrupar_por_funciones_de_agregado_detalles.png)
 
-El proceso de búsqueda es simple y consiste en la selección del campo 
+  1. Barra que nos permite realizar búsqueda de columnas/campos por teclado.
+  2. Zona donde se muestran las columnas resultado de la búsqueda con la barra anterior o todas si no hay consulta.
+  3. Barra donde se muestra la columna o campo seleccionado sobre el cual realizar la agrupación.
+  4. Función de agregado o agregación. Actualmente hay implimentadas cuatro; MIN, COUNT, SUM y MAX.
+  5. Icono que permite aceptar y terminar el proceso de agrupar, mostrando los resultados en la *ficha de búsqueda*.
+  6. Icono que cancela el proceso de agrupar y cierra la ventana.
+
+* Ordenar por... Esta es la última de las herramientas extra de la ficha de búsqueda y como su propio nombre indica permite ordenar columnas segun su valor numérico o alfanumérico de maera descendente o ascendente.
+
+  La ventana de esta herramienta se muestra acontinuación.
+
+  ![ventanas Ordenar por...](simplificada_files/ordenar_por.png)
+
+  Las partes que componen dicha ventana son las siguientes.
+
+  ![ventanas Ordenar por...](simplificada_files/ordenar_por_detalles.png)
+
+  1. Barra que nos permite realizar búsqueda de columnas/campos por teclado.
+  2. Zona donde se muestran las columnas resultado de la búsqueda con la barra anterior o todas si no hay consulta.
+  3. Iconos que permiten llevar columnas de la zona de busqueda a la zona donde se agrupan las que van a ser ordenadas. Este icono también permite quitar columnas del grupo a ordenar.
+  4. Zona donde se encuentran las columnas a ser ordenadas.
+  5. Iconos que permiten seleccionar un orden ascendente o descendente.
+  6. Iconos que permiten ordenar las columnas a ordenar en la zona donde se agrupan.
+  7. Icono que permite aceptar y terminar el proceso.
+  8. Icono que cancela el proceso y cierra la ventana.
+
+Tras exponer las diferentes partes , funciones y herramientas que presenta la *ficha de búsqueda simple*, a continuación se muestra un breve ejemplo. El proceso de búsqueda es "simple" y consiste en la selección del campo 
 a realizar la consulta, el operador lógico a aplicar y el valor deseado.
 
 ![Proceso de busqueda](simplificada_files/simplificada_flujo.png)
