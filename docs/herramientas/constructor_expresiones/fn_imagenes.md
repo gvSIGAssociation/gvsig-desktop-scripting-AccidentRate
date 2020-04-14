@@ -3,7 +3,7 @@
 {% comment %} Funciones de manipulacion de imagenes {% endcomment %}
  
 
-**Funciones de manipulacion de imagenes**
+**Funciones de manipulación de imágenes**
 
 | -------- | -------------
 | IMAGEVERTICALFLIP | Función que permite voltear verticalmente la imagen.

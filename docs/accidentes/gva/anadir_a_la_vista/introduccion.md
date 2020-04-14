@@ -14,11 +14,11 @@ accidentes sobre el mapa.
 
 ![Vista](introduccion_files/vista_1.png)
 
-GvSIG Desktop dispone de muchas herramienta de procesamiento y 
+GvSIG Desktop dispone de muchas herramientas de procesamiento y 
 visualización para datos espaciales. Se va a explicar rápidamente 
 dos ejemplos para modificar la representación de la capa en el mapa. 
 
-Los menus principales que se van a explicar aparecen en el menú 
+Los menús principales que se van a explicar aparecen en el menú 
 de propiedades. Para acceder sobre la capa que aparece en la 
 Vista, presionar con el botón secundario y acceder a la opción 
 de *Propiedades*.

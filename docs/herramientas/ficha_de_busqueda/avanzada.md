@@ -18,7 +18,7 @@ Las partes que componen a la ficha de búsqueda avanzada son las siguientes.
 8. Icono que permite mostrar el resultado de la búsqueda en un informe.
 9. Icono que muestra el historial global de cualquiera ficha de búsqueda sea cual sea.
 10. Icono que muestra las búsquedas favoritas de cualquiera ficha de búsqueda sea cual sea.
-11. Icono que permite seleccionar herramientas extra dentro de la *ficha de búsqueda*. Son las mismas que la expuestas en el apartado de la *ficha de búsqueda simple*.
+11. Icono que permite seleccionar herramientas extra dentro de la *ficha de búsqueda*. Son las mismas que las expuestas en el apartado de la *ficha de búsqueda simple*.
 
 
 El *Creador de Expresiones* presenta la siguiente forma y se trata en profundidad así como las diferentes expresiones que permite utilizar en el apartado *Creador de expresiones* en *ANEXOS*.

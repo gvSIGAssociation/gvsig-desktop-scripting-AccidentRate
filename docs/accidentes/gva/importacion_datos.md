@@ -1,12 +1,12 @@
 {% comment %} encoding: utf-8 {% endcomment %}
 
-# Importacíon de datos de ARENA2
+# Importación de datos de ARENA2
 
-gvSIG Desktop es un software con soporte para cargar los XML de ARENA2, 
+GvSIG Desktop es un software con soporte para cargar los XML de ARENA2, 
 proceso que puede realizarse de dos formas. Una primera forma directa o 
 más primitiva que nos permite su visualización pero un deficiente tratamiento 
 de los datos. La segunda forma resulta más acertada tanto para su visualización 
-como para el tratamiento y consiste en cargar la información en un base 
+como para el tratamiento y consiste en cargar la información en una base 
 de datos local optimizando la explotación de recursos.
 
 ## Creación de tablas
@@ -38,17 +38,17 @@ a la base de datos a conectar y su situación en el equipo.
 ### Descripción de los datos
 
 Las tablas asociadas a los datos de ARENA2 podemos dividirlas en dos grupos. Por un 
-lado las tablas que almacenan los datos de los accidentes propieamente dichos, y por
+lado las tablas que almacenan los datos de los accidentes propiamente dichos, y por
 otro las tablas que definen diccionarios de datos usados por la aplicación.
 
-Las tablas que almancenan los datos de los accidentes son:
+Las tablas que almacenan los datos de los accidentes son:
 
-* **ARENA2_ACCIDENTES**, Contine la información general de los accidentes.
-* **ARENA2_CONDUCTORES**, Contine la información sobre los conductores.
-* **ARENA2_CROQUIS**, Contine la la indormacón de los croquis de los accidentes.
-* **ARENA2_PASAJEROS**, Contine la información sobre los pasajeros.
-* **ARENA2_PEATONES**, Contine la información sobre los peatones.
-* **ARENA2_VEHICULOS**, Contine la información sobre los vehículo implicados en los accidentes.
+* **ARENA2_ACCIDENTES**, Contiene la información general de los accidentes.
+* **ARENA2_CONDUCTORES**, Contiene la información sobre los conductores.
+* **ARENA2_CROQUIS**, Contiene la información de los croquis de los accidentes.
+* **ARENA2_PASAJEROS**, Contiene la información sobre los pasajeros.
+* **ARENA2_PEATONES**, Contiene la información sobre los peatones.
+* **ARENA2_VEHICULOS**, Contiene la información sobre los vehículo implicados en los accidentes.
 
 Las tablas de *diccionarios* son las siguientes:
 
@@ -184,7 +184,7 @@ atributos.
 
 ![Tabla de accidentes](importacion_datos_files/tabla_accidentes.png)
 
-**Catálogo.** La conexión al espacio de trabajo tambien puede llevarse a cabo de manera directa desde el catálogo. El proceso comienza pulsando botón derecho del mouse sobre la pestaña *Base de datos* y seleccionando la opción *Añadir base de datos*.
+**Catálogo.** La conexión al espacio de trabajo también puede llevarse a cabo de manera directa desde el catálogo. El proceso comienza pulsando botón derecho del mouse sobre la pestaña *Base de datos* y seleccionando la opción *Añadir base de datos*.
 
 ![Conexión a base de datos desde el catálogo](importacion_datos_files/catalogo_conexion_bbdd.png)
 
@@ -222,7 +222,7 @@ Las partes que lo componen son las siguientes.
 6. Ventana con dos pestañas. La pestaña *Incidencias* muestra los casos donde el proceso indique 
    una falta de integridad, mientras que la pestaña *Opciones* muestra si la herramienta de 
    geocodificación está activa, así como otras reglas de validación.
-7. Icono que permite modificar por ventana una determinada caracterástica de un número de muestras.
+7. Icono que permite modificar por ventana una determinada característica de un número de muestras.
 8. Icono que permite eliminar las incidencias.
 9. Icono que permite exportar las incidencias en diferentes archivos gracias al *Exportador*.
 10. Icono que inicia el proceso de geocodificación y utilización de las reglas de validación para 

@@ -15,7 +15,7 @@ Para ello hay que entrar en el botón indicado como “Seleccionar símbolo”.
 
 ![Selector de simbolos](leyenda_files/selector_simbolos_1.png)
 
-También se podrían seleccionar simbolos preexistentes para la representación 
+También se podrían seleccionar símbolos preexistentes para la representación 
 de los puntos. Si cambiamos los valores y aceptamos, se podrá ver sobre 
 la Vista que la representación de puntos ha cambiado.
 

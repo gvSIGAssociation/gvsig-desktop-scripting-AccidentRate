@@ -12,7 +12,7 @@ mediante iconos en las *Fichas de búsqueda* y *Formularios* así como una o var
 tablas completas.
 
 Para iniciar la exportación de una o varias tablas de la base de datos hay 
-que tener dicha tabla abierta y pulsar en *Tabla* y *Exportar a …* respectivamente.
+que tener dicha tabla abierta y pulsar en *Tabla* y *Exportar a…* respectivamente.
 
 ![Menu exportar](export_files/export_menu.png)
 

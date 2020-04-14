@@ -13,16 +13,16 @@ En la siguiente ilustración se muestran seleccionados los elementos comunes sea
 
 ![Ficha accidentes con detalles](ficha_accidentes_files/ficha_accidentes_detalles.png)
 
-En las siguiente composición de imagenes se muestra los elementos singulares de cada pestaña de complementos.
+En la siguiente composición de imágenes se muestra los elementos singulares de cada pestaña de complementos.
 
 ![Ficha accidentes información pestañas](ficha_accidentes_files/ficha_accidentes_pestanas_detalles.png)
 
 1. Pestaña que indica que estamos en los complementos de búsqueda relacionados con el *Código*.
 2. Barra donde se indica el código del accidente.
 3. Pestaña que indica que estamos en los complementos de búsqueda relacionados con la *Carretera*.
-4. Desplegable donde se selecciona la provincia donde se situa el accidente.
+4. Desplegable donde se selecciona la provincia donde se sitúa el accidente.
 5. Desplegable donde se selecciona la titularidad de la vía.
-6. Barra donde se indentifica la carretera.
+6. Barra donde se identifica la carretera.
 7. Conjunto de pestañas donde se especifica el punto kilométrico de inicio del accidente.
 8. Conjunto de pestañas donde se especifica el punto kilométrico final del accidente.
 9. Desplegable donde se concreta el sentido del accidente.
@@ -31,8 +31,8 @@ En las siguiente composición de imagenes se muestra los elementos singulares de
 12. Pestaña donde se concreta la fecha de conclusión del accidente.
 13. Pestaña que define el tipo de accidente.
 14. Pestaña que indica que estamos en los complementos de búsqueda relacionados con las *Víctimas*.
-15. Desplegable que indica la categoria del accidente.
-16. Pestaña que indica si en el accidente estan involucradas mercancias peligrosas.
+15. Desplegable que indica la categoría del accidente.
+16. Pestaña que indica si en el accidente están involucradas mercancías peligrosas.
 17. Desplegable con operadores lógicos para obtener información sobre víctimas mortales.
 18. Valores a relacionar con el operador lógico anterior.
 19. Desplegable con operadores lógicos que permiten concatenar consultas sobre víctimas mortales, víctimas graves y heridos leves.
@@ -42,4 +42,4 @@ En las siguiente composición de imagenes se muestra los elementos singulares de
 23. Desplegable con operadores lógicos para obtener información sobre heridos leves.
 24. Valores a relacionar con el operador lógico anterior.
 
-**NOTA IMPORTANTE;** Las pestañas que indican la temática del complemento, 1, 3, 10 y 14, presentan un icono que se muestra verdes si alguno de sus parametros define una consulta, parametros rellenos con valores, y gris si todos sus parametros se encuentran en blanco o vacios.
+**NOTA IMPORTANTE;** Las pestañas que indican la temática del complemento, 1, 3, 10 y 14, presentan un icono que se muestra verdes si alguno de sus parámetros define una consulta, parámetros rellenos con valores, y gris si todos sus parámetros se encuentran en blanco o vacios.

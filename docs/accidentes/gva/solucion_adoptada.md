@@ -48,7 +48,7 @@ sea capaz de importar los nuevos ficheros.
 Tras evaluar el impacto en el complemento de *"Gestión de accidentes"* se decide sobrescribir
 completamente el complemento, optando por un modelo que reduzca al mínimo los desarrollos 
 específicos e incluya de base en la aplicación *"gvSIG Desktop"* gran parte de la funcionalidad 
-que tenia el complementos de *"Gestión de accidentes"* existente. Para esto el desarrollo se 
+que tenía el complemento de *"Gestión de accidentes"* existente. Para esto el desarrollo se 
 divide en cuatro bloques:
 
 * Actualizaciones en el núcleo de gvSIG Desktop (mejoras o nuevos desarrollos 
@@ -66,7 +66,7 @@ Los desarrollos coloreados en rojo, son los desarrollos específicos realizados 
 
 Los nuevos desarrollos, aunque pueden funcionar de forma independiente de los desarrollos que 
 ya existían previamente, mantienen una relación, que no dependencia, con el complemento de 
-gestión de usuarios. Esto es, si esta instalado el complemento de gestión de usuarios, 
+gestión de usuarios. Esto es, si está instalado el complemento de gestión de usuarios, 
 lo utilizara para comprobar si el usuario tiene permisos para realizar algunas operaciones, 
 como pueden ser:
 
@@ -75,14 +75,14 @@ como pueden ser:
 
 De forma que solo los usuarios con permisos podrán realizar estas operaciones.
 
-Si no esta instalado el complemento de gestión de usuario, se podrá utilizar la aplicación 
+Si no está instalado el complemento de gestión de usuario, se podrá utilizar la aplicación 
 y acceder a los datos para su explotación, pero no se podrán modificar los accidentes 
 importados en la BBDD. 
 
 Siempre que el usuario tenga las credenciales de acceso a la BBDD adecuadas no precisara 
 de la herramienta de gestión de usuario para realizar operaciones de explotación de los datos.
 
-Vamos a ver con un poco de detalle en que consisten los cuatro bloques comentados.
+Vamos a ver con un poco de detalle en qué consisten los cuatro bloques comentados.
 
 ### Actualizaciones en el núcleo de gvSIG Desktop
 
@@ -99,7 +99,7 @@ en la base de la aplicación. Las principales son:
   
   * Favoritos e histórico de búsquedas.
   * Campos de búsqueda preferidos.
-  * Campos de búsqueda mas usados.
+  * Campos de búsqueda más usados.
   * Búsqueda en tablas relacionadas.
   * Enlace a tablas con lista de valores.
   * Previsualización de valores asociados a un campo.
@@ -126,12 +126,12 @@ ofreciendo una serie de funcionalidades hacia la aplicación independientes del
 formato de datos al que se quiere acceder (como puede ser, la obtención de 
 *"cursores"*, su recorrido, filtros sobre ellos, localización de registro, ...). 
 En las partes de la aplicación que precisan acceder a los datos, se utiliza esta 
-capa de abstracción, de forma que el desarrollo de la funcionalidad no esta ligado 
-a un formato de datos especifico. 
+capa de abstracción, de forma que el desarrollo de la funcionalidad no está ligado 
+a un formato de datos específico. 
 
 Así mismo la capa de abstracción define el concepto de proveedor de datos, ya 
 que operaciones debe responder este, de forma que existe un proveedor de datos 
-para cada formato especifico que soporta la aplicación. Por ejemplo, existe un 
+para cada formato específico que soporta la aplicación. Por ejemplo, existe un 
 proveedor de datos para acceder a ficheros CSV, otro para DBFs, otro para SHPs, 
 otro para BBDD PostgreSQL o para BBDD H2 Spatial. Este modelo permite desacoplar 
 los entresijos del formato, de la lógica de la aplicación, de forma que una 
@@ -170,7 +170,7 @@ es independiente del entorno o lenguaje usado para su desarrollo
 siempre que el proveedor cumpla con las especificaciones de la capa de 
 abstracción.
 
-Con este concepto en mente, lo que se se ha hecho es desarrollar un proveedor 
+Con este concepto en mente, lo que se ha hecho es desarrollar un proveedor 
 de datos, utilizando la herramienta de scripting, que sea capaz de leer un 
 fichero XML ARENA2, de forma que la aplicación pueda acceder a los datos de 
 este como si de cualquier otro *"almacén de datos"* de gvSIG Desktop se tratase. 
@@ -179,7 +179,7 @@ independiente, de forma similar a como lo hace el de BBDD postgreSQL, DXF o ODS.
 
 Dado que el proveedor de datos de XML ARENA2, se trata de un proveedor muy 
 especifico, es decir, no lee datos de cualquier XML, sino solo de los datos de 
-ARENA2, que define un modelo de datos en concreto, no solo esta en condiciones 
+ARENA2, que define un modelo de datos en concreto, no solo está en condiciones 
 de aportar cómo acceder a los datos, si no también otro tipo de información como:
 
 * Etiquetas y descripciones para los campos.
@@ -188,8 +188,8 @@ de aportar cómo acceder a los datos, si no también otro tipo de información c
 * Personalización de los informes asociados a las tablas del modelo de ARENA2.
 * Diccionarios de datos específicos del modelo de ARENA2.
 
-Con lo que se trata de un proveedor de datos que ademas de los datos aporta mucha 
-información sobre como se deben visualizar estos.
+Con lo que se trata de un proveedor de datos que además de los datos aporta mucha 
+información sobre cómo se deben visualizar estos.
 
 ### Importador de datos de ARENA2 a BBDD
 
@@ -197,18 +197,18 @@ Aunque la existencia de un proveedor de datos de XML ARENA2 para gvSIG Desktop
 permite ya la carga de los fichero XML de ARENA2 en la aplicación, la funcionalidad 
 que tenemos con esto es limitada. Por ejemplo, los datos del XML se cargan en memoria. 
 O solo podemos acceder a los datos de un fichero XML a la vez. No se dispone de 
-indices que permitan optimizar el acceso a los datos. 
+índices que permitan optimizar el acceso a los datos. 
 
-¿ Esto que quiere decir ? Pues que si tenemos dos ficheros XML de dos quincenas de 
+¿Esto qué quiere decir? Pues que si tenemos dos ficheros XML de dos quincenas de 
 datos de accidentes, no podríamos cargarlos y realizar una búsqueda que arrojase datos 
-de las dos quincenas ya que cada quincena estaría en una tabla separada. Ademas, 
+de las dos quincenas ya que cada quincena estaría en una tabla separada. Además, 
 aunque pudiésemos unir en un solo XML los datos, estos se cargan en memoria para acceder 
 a ellos, con lo que no podríamos cargar ficheros muy grandes. Y cuando quisiésemos realizar 
-una búsqueda sobre ellos, esta seria secuencial, es decir, tendrá que recorrerse todos 
+una búsqueda sobre ellos, esta sería secuencial, es decir, tendrá que recorrerse todos 
 los datos para localizar los que cumpliesen el criterio indicado.
 
 Así que, aunque parezca atractivo trabajar directamente con los ficheros XML, no 
-es optimo, y por ello se opto por implementar un importador de estos sobre una BBDD. 
+es óptimo, y por ello se opto por implementar un importador de estos sobre una BBDD. 
 Se desarrolló un importador específico para ese tipo de fichero ya que debería realizar 
 algunas tareas específicas. Se precisaba poder realizar:
 
@@ -235,7 +235,7 @@ de datos y no sobre XML independientes.
 
 Debido a las necesidades de la GVA, importar los datos de los XML en bruto no era 
 suficiente. Al menos había dos operaciones que había que realizar con los datos 
-antes de cargarlos en la BBDD, y que ademas, eran dependientes de información que 
+antes de cargarlos en la BBDD, y que además, eran dependientes de información que 
 tenia la GVA en otras tablas de BBDD propias.
 
 Esto llevo al desarrollo de reglas de comprobación y transformaciones específicas 

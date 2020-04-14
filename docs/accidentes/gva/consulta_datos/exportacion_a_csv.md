@@ -35,7 +35,7 @@ tipos de datos a los cuales pueden transformarse los datos originales.
 
 
 El proceso continúa, novena ventana, definiendo la proyección de los datos en 
-el caso de que existan geometrías, dato gráfico. Tras esto se indican los 
+el caso de que existan geometrías, dato gráfico. Tras esto se indican
 los elementos a exportar,  que pueden ser la totalidad de la tabla o aquellos 
 que cumplan una determinada consulta gracias a un filtro, ventana número diez. 
 La consulta se crea o define al igual que lo indicado en el apartado de 

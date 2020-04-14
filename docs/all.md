@@ -55,11 +55,11 @@ consultas. Los ejemplos propuestos son:
 * Localización de vehículos implicados en accidentes mortales.
 * Localización de peatones involucrados en accidentes mortales.
 
-#### Localizacion de accidentes mortales
+#### Localización de accidentes mortales
 
 {% include accidentes/gva/consulta_datos/ficha_de_busqueda/ejemplos/accidentes_mortales.md %}
 
-#### Localizacion de peatones implicados accidentes mortales
+#### Localización de peatones implicados accidentes mortales
 
 {% include accidentes/gva/consulta_datos/ficha_de_busqueda/ejemplos/peatones_en_accidentes_mortales.md %}
 
@@ -75,15 +75,15 @@ consultas. Los ejemplos propuestos son:
 
 {% include accidentes/gva/consulta_datos/informes.md %}
 
-## Exportacion
+## Exportación
 
 {% include accidentes/gva/consulta_datos/exportacion.md %}
 
-### Exportacion a fichero CSV
+### Exportación a fichero CSV
 
 {% include accidentes/gva/consulta_datos/exportacion_a_csv.md %}
 
-# Añadir informacion a la vista
+# Añadir información a la vista
 
 {% include accidentes/gva/anadir_a_la_vista/introduccion.md %}
 

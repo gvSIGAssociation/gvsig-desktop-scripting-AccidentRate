@@ -6,7 +6,7 @@
 **Funciones OGC**
 
 | -------- | -------------
-| ST_GeomFromText | Función que devuelve una geometría a partir de un cadena de texto conocido.
+| ST_GeomFromText | Función que devuelve una geometría a partir de una cadena de texto conocido.
 | ST_Point | Función que construye una geometría punto a partir de unas coordenadas.
 | ST_GeomFromWKB | Función que crea una geometría a partir de una representación binaria conocida (WKB) y SRID opcional.
 | ST_Union | Función que devuelve la unión de geometrías.
@@ -17,7 +17,7 @@
 | ST_IsSimple | Devuelve verdadero si esta Geometría no tiene puntos geométricos anómalos, como la intersección propia o la tangencia propia.
 | ST_Perimeter | Función que devuelve el perímetro de una geometría.
 | ST_NumGeometries | Función que devuelve el número de geometrías.
-| ST_Difference | Función que devuelve una geometría que representa la parte de una geometría no intersectada por otra.
+| ST_Difference | Función que devuelve una geometría que representa la parte de una geometría no intersecada por otra.
 | ST_Contains | Función que devuelve un booleano si una geometría contiene a otra.
 | ST_GeometryN | Devuelve el enésimo elemento de geometría de una colección de geometría.
 | ST_Dimension | Función que devuelve un entero con la dimensión de una geometría. 0 para puntos, 1 para líneas y 2 para polígonos.

@@ -7,21 +7,21 @@ de funciones y operadores:
 
 * Operadores
 
-  * Operadores numericos
+  * Operadores numéricos
   * Operadores OGC
   * Operadores de cadena (String)
-  * Operadores logicos (Booleanos)
+  * Operadores lógicos (Booleanos)
 
 * Funciones
 
-  * Funciones numericas
+  * Funciones numéricas
   * Funciones de manejo de carpetas
   * Funciones OGC
   * Funciones de cadena (String)
-  * Funciones de manipulacion de imagenes
+  * Funciones de manipulación de imágenes
   * Funciones de acceso a datos
-  * Funciones logicas (Booleanas)
-  * Funciones de conversion
+  * Funciones lógicas (Booleanas)
+  * Funciones de conversión
   * Funciones de manejo de fechas
   
    

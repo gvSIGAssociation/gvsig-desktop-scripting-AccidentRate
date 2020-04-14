@@ -34,7 +34,7 @@ de dos valores *ID_ACCIDENTE* y *KM* del punto kilométrico.
 ![Vista](etiquetado_files/vista_1.png)
 
 Esto es solo un ejemplo de etiquetados posibles a realizar, las opciones 
-pueden ser muchar y muy variadas, incluyendo la personalización de 
+pueden ser muchas y muy variadas, incluyendo la personalización de 
 las expresiones que pueden ser complicadas, existen otras opciones que 
 facilitan la colocación y posición de las etiquetas sobre el mapa para 
 una mejor visualización.

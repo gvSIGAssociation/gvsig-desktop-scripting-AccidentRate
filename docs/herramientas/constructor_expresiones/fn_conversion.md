@@ -3,7 +3,7 @@
 {% comment %} Funciones de conversion {% endcomment %}
  
 
-**Funciones de conversion**
+**Funciones de conversión**
 
 | -------- | -------------
 | CAST | Convierte un valor de un tipo a otro.

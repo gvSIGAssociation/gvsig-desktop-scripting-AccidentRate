@@ -3,7 +3,7 @@
 {% comment %} Funciones logicas {% endcomment %}
  
 
-**Funciones logicas**
+**Funciones lógicas**
 
 | -------- | -------------
 | IFNULL | Función condicional que prueba si un valor especificado es nulo y devuelve valores.
