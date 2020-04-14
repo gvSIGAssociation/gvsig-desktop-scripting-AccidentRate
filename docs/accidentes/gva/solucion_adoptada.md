@@ -97,21 +97,21 @@ en la base de la aplicación. Las principales son:
   La ficha de búsqueda dispone de un modo de búsqueda simple y otro avanzada. 
   Dispone de las siguientes funcionalidades:
   
-  * Favoritos e histórico de búsquedas
-  * Campos de búsqueda preferidos
-  * Campos de búsqueda mas usados
-  * Búsqueda en tablas relacionadas
-  * Enlace a tablas con lista de valores
-  * Previsualización de valores asociados a un campo
-  * Formulario asociado a los datos
-  * Exportación resultados de búsqueda
-  * Informes sobre los resultados de búsqueda
+  * Favoritos e histórico de búsquedas.
+  * Campos de búsqueda preferidos.
+  * Campos de búsqueda mas usados.
+  * Búsqueda en tablas relacionadas.
+  * Enlace a tablas con lista de valores.
+  * Previsualización de valores asociados a un campo.
+  * Formulario asociado a los datos.
+  * Exportación resultados de búsqueda.
+  * Informes sobre los resultados de búsqueda.
 
 * Mejoras en el exportador de gvSIG. Se añade la funcionalidad relacionada con:
 
-  * Exportación a CSV
+  * Exportación a CSV.
   * Selección de campos a exportar y posibilidad de cambiar el nombre de estos.
-  * Favoritos e histórico de exportaciones
+  * Favoritos e histórico de exportaciones.
 
 * Mejoras en la gestión de formularios.
 * Mejoras en los informes, entre otras se añade la posibilidad de asociar 
@@ -120,7 +120,7 @@ en la base de la aplicación. Las principales son:
 
 ### Nuevo proveedor de datos para XML ARENA2
 
-La aplicación *"gvSIG Desktop"* dispone de una capa de abstracción para acceso 
+La aplicación gvSIG Desktop dispone de una capa de abstracción para acceso 
 a los datos. Esta capa de abstracción expone el concepto de *"almacén de datos"*,
 ofreciendo una serie de funcionalidades hacia la aplicación independientes del 
 formato de datos al que se quiere acceder (como puede ser, la obtención de 
@@ -145,20 +145,20 @@ dinámicamente en el arranque de la aplicación. El núcleo de gvSIG Desktop
 lleva con sigo los proveedores de:
 
 * Ficheros CSV.
-* Fichero dBASE (DBFs)
-* Ficheros Shape (SHPs)
+* Fichero dBASE (DBFs).
+* Ficheros Shape (SHPs).
 * Bases de datos H2 Spatial.
 
 Luego existen una serie de complementos que aportan otros proveedores de datos y 
 que no forman parte del núcleo de gvSIG Desktop aportando soporte para:
 
-* Bases de datos PostgreSQL/PostGIS
-* Ficheros DXFs
-* Fichero DWG
-* Fichero MS Excel (XSL)
-* Fichero ODS
-* Bases de datos Oracle
-* Bases de datos MS SQLServer
+* Bases de datos PostgreSQL/PostGIS.
+* Ficheros DXFs.
+* Fichero DWG.
+* Fichero MS Excel (XSL).
+* Fichero ODS.
+* Bases de datos Oracle.
+* Bases de datos MS SQLServer.
 
 Y algunos más además de los propios para acceder a datos raster que tienen su 
 propio modelo de datos distinto del de los datos tabulares y vectoriales.

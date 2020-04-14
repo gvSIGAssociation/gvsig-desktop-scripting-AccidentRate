@@ -159,7 +159,7 @@ iniciar la conexión de manera directa mediante el botón *Connect*.
 ![Dialogo de conexión a espacio de trabajo](importacion_datos_files/dialogo_conexion_espacio_trabajo_2.png)
 
 Una vez realizada la conexión al espacio de trabajo, para comprobar que se ha
-realizado la conexión y acceder a los datos disponibles se debe de ir al Catálogo que
+realizado la conexión y acceder a los datos disponibles se debe de ir al *Catálogo* que
 aparece en la Vista.
 
 Esta pestaña se encuentra bajo la zona donde se enuncia los diferentes archivos
@@ -184,6 +184,11 @@ atributos.
 
 ![Tabla de accidentes](importacion_datos_files/tabla_accidentes.png)
 
+**Catálogo.** La conexión al espacio de trabajo tambien puede llevarse a cabo de manera directa desde el catálogo. El proceso comienza pulsando botón derecho del mouse sobre la pestaña *Base de datos* y seleccionando la opción *Añadir base de datos*.
+
+![Conexión a base de datos desde el catálogo](importacion_datos_files/catalogo_conexion_bbdd.png)
+
+Tras realizar lo anterior se despliega la ventana para realizar la conexión a la base de datos descrita en el caso anterior y se puede realizar el acceso a tablas descrito anteriormente.
 
 ### Importador
 
@@ -235,7 +240,7 @@ desarrollar otras extensiones que se adapten a otra tipología de datos o que te
 otras necesidades de validación.
 
 Las extensiones desarrolladas para la GVA son tres, una para el procesamiento de
-los datos y dos para la validación de integridad. En el menú de opciones se pueden
+los datos y dos para la validación de integridad. En el menú *opciones* se pueden
 comprobar las extensiones registradas y activar o desactivar las que se deseen
 utilizar en este momento.
 

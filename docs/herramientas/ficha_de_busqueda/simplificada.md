@@ -24,7 +24,7 @@ las siguientes.
 6. Operador lógico utilizado para relacionar búsquedas en otros campos.
 7. Icono que permite mostrar la búsqueda en un formulario.
 8. Icono que permite exportar la búsqueda en diferentes 
-   formatos mediante el Exportador.
+   formatos mediante el *Exportador*.
 9. Icono que permite mostrar la búsqueda en un informe.
 10. Icono que muestra el historial global de cualquiera ficha de búsqueda sea cual sea.
 11. Icono que muestra las búsquedas favoritas de cualquiera ficha de búsqueda sea cual sea.
@@ -32,8 +32,9 @@ las siguientes.
 13. Zona donde se representan los resultados de la búsqueda con las columnas especificadas.
 14. Icono que permite limpiar los parametros de búsqueda.
 15. Icono que inicia el proceso de búsqueda simple.
+16. Conjunto de iconos que gestionan la acumulación de filtros o consultas. Permite iniciar el proceso de acumulacion de filtros, ver el proceso y eliminar la acumulación. La acumulación de filtros o consultas se realiza mediante el *operador lógico Y*.
 
-Las herramientas extra, icono 12, a utilizar en la ficha e búsqueda simplificada son las siguientes:
+Las herramientas extra, icono 12, a utilizar en la ficha de búsqueda simplificada son las siguientes:
 
 * Usar etiquetas.
 * Usar nombres.
@@ -47,7 +48,7 @@ Las herramientas extra, icono 12, a utilizar en la ficha e búsqueda simplificad
   ![ventana herramienta extra seleccionar columna con detalles](simplificada_files/seleccionarColumnas_detalles.png)
 
   1. Barra que nos permite realizar búsqueda de columnas por teclado.
-  2. Zona donde se muestran las columnas resultado de la búsqueda con la barra anterior.
+  2. Zona donde se muestran las columnas resultado de la búsqueda con la barra anterior o todas si no hay consulta.
   3. Iconos que permiten llevar columnas de la zona de busqueda a la zona donde se agrupan las que van a ser mostradas. Este icono también permite quitar columnas del grupo a representar.
   4. Zona donde se encuentran las columnas a representar.
   5. Iconos que permiten ordenar las columnas a representar.
@@ -72,7 +73,7 @@ Las herramientas extra, icono 12, a utilizar en la ficha e búsqueda simplificad
   8. Zona donde se indica la expresión o formula que surtirá de datos a la columna.
   9. Icono que permite llamar al *Creador de expresiones* para crear la expresión.
   10. Icono que muesta el historial de expresiones.
-  11. Icono que muestra las búsquedas favoritas.
+  11. Icono que muestra las expresiones favoritas.
   12. Zona donde se indica el tamaño del dato de la columna calculada.
   13. Zona donde se indica la precisión del dato de la columna calculada.
   14. Zona donde se indica el escalar del dato de la columna calculada.
@@ -88,7 +89,7 @@ Las herramientas extra, icono 12, a utilizar en la ficha e búsqueda simplificad
 
   ![ventanas Agrupar por...](simplificada_files/agrupar_por.png)
 
-  La primera pestaña como se ha comentado anteriormente permite selecionar la columna o campo por el cual vaos a agrupar. La segunda ventana introduce los campos a mostrar información y la función de agregación a aplicar en estos. 
+  La primera pestaña como se ha comentado anteriormente permite selecionar la columna o campo por el cual se va a agrupar. La segunda ventana introduce los campos a mostrar información y la función de agregación a aplicar en estos. 
   
   Importante mencionar que se pueden tener diferentes funciones de agregación en cada columna o campo a representar y que los campos sin función de agregación apareceran en blanco.
   
@@ -116,7 +117,7 @@ Las herramientas extra, icono 12, a utilizar en la ficha e búsqueda simplificad
   1. Barra que nos permite realizar búsqueda de columnas/campos por teclado.
   2. Zona donde se muestran las columnas resultado de la búsqueda con la barra anterior o todas si no hay consulta.
   3. Iconos que permiten llevar columnas de la zona de busqueda a la zona donde se agrupan las que van a ser ordenadas. Este icono también permite quitar columnas del grupo a ordenar.
-  4. Zona donde se encuentran las columnas a ser ordenadas.
+  4. Zona donde se encuentran las columnas propuestas a ser ordenadas.
   5. Iconos que permiten seleccionar un orden ascendente o descendente.
   6. Iconos que permiten ordenar las columnas a ordenar en la zona donde se agrupan.
   7. Icono que permite aceptar y terminar el proceso.

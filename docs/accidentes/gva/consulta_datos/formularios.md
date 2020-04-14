@@ -6,7 +6,7 @@ Una vez realizada la conexión a los datos podemos visualizar estos mediante
 el uso de formularios.
 
 Para visualizar la información de una tabla gracias a los formularios esta 
-tiene que abierta y es necesario pulsar en el menú Tabla la opción Show form. 
+tiene que abierta y es necesario pulsar en el menú *Tabla* la opción *Show form*. 
 
 ![Menu mostrar formulario](formularios_files/formulario_menu_tabla.png)
 

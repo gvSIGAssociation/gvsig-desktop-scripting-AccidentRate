@@ -4,7 +4,7 @@
 
 Esta nueva funcionalidad permite exportar al formato abierto CSV, 
 sencillo para representar datos en forma de tabla, en las que las 
-columnas se separan por comas (“ , “) o punto y coma (“ ; “) si la 
+columnas se separan por *comas ( , )* o *punto y coma ( ; )* si la 
 coma representa al separador decimal.
 
 La exportación a este formato se inicia definiendo diferentes 
