@@ -1,3 +1,6 @@
+
+{% comment %} encoding: utf-8 {% endcomment %}
+
 La *ficha de búsqueda especifica de accidentes* o *ficha de accidentes* es una herramienta de consulta que aúna los complementos más usuales a la hora de realizar una consulta sobre un accidente.
 
 Su apariencia es muy parecida a las dos fichas de búsqueda anteriores con la excepción de que dichos complementos se muestran en pestañas. Las pestañas que engloban a los complementos para realizar las consultas son:
