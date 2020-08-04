@@ -51,11 +51,19 @@ class AccidentRateExtension(ScriptingExtension):
         
   def createTables(self):
     manager = getArena2ImportManager()
+    messages = manager.checkRequirements()
+    if messages!=None:
+      msgbox("\n".join(messages))
+      return
     dialog = manager.createTablestDialog()
     dialog.showWindow("Accidentes - Crear tablas de accidentes")
 
   def importData(self):
     manager = getArena2ImportManager()
+    messages = manager.checkRequirements()
+    if messages!=None:
+      msgbox("\n".join(messages))
+      return
     dialog = manager.createImportDialog()
     dialog.showWindow("Accidentes - Importar accidentes")
     
@@ -90,16 +98,8 @@ class AccidentRateExtension(ScriptingExtension):
       "Busqueda de accidentes", 
       WindowManager.MODE.WINDOW
     )
-    
-def selfRegister():
 
-  config = AccidentRateConfig()
-  config.readConfig()
-  if not config.getboolean("ARENA2","alreadyDisabled"):
-    disableArena2()
-    config.set("ARENA2","alreadyDisabled","false")
-    config.writeConfig()
-  
+def registerActions():
   application = ApplicationLocator.getManager()
 
   #
@@ -140,9 +140,7 @@ def selfRegister():
     1009000901, # Position 
     "_Show_the_accidents_tables_creator_tool" # Tooltip
   )
-
-  action = actionManager.registerAction(action)
-  application.addMenu(action, u"_AccidentRate/Administration/Gesti\u00F3n de accidentes/Crear tablas de accidentes")
+  action = actionManager.registerAction(action, True)
 
   action = actionManager.createAction(
     extension, 
@@ -154,8 +152,7 @@ def selfRegister():
     1009000902, # Position 
     "_Show_the_accidents_import_tool" # Tooltip
   )
-  action = actionManager.registerAction(action)
-  application.addMenu(action, u"_AccidentRate/Administration/Gesti\u00F3n de accidentes/Importador de accidentes")
+  action = actionManager.registerAction(action, True)
   
   action = actionManager.createAction(
     extension, 
@@ -167,8 +164,7 @@ def selfRegister():
     1009000903, # Position 
     "_Show_the_accidents_closing_date_tool" # Tooltip
   )
-  action = actionManager.registerAction(action)
-  application.addMenu(action, u"_AccidentRate/Administration/Gesti\u00F3n de accidentes/Fecha de cierre")
+  action = actionManager.registerAction(action, True)
 
   action = actionManager.createAction(
     extension, 
@@ -180,8 +176,7 @@ def selfRegister():
     1009000100, # Position 
     "Busqueda de accidentes" # Tooltip
   )
-  action = actionManager.registerAction(action)
-  application.addMenu(action, u"_AccidentRate/Gesti\u00F3n de accidentes/Busqueda de accidentes")
+  action = actionManager.registerAction(action, True)
 
   action = actionManager.createAction(
     extension, 
@@ -193,11 +188,40 @@ def selfRegister():
     1009000200, # Position 
     "Añadir capa de accidentes" # Tooltip
   )
-  action = actionManager.registerAction(action)
-  application.addMenu(action, u"_AccidentRate/Gesti\u00F3n de accidentes/A\u00F1adir capa de accidentes")
+  action = actionManager.registerAction(action, True)
+
+def selfRegister():
+
+  config = AccidentRateConfig()
+  config.readConfig()
+  if not config.getboolean("ARENA2","alreadyDisabled"):
+    disableArena2()
+    config.set("ARENA2","alreadyDisabled","false")
+    config.writeConfig()
+  
+  application = ApplicationLocator.getManager()
+  actionManager = PluginsLocator.getActionInfoManager()
+
+  registerActions()
+  
+  action = actionManager.getAction("accidentrate-importer-showtablecreator")
+  application.addMenu(action, u"tools/_AccidentRate/Administration/Crear tablas de accidentes")
+
+  action = actionManager.getAction("accidentrate-importer-showimporter")
+  application.addMenu(action, u"tools/_AccidentRate/Administration/Importador de accidentes")
+  
+  action = actionManager.getAction("accidentrate-closingdate-showdialog")
+  application.addMenu(action, u"tools/_AccidentRate/Administration/Fecha de cierre")
+
+  action = actionManager.getAction("accidentrate-search")
+  application.addMenu(action, u"tools/_AccidentRate/Busqueda de accidentes")
+
+  action = actionManager.getAction("accidentrate-addlayer")
+  application.addMenu(action, u"tools/_AccidentRate/A\u00F1adir capa de accidentes")
 
 def main(*args):
   #selfRegister()
-  x = AccidentRateExtension()
-  x.showAccidentsSearch()
+  registerActions()
+  #x = AccidentRateExtension()
+  #x.showAccidentsSearch()
   

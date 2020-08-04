@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 from java.lang import String, Integer
 
-from addons.AccidentRate.roadcatalog import findOwnership
+from addons.AccidentRate.roadcatalog import findOwnership, checkRequirements
 
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory, RuleFixer
@@ -59,6 +59,12 @@ class ConflictRule(Rule):
 class ConflictRuleFactory(RuleFactory):
   def __init__(self):
     RuleFactory.__init__(self,"[GVA] Conflicto en CARRETERA/TIPO_VIA/KM/TITULARIDAD_VIA")
+
+  def checkRequirements(self):
+    s = checkRequirements()
+    if s != None:
+      return self.getName()+".\nNo  es posible realizar las comprobaciones de CARRETERA/TIPO_VIA/KM/TITULARIDAD_VIA.\n"+s
+    return None
 
   def create(self, **args):
     return ConflictRule(self, **args)

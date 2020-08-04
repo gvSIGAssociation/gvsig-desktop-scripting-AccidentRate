@@ -2,10 +2,13 @@
 
 import gvsig
 
-from addons.AccidentRate.roadcatalog import geocodificar
+from addons.AccidentRate.roadcatalog import geocodificar, checkRequirements
+from addons.AccidentRate.importrules.titularidad import CODERR_CARRETERAKM_NO_ENCONTRADA
+from addons.AccidentRate.importrules.titularidad import CODERR_KM_NO_ENCONTRADO
 
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory, RuleFixer
+
 
 class GeocodeTransform(Transform):
   def __init__(self, factory):
@@ -15,7 +18,7 @@ class GeocodeTransform(Transform):
     if feature.getType().get("LID_ACCIDENTE") == None:
       # Si no es la tabla de accidentes no hacenos nada
       return
-    p, msg = geocodificar(
+    p, f, msg = geocodificar(
       feature.get("FECHA_ACCIDENTE"), 
       feature.get("CARRETERA"), 
       feature.get("KM")
@@ -25,6 +28,7 @@ class GeocodeTransform(Transform):
     else:
       #print "GeocodeTransform.apply: update MAPA to ", p
       feature.set("MAPA",p)
+      feature.set("ID_TRAMO", f.get("id_tramo"))
     
       
 
@@ -32,6 +36,12 @@ class GeocodeTransformFactory(TransformFactory):
   def __init__(self):
     TransformFactory.__init__(self,"[GVA] Geocode (LRS)")
 
+  def checkRequirements(self):
+    s = checkRequirements()
+    if s != None:
+      return self.getName()+".\nNo es posible realizar la geocodificacion.\n"+s
+    return None
+    
   def create(self, *args):
     return GeocodeTransform(self)
     
@@ -51,18 +61,26 @@ class GeocodeRule(Rule):
     if feature.getType().get("LID_ACCIDENTE") == None:
       # Si no es la tabla de accidentes no hacenos nada
       return
-    p, msg = geocodificar(
+    titularidad_accidente = feature.get("TITULARIDAD_VIA")
+    p, f, msg = geocodificar(
       feature.get("FECHA_ACCIDENTE"), 
       feature.get("CARRETERA"), 
       feature.get("KM")
     )
     if p==None:
+      errcode = CODERR_CARRETERAKM_NO_ENCONTRADA
+      if msg.lower().startswith("kilometro"):
+        errcode = CODERR_KM_NO_ENCONTRADO
       report.add(
         feature.get("ID_ACCIDENTE"), 
-        self.getName(), 
-        100,
+        errcode,
         msg,
-        fixedID="IgnoreGeocodeError"
+        fixerID="IgnoreGeocodeError",
+        CARRETERA=feature.get("CARRETERA"),
+        PK=feature.get("KM"),        
+        TITULARIDAD_ACCIDENTE=titularidad_accidente,
+        FECHA=feature.get("FECHA_ACCIDENTE"),
+        PROVINCIA=feature.get("COD_PROVINCIA")
       )
 
 
@@ -74,6 +92,12 @@ class GeocodeRuleFactory(RuleFactory):
     rule = GeocodeRule(self, **args)
     #print "GeocodeRuleFactory.create: ", rule
     return rule
+
+  def checkRequirements(self):
+    s = checkRequirements()
+    if s != None:
+      return self.getName()+".\nNo es posible realizar la geocodificacion.\n"+s
+    return None
 
   def isSelectedByDefault(self):
     return False

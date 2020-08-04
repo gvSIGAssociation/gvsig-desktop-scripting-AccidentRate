@@ -4,7 +4,6 @@ import gvsig
 
 from gvsig.uselib import use_plugin
 
-use_plugin("org.gvsig.cegesev.roadcatalog.app.mainplugin")
 use_plugin("org.gvsig.lrs.app.mainplugin")
 
 from java.text import SimpleDateFormat
@@ -12,11 +11,7 @@ from org.gvsig.tools.dispose import DisposeUtils
 from org.gvsig.tools.util import CachedValue
 from org.gvsig.fmap.dal import DALLocator
 from org.gvsig.fmap.geom import GeometryUtils
-
-try:
-  from org.gvsig.cegesev.roadcatalog import AccidentCatalogLocator
-except:
-  AccidentCatalogLocator = None
+from org.gvsig.expressionevaluator import ExpressionUtils
 
 try:
   from org.gvsig.lrs.lib.api import LrsAlgorithmsLocator
@@ -35,15 +30,9 @@ class StretchFeatureStoreCache(CachedValue):
     store = dataManager.openStore(params.getProviderName(), params)
     self.setValue(store)
 
-carreterasManager = None
 lrsManager = None
 stretchFeatureStore = StretchFeatureStoreCache(5000);
 
-def getCarreterasManager():
-  global carreterasManager
-  if carreterasManager == None:
-    carreterasManager = AccidentCatalogLocator.getManager()
-  return carreterasManager
 
 def getLRSManager():
   global lrsManager
@@ -54,39 +43,86 @@ def getLRSManager():
 def getStretchFeatureStore():
   return stretchFeatureStore.get()
 
+def checkRequirements():
+  dataManager = DALLocator.getDataManager()
+  s = ""
+  if getLRSManager()==None:
+    s += "No se ha podido acceder al plugin de LRS, es posible que no se encuentre instalado.\n"
+  pool = dataManager.getDataServerExplorerPool()
+  if pool.get("carreteras_gva")==None:
+    s += "No se ha podido localizar la conexion 'carreteras_gva' para poder acceder a las capas de carreteras\n"
+  else:
+    try:
+      explorerParams = pool.get("carreteras_gva").getExplorerParameters()    
+      explorerParams.setSchema("layers")
+      explorer = dataManager.openServerExplorer(explorerParams.getProviderName(), explorerParams)
+      params = explorer.get("tramos_carreteras")
+    except:
+      params = None
+      
+    if params == None:
+      s += "No se ha podido acceder a la tabla 'layers.tramos_carreteras'.\n"
+  if s.strip() == "":
+    return None
+  return s
+
 def getVigentStretchesQuery(store, fecha):
-  #query = getCarreterasManager().getVigentStretchesQuery(store, fecha) 
-  dateFormatter = SimpleDateFormat("dd/MM/yyyy")
-  formatedDate = dateFormatter.format(fecha)
-  filtro = "( fecha_entrada <= '%s' OR fecha_entrada IS NULL) AND ('%s' <= fecha_salida OR fecha_salida IS NULL)" % (
-    formatedDate,
-    formatedDate
-  )
+  builder = ExpressionUtils.createExpressionBuilder()
+  filtro = builder.and( 
+    builder.group( builder.or( 
+        builder.le(builder.variable("fecha_entrada"), builder.date(fecha)),
+        builder.is_null(builder.variable("fecha_entrada"))
+    )),
+    builder.group( builder.or( 
+        builder.le(builder.variable("fecha_salida"), builder.date(fecha)),
+        builder.is_null(builder.variable("fecha_salida"))
+    ))
+  ).toString()
+  
+  #dateFormatter = SimpleDateFormat("dd/MM/yyyy")
+  #formatedDate = dateFormatter.format(fecha)
+  #filtro = "( fecha_entrada <= '%s' OR fecha_entrada IS NULL) AND ('%s' <= fecha_salida OR fecha_salida IS NULL)" % (
+  #  formatedDate,
+  #  formatedDate
+  #)
+  
   query = store.createFeatureQuery()
   query.addFilter(filtro)
   return query
 
+def iif(cond, ontrue, onfalse):
+  if cond:
+    return ontrue
+  return onfalse
+  
 def geocodificar(fecha, carretera, pk):
   if fecha == None or carretera == None or pk == None:
-    return (None, "Fecha, carretera o pk nulo")
+    return (None, None, "Fecha%s, carretera%s o pk%s nulo" % (
+        iif(fecha==None, "*",""),
+        iif(carretera==None, "*",""),
+        iif(pk==None, "*","")
+      )
+    )
   strechesStore = getStretchFeatureStore()
   query = getVigentStretchesQuery(strechesStore, fecha) 
 
-  expression = "matricula = '%s'" % carretera
+  builder = ExpressionUtils.createExpressionBuilder()
+  expression = builder.eq(builder.variable("matricula"), builder.constant(carretera)).toString()
+  #expression = "matricula = '%s'" % carretera
   try:
     query.addFilter(expression)
     query.retrievesAllAttributes()
     streches = strechesStore.getFeatureSet(query)
     if len(streches)<1:
-      return (None,"Carretera '%s' no encontrada" % carretera)
+      return (None, None, "Carretera '%s' no encontrada" % carretera)
 
     for strech in streches:
       location = getLRSManager().getMPointFromGeometry(strech.getDefaultGeometry(), pk)
       if location != None:
         # LRS devuelve un Point2DM y falla al guardarse en la BBDD (H2 por lo menos)
         location = GeometryUtils.createPoint(location.getX(), location.getY())
-        return (location, None)
-    return (None, "kilometro %s no encontrado en '%s'." % (pk,carretera))
+        return (location, strech, None)
+    return (None, None, "kilometro %s no encontrado en '%s'." % (pk,carretera))
   finally:
     DisposeUtils.disposeQuietly(streches)
 
@@ -96,7 +132,12 @@ def findOwnership(fecha, carretera, pk):
   strechesStore = getStretchFeatureStore()
   query = getVigentStretchesQuery(strechesStore, fecha) 
 
-  expression = "matricula = '%s' and pk_i >= %s and pk_f <= %s" % (carretera, pk, pk)
+  builder = ExpressionUtils.createExpressionBuilder()
+  builder.and( builder.eq(builder.variable("matricula"), builder.constant(carretera)))
+  builder.and( builder.ge(builder.variable("pk_i"), builder.constant(pk)))
+  builder.and( builder.le(builder.variable("pk_f"), builder.constant(pk)))
+  expression = builder.toString()
+  #expression = "matricula = '%s' and pk_i >= %s and pk_f <= %s" % (carretera, pk, pk)
   query.addFilter(expression)
   query.retrievesAllAttributes()
   feature = strechesStore.findFirst(query)
@@ -106,4 +147,17 @@ def findOwnership(fecha, carretera, pk):
 
 
 def main(*args):
-    pass
+    from java.util import Date
+    fecha = Date()
+    builder = ExpressionUtils.createExpressionBuilder()
+    print builder.and( 
+      builder.group( builder.or( 
+          builder.le(builder.variable("fecha_entrada"), builder.date(fecha)),
+          builder.is_null(builder.variable("fecha_entrada"))
+      )),
+      builder.group( builder.or( 
+          builder.le(builder.variable("fecha_salida"), builder.date(fecha)),
+          builder.is_null(builder.variable("fecha_salida"))
+      ))
+    ).toString()      
+    print builder.toString()
