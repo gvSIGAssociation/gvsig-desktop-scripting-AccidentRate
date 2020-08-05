@@ -40,12 +40,13 @@ class OwnershipRule(Rule):
     Rule.__init__(self, factory)
     self.__titularidadGVA2DGT = {
       0: TITULARIDAD_DESCONOCIDA,
-      1: TITULARIDAD_ESTATAL,
-      2: TITULARIDAD_AUTONOMICA,
-      3: TITULARIDAD_PROVINCIAL, # En la GVA han separado esta en dos
-      4: TITULARIDAD_PROVINCIAL,
-      5: TITULARIDAD_MUNICIPAL,
-      6: TITULARIDAD_OTRA
+      10: TITULARIDAD_ESTATAL,
+      20: TITULARIDAD_AUTONOMICA,
+      30: TITULARIDAD_PROVINCIAL, # En la GVA han separado esta en dos
+      40: TITULARIDAD_PROVINCIAL,
+      50: TITULARIDAD_MUNICIPAL,
+      60: TITULARIDAD_OTRA,
+      99: TITULARIDAD_DESCONOCIDA
     }
     self.__titularidadCod2Name = {
       TITULARIDAD_DESCONOCIDA: "Desconocida [%s]" % TITULARIDAD_DESCONOCIDA,

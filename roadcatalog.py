@@ -35,6 +35,8 @@ stretchFeatureStore = StretchFeatureStoreCache(5000);
 
 
 def getLRSManager():
+  if LrsAlgorithmsLocator == None:
+    return None
   global lrsManager
   if lrsManager == None:
     lrsManager = LrsAlgorithmsLocator.getLrsAlgorithmsManager()
@@ -131,11 +133,11 @@ def findOwnership(fecha, carretera, pk):
     return None
   strechesStore = getStretchFeatureStore()
   query = getVigentStretchesQuery(strechesStore, fecha) 
-
+  pk = pk * 1000 
   builder = ExpressionUtils.createExpressionBuilder()
   builder.and( builder.eq(builder.variable("matricula"), builder.constant(carretera)))
-  builder.and( builder.ge(builder.variable("pk_i"), builder.constant(pk)))
-  builder.and( builder.le(builder.variable("pk_f"), builder.constant(pk)))
+  builder.and( builder.le(builder.variable("pk_i"), builder.constant(pk)))
+  builder.and( builder.ge(builder.variable("pk_f"), builder.constant(pk)))
   expression = builder.toString()
   #expression = "matricula = '%s' and pk_i >= %s and pk_f <= %s" % (carretera, pk, pk)
   query.addFilter(expression)
