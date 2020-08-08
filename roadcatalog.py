@@ -28,6 +28,7 @@ class StretchFeatureStoreCache(CachedValue):
     explorer = dataManager.openServerExplorer(explorerParams.getProviderName(), explorerParams)
     params = explorer.get("tramos_carreteras")
     store = dataManager.openStore(params.getProviderName(), params)
+    explorer.dispose()
     self.setValue(store)
 
 lrsManager = None
@@ -59,6 +60,7 @@ def checkRequirements():
       explorerParams.setSchema("layers")
       explorer = dataManager.openServerExplorer(explorerParams.getProviderName(), explorerParams)
       params = explorer.get("tramos_carreteras")
+      explorer.dispose()
     except:
       params = None
       
@@ -114,10 +116,10 @@ def geocodificar(fecha, carretera, pk):
   try:
     query.addFilter(expression)
     query.retrievesAllAttributes()
-    streches = strechesStore.getFeatureSet(query)
-    if len(streches)<1:
+    streches = strechesStore.getFeatureSet(query).iterable()
+    if streches.isEmpty():
       return (None, None, "Carretera '%s' no encontrada" % carretera)
-
+    
     for strech in streches:
       location = getLRSManager().getMPointFromGeometry(strech.getDefaultGeometry(), pk)
       if location != None:
