@@ -119,7 +119,7 @@ def geocodificar(fecha, carretera, pk):
     streches = strechesStore.getFeatureSet(query).iterable()
     if streches.isEmpty():
       return (None, None, "Carretera '%s' no encontrada" % carretera)
-    
+    pk = pk * 1000 
     for strech in streches:
       location = getLRSManager().getMPointFromGeometry(strech.getDefaultGeometry(), pk)
       if location != None:
