@@ -13,15 +13,18 @@ from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, R
 from org.gvsig.expressionevaluator import ExpressionUtils
 
 CODERR_VALUES_NO_DISPONIBLES = 470
+CODERR_VALUES_NO_DISPONIBLES_DE_FK = 471
 
 class AvailableValuesRule(Rule):
   def __init__(self, factory, **args):
     Rule.__init__(self, factory)
     
   def execute(self, report, feature):
-    for attr in feature.getStore().getDefaultFeatureType():
-      if attr.hasConstantAvailableValues():
+    ftype = feature.getStore().getDefaultFeatureType()
+    for attr in ftype:
+      if attr.hasConstantAvailableValues() == True:
         value = feature.get(attr)
+        if value==None: continue
         if not attr.isInAvailableValues(value):
           report.add(
                     feature.get("ID_ACCIDENTE"),
@@ -33,7 +36,22 @@ class AvailableValuesRule(Rule):
                     selected=False,
                     FIELD_NO_AVAILABLE=attr.getName()
                   )
-      
+      if attr.isForeingKey() and attr.getForeingKey().isClosedList():
+          value = feature.get(attr.getName())
+          if value==None: continue
+          fk = attr.getForeingKey()
+          if not fk.isInAvailableValues(value):
+            report.add(
+                      feature.get("ID_ACCIDENTE"),
+                      CODERR_VALUES_NO_DISPONIBLES_DE_FK,
+                      "Valor no disponible en esta clave ajena. Campo: %s Valor: %s ." % (
+                        attr.getName(),
+                        str(value)
+                      ),
+                      fixerId = None, 
+                      selected=False,
+                      FIELD_NO_AVAILABLE=attr.getName()
+                    )
 class AvailableValuesRuleFactory(RuleFactory):
   def __init__(self):
     RuleFactory.__init__(self,"[GVA] Valores disponibles")
@@ -57,7 +75,6 @@ def selfRegister():
   )
 
   manager.addReportAttribute("FIELD_NO_AVAILABLE",String, size=120, label="Campo con valor no disponible", isEditable=True)
-
   
 
 
