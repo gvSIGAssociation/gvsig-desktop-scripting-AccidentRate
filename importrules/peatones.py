@@ -11,7 +11,7 @@ from addons.AccidentRate.roadcatalog import findOwnership, checkRequirements
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory, RuleFixer
 from org.gvsig.expressionevaluator import ExpressionUtils
-
+from org.gvsig.tools.dispose import DisposeUtils
 CODERR_PEATONES_NO_COINCIDEN = 400
 
 class AssignPeatonesFromTableFixer(RuleFixer):
@@ -42,6 +42,7 @@ class PeatonesRule(Rule):
       expression = builder.eq(builder.variable("ID_ACCIDENTE"), builder.constant(accidente)).toString()
       fset = storePeatones.getFeatureSet(expression)
       totalPeatones = fset.size()
+      DisposeUtils.dispose(fset)
       peatonesFromFeature = feature.get("TOTAL_PEATONES")
       if totalPeatones!=peatonesFromFeature:
         report.add(
@@ -55,7 +56,7 @@ class PeatonesRule(Rule):
                   selected=False,
                   TOTAL_PEATONES=totalPeatones
                 )
-    
+    DisposeUtils.dispose(storePeatones)
 class PeatonesRuleFactory(RuleFactory):
   def __init__(self):
     RuleFactory.__init__(self,"[GVA] Peatones")

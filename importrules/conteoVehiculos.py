@@ -12,12 +12,22 @@ from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory, RuleFixer
 from org.gvsig.expressionevaluator import ExpressionUtils
 from java.lang import StringBuilder
+from org.gvsig.tools.dispose import DisposeUtils
 
 CODERR_VEHICULOS_NO_COINCIDEN = 450
 
 class UpdateCountVehicles(RuleFixer):
   def __init__(self, **args):
     RuleFixer.__init__(self, "UpdateCountVehicles", "Corregir vehiculos", True)
+    self.agrupacion = {'NUM_TURISMOS' : [1,3],
+         'NUM_FURGONETAS' : [2],
+         'NUM_CAMIONES' : [19,20,21],
+         'NUM_AUTOBUSES' : [15,16,17],
+         'NUM_CICLOMOTORES' : [5],
+         'NUM_MOTOCICLETAS' : [6,7],
+         'NUM_BICICLETAS' : [4],
+         'NUM_OTROS_VEHI' : [8,9,10,11,12,13,14,18,22,23,24,25,26,27,30,98]
+         }
 
   def fix(self,feature, issue):
     if feature.getType().get("LID_ACCIDENTE") == None:
@@ -78,7 +88,7 @@ class CountVehiclesRule(Rule):
       ## Conteo por la tabla asociada de vehiculos
       builder = ExpressionUtils.createExpressionBuilder()
       expression = builder.eq(builder.variable("ID_ACCIDENTE"), builder.constant(accidente)).toString()
-      fset = storeVehiculos.getFeatureSet(expression)
+      #fset = storeVehiculos.getFeatureSet(expression)
       conteoPorTablas = { 'NUM_TURISMOS': 0,
         'NUM_FURGONETAS': 0,
         'NUM_CAMIONES': 0,
@@ -88,13 +98,14 @@ class CountVehiclesRule(Rule):
         'NUM_BICICLETAS': 0,
         'NUM_OTROS_VEHI': 0
         }
-      
+      fset = storeVehiculos.getFeatureSet(expression).iterable()
       for f in fset:
         tipoVehiculo = f.get("TIPO_VEHICULO")
         keyValue = self.getKeyFromTypeVehicle(tipoVehiculo)
         if keyValue!=None:
           conteoPorTablas[keyValue]+=1
-          
+      DisposeUtils.dispose(fset)
+      DisposeUtils.dispose(storeVehiculos)
       toReport = False
       builder = StringBuilder()
       for key in conteoPorTablas.keys():
@@ -121,7 +132,6 @@ class CountVehiclesRule(Rule):
                   NUM_BICICLETAS=conteoPorTablas[key],
                   NUM_OTROS_VEHI=conteoPorTablas[key]
                 )
-    
 class CountVehiclesRuleFactory(RuleFactory):
   def __init__(self):
     RuleFactory.__init__(self,"[GVA] Numero de vehiculos")
