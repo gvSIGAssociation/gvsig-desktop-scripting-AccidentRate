@@ -123,14 +123,14 @@ class CountVehiclesRule(Rule):
                   ),
                   fixerId = "UpdateCountVehicles", 
                   selected=False,
-                  NUM_TURISMOS=conteoPorTablas[key],
-                  NUM_FURGONETAS=conteoPorTablas[key],
-                  NUM_CAMIONES=conteoPorTablas[key],
-                  NUM_AUTOBUSES=conteoPorTablas[key],
-                  NUM_CICLOMOTORES=conteoPorTablas[key],
-                  NUM_MOTOCICLETAS=conteoPorTablas[key],
-                  NUM_BICICLETAS=conteoPorTablas[key],
-                  NUM_OTROS_VEHI=conteoPorTablas[key]
+                  NUM_TURISMOS=conteoPorTablas['NUM_TURISMOS'],
+                  NUM_FURGONETAS=conteoPorTablas['NUM_FURGONETAS'],
+                  NUM_CAMIONES=conteoPorTablas['NUM_CAMIONES'],
+                  NUM_AUTOBUSES=conteoPorTablas['NUM_AUTOBUSES'],
+                  NUM_CICLOMOTORES=conteoPorTablas['NUM_CICLOMOTORES'],
+                  NUM_MOTOCICLETAS=conteoPorTablas['NUM_MOTOCICLETAS'],
+                  NUM_BICICLETAS=conteoPorTablas['NUM_BICICLETAS'],
+                  NUM_OTROS_VEHI=conteoPorTablas['NUM_OTROS_VEHI']
                 )
 class CountVehiclesRuleFactory(RuleFactory):
   def __init__(self):
