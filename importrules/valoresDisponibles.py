@@ -22,36 +22,23 @@ class AvailableValuesRule(Rule):
   def execute(self, report, feature):
     ftype = feature.getStore().getDefaultFeatureType()
     for attr in ftype:
-      if attr.hasConstantAvailableValues() == True:
-        value = feature.get(attr)
-        if value==None: continue
+      if attr.hasAvailableValues()==True:
+        value = feature.get(attr.getName())
+        if value==None: 
+            continue
         if not attr.isInAvailableValues(value):
-          report.add(
-                    feature.get("ID_ACCIDENTE"),
-                    CODERR_VALUES_NO_DISPONIBLES,
-                    "Valor no disponible en este attributo: %s ." % (
-                      str(value)
-                    ),
-                    fixerId = None, 
-                    selected=False,
-                    FIELD_NO_AVAILABLE=attr.getName()
-                  )
-      if attr.isForeingKey() and attr.getForeingKey().isClosedList():
-          value = feature.get(attr.getName())
-          if value==None: continue
-          fk = attr.getForeingKey()
-          if not fk.isInAvailableValues(value):
             report.add(
                       feature.get("ID_ACCIDENTE"),
-                      CODERR_VALUES_NO_DISPONIBLES_DE_FK,
-                      "Valor no disponible en esta clave ajena. Campo: %s Valor: %s ." % (
-                        attr.getName(),
-                        str(value)
+                      CODERR_VALUES_NO_DISPONIBLES,
+                      "Valor no disponible en este attributo: %s  del campo: %s " % (
+                        str(value),
+                        str(attr.getName())
                       ),
                       fixerId = None, 
                       selected=False,
                       FIELD_NO_AVAILABLE=attr.getName()
                     )
+
 class AvailableValuesRuleFactory(RuleFactory):
   def __init__(self):
     RuleFactory.__init__(self,"[GVA] Valores disponibles")
