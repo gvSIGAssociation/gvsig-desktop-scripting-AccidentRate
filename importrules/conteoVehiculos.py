@@ -113,7 +113,7 @@ class CountVehiclesRule(Rule):
           if toReport:
             builder.append(", ")
           toReport = True
-          builder.append(key+" tiene "+str(conteoPorFeature[key])+" y es "+str(conteoPorTablas[key]))
+          builder.append(key+" valor:"+str(conteoPorFeature[key])+" correccion:"+str(conteoPorTablas[key]))
 
       if toReport:
        report.add( feature.get("ID_ACCIDENTE"),

@@ -30,7 +30,7 @@ class AvailableValuesRule(Rule):
             report.add(
                       feature.get("ID_ACCIDENTE"),
                       CODERR_VALUES_NO_DISPONIBLES,
-                      "Valor no disponible en este attributo: %s  del campo: %s " % (
+                      "Valor no disponible: %s  del campo: %s " % (
                         str(value),
                         str(attr.getName())
                       ),
