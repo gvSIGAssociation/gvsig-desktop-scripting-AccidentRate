@@ -26,7 +26,7 @@ class UpdateCountVehicles(RuleFixer):
          'NUM_CICLOMOTORES' : [5],
          'NUM_MOTOCICLETAS' : [6,7],
          'NUM_BICICLETAS' : [4,30],
-         'NUM_OTROS_VEHI' : [8,9,10,11,12,13,14,18,22,23,24,25,26,27,98]
+         'NUM_OTROS_VEHI' : [8,9,10,11,12,13,14,18,22,23,24,25,26,27,29]
          }
 
   def fix(self,feature, issue):
@@ -48,7 +48,7 @@ class CountVehiclesRule(Rule):
          'NUM_CICLOMOTORES' : [5],
          'NUM_MOTOCICLETAS' : [6,7],
          'NUM_BICICLETAS' : [4,30],
-         'NUM_OTROS_VEHI' : [8,9,10,11,12,13,14,18,22,23,24,25,26,27,98]
+         'NUM_OTROS_VEHI' : [8,9,10,11,12,13,14,18,22,23,24,25,26,27,29]
          }
   def getKeyFromTypeVehicle(self, value):
     if value==None:
