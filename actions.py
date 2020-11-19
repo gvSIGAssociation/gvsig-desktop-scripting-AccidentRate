@@ -51,10 +51,10 @@ class AccidentRateExtension(ScriptingExtension):
         
   def createTables(self):
     manager = getArena2ImportManager()
-    messages = manager.checkRequirements()
-    if messages!=None:
-      msgbox("\n".join(messages))
-      return
+    #messages = manager.checkRequirements()
+    #if messages!=None:
+      #msgbox("\n".join(messages))
+      #return
     dialog = manager.createTablestDialog()
     dialog.showWindow("Accidentes - Crear tablas de accidentes")
 
@@ -181,12 +181,12 @@ def registerActions():
   action = actionManager.createAction(
     extension, 
     "accidentrate-addlayer", # Action name
-    "AÃ±adir capa de accidentes", # Text
+    "Añadir capa de accidentes", # Text
     "accidentrate-addlayer", # Action command
     "accidentrate-addlayer", # Icon name
     None, # Accelerator
     1009000200, # Position 
-    "AÃ±adir capa de accidentes" # Tooltip
+    "Añadir capa de accidentes" # Tooltip
   )
   action = actionManager.registerAction(action, True)
 
