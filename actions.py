@@ -181,12 +181,12 @@ def registerActions():
   action = actionManager.createAction(
     extension, 
     "accidentrate-addlayer", # Action name
-    "Añadir capa de accidentes", # Text
+    "AÃ±adir capa de accidentes", # Text
     "accidentrate-addlayer", # Action command
     "accidentrate-addlayer", # Icon name
     None, # Accelerator
     1009000200, # Position 
-    "Añadir capa de accidentes" # Tooltip
+    "AÃ±adir capa de accidentes" # Tooltip
   )
   action = actionManager.registerAction(action, True)
 
