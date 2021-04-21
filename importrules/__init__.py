@@ -8,6 +8,7 @@ from addons.AccidentRate.importrules import conflicto
 from addons.AccidentRate.importrules import peatones
 from addons.AccidentRate.importrules import conteoVehiculos
 from addons.AccidentRate.importrules import valoresDisponibles
+from addons.AccidentRate.importrules import fechaCierre
 
 def selfRegister():
   geocode.selfRegister()
@@ -16,3 +17,4 @@ def selfRegister():
   peatones.selfRegister()
   conteoVehiculos.selfRegister()
   valoresDisponibles.selfRegister()
+  fechaCierre.selfRegister()

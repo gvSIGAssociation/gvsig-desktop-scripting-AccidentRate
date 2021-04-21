@@ -23,10 +23,15 @@ class StretchFeatureStoreCache(CachedValue):
     #store = getCarreterasManager().getStretchFeatureStore()
     dataManager = DALLocator.getDataManager()
     pool = dataManager.getDataServerExplorerPool()
+    
     explorerParams = pool.get("carreteras_gva").getExplorerParameters()
-    explorerParams.setSchema("layers")
+    poolCarreterasSchema = DALLocator.getDataManager().getDatabaseWorkspace("ARENA2_DB").get("TRAMOS_CARRETERAS_SCHEMA")
+    explorerParams.setSchema(poolCarreterasSchema)
     explorer = dataManager.openServerExplorer(explorerParams.getProviderName(), explorerParams)
-    params = explorer.get("tramos_carreteras")
+    
+    poolCarreterasName = DALLocator.getDataManager().getDatabaseWorkspace("ARENA2_DB").get("TRAMOS_CARRETERAS_NAME")
+    params = explorer.get(poolCarreterasName)
+    
     store = dataManager.openStore(params.getProviderName(), params)
     explorer.dispose()
     self.setValue(store)
@@ -57,9 +62,12 @@ def checkRequirements():
   else:
     try:
       explorerParams = pool.get("carreteras_gva").getExplorerParameters()    
-      explorerParams.setSchema("layers")
+      poolCarreterasSchema = DALLocator.getDataManager().getDatabaseWorkspace("ARENA2_DB").get("TRAMOS_CARRETERAS_SCHEMA")
+      explorerParams.setSchema(poolCarreterasSchema)
       explorer = dataManager.openServerExplorer(explorerParams.getProviderName(), explorerParams)
-      params = explorer.get("tramos_carreteras")
+
+      poolCarreterasName = DALLocator.getDataManager().getDatabaseWorkspace("ARENA2_DB").get("TRAMOS_CARRETERAS_NAME")
+      params = explorer.get(poolCarreterasName)
       explorer.dispose()
     except:
       params = None

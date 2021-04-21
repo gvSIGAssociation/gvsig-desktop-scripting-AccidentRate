@@ -21,23 +21,16 @@ class DateLockRule(Rule):
     
   def execute(self, report, feature):
     ftype = feature.getStore().getDefaultFeatureType()
-    for attr in ftype:
-      if attr.hasAvailableValues()==True:
-        value = feature.get(attr.getName())
-        if value==None: 
-            continue
-        if not attr.isInAvailableValues(value):
-            report.add(
-                      feature.get("ID_ACCIDENTE"),
-                      CODERR_VALUES_FECHA_CIERRE,
-                      "Valor no disponible en este fecha: %s  del campo: %s " % (
-                        str(value),
-                        str(attr.getName())
-                      ),
-                      fixerId = None, 
-                      selected=False,
-                      FIELD_NO_AVAILABLE=attr.getName()
-                    )
+    fecha = feature.get("FECHA_ACCIDENTE")
+    
+    report.add(
+              feature.get("ID_ACCIDENTE"),
+              CODERR_VALUES_FECHA_CIERRE,
+              "Fecha de cierre fuera: %s" % (
+                str(fecha)),
+              fixerId = None, 
+              selected=True
+            )
 
 class DateLockRuleFactory(RuleFactory):
   def __init__(self):
@@ -58,7 +51,7 @@ def selfRegister():
   #manager.addRuleFixer()
   manager.addRuleErrorCode(
     CODERR_VALUES_FECHA_CIERRE,
-    "%s - está fuera de la fecha de cierre" % CODERR_VALUES_NO_DISPONIBLES
+    "%s - está fuera de la fecha de cierre" % CODERR_VALUES_FECHA_CIERRE
   )
 
   manager.addReportAttribute("DATE_LOCK_CONSTRAINT",Date, size=40, label="Valor anterior a la fecha de cierre", isEditable=True)
