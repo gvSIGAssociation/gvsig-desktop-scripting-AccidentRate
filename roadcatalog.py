@@ -52,6 +52,7 @@ def getStretchFeatureStore():
   return stretchFeatureStore.get()
 
 def checkRequirements():
+  """
   dataManager = DALLocator.getDataManager()
   s = ""
   if getLRSManager()==None:
@@ -77,7 +78,8 @@ def checkRequirements():
   if s.strip() == "":
     return None
   return s
-
+  """
+  return None
 def getVigentStretchesQuery(store, fecha):
   builder = ExpressionUtils.createExpressionBuilder()
   filtro = builder.and( 
