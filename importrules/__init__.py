@@ -15,7 +15,7 @@ def selfRegister():
   #geocode.selfRegister()
   #titularidad.selfRegister()
   #conflicto.selfRegister()
-  peatones.selfRegister()
+  #peatones.selfRegister()
   #conteoVehiculos.selfRegister()
   #valoresDisponibles.selfRegister()
   #fechaCierre.selfRegister()
