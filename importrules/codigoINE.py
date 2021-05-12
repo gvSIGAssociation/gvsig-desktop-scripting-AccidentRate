@@ -39,9 +39,24 @@ class CodigoINETransform(Transform):
       ft = feature.getStore().getDefaultFeatureType()
       if ft.get("COD_PROVINCIA") == None or ft.get("INE_PROVINCIA") == None or ft.get("COD_MUNICIPIO") == None or ft.get("INE_MUNICIPIO") == None:
         return
-      
+
+      if feature.get("INE_PROVINCIA") ==None or feature.get("INE_PROVINCIA") == 0:
+        self.transformProv(feature)
+        
+      if feature.get("INE_MUNICIPIO") ==None or feature.get("INE_MUNICIPIO") == 0:
+        self.transformMun(feature)
+        
+    except:
+      ex = sys.exc_info()[1]
+      logger("Error importando archivos." + str(ex), gvsig.LOGGER_WARN, ex)
+      return
+
+
+  def transformProv(self, feature):
+    try:
       if feature.get("COD_PROVINCIA") == None:
         return
+        
       prov=feature.get("COD_PROVINCIA")
       
       storeP = self.repo.getStore("ARENA2_TR_INE_PROVINCIA")
@@ -55,7 +70,7 @@ class CodigoINETransform(Transform):
         if provData == None:
           logger("La provincia "+i+" no se encuentra en la tabla ARENA2_TR_INE_PROVINCIA" , LOGGER_INFO)
           continue
-        feature.set("INE_PROVINCIA",provData.get("COD_INE"))
+        feature.set("INE_PROVINCIA",provData.get("PROV_INE"))
         break
       storeP.dispose()
     except:
@@ -63,6 +78,7 @@ class CodigoINETransform(Transform):
       logger("Error importando archivos." + str(ex), gvsig.LOGGER_WARN, ex)
       return
 
+  def transformMun(self, feature):
     try:
       if feature.get("COD_MUNICIPIO") == None:
         return
@@ -80,7 +96,7 @@ class CodigoINETransform(Transform):
         if munData == None:
           logger("El municipio "+j+" no se encuentra en la tabla ARENA2_TR_INE_MUNICIPIO" , LOGGER_INFO)
           continue
-        feature.set("INE_MUNICIPIO",munData.get("COD_INE"))
+        feature.set("INE_MUNICIPIO",munData.get("MUN_INE"))
         break
       storeM.dispose()
     except:
@@ -127,10 +143,9 @@ class CodigoINERule(Rule):
       if ft.get("COD_PROVINCIA") == None or ft.get("COD_MUNICIPIO") == None:
         return
         
-      if ft.get("INE_PROVINCIA") == None or ft.get("INE_MUNICIPIO") == None: #Preprocess
-        #f1(self, report, feature)
+      if ft.get("INE_PROVINCIA") == None or ft.get("INE_MUNICIPIO") == None:
         self.preprocess( report, feature)
-      if ft.get("INE_PROVINCIA") != None and ft.get("INE_MUNICIPIO") != None: #Postprocess
+      if ft.get("INE_PROVINCIA") != None and ft.get("INE_MUNICIPIO") != None:
         self.postprocess( report, feature)
 
     except:
@@ -138,114 +153,6 @@ class CodigoINERule(Rule):
       logger("Error al ejecutar la regla codigo INE, " + str(ex), gvsig.LOGGER_WARN, ex)
       return
 
-  """
-  def f1 (self, report, feature):
-    try:
-      prov=feature.get("COD_PROVINCIA")
-      storeP = self.repo.getStore("ARENA2_DIC_INE_PROVINCIA")
-  
-      builder = ExpressionUtils.createExpressionBuilder()
-      expression = builder.eq(builder.lower(builder.variable("PROVINCIA")), builder.lower(builder.constant(prov))).toString()
-      provData = storeP.findFirst(expression)
-      if provData != None:# Si existe un resultado con equivalencia directa lo trata la transformacion
-        return
-  
-      jDMaxP=0
-      provOptions=prov.split("/")
-      provOptions.append(prov)
-      for i in provOptions:
-        logger("provOptions= "+str(i),LOGGER_WARN)
-        builder = ExpressionUtils.createExpressionBuilder()
-        expression = builder.eq(builder.lower(builder.variable("PROVINCIA")), builder.lower(builder.constant(i))).toString()
-        provData = storeP.findFirst(expression)
-        if provData == None:
-          for j in storeP:
-            provO=unicodedata.normalize('NFKD', i).encode('ASCII', 'ignore')
-            provT=j.get("PROVINCIA")
-            provT=unicodedata.normalize('NFKD', provT).encode('ASCII', 'ignore')
-            provTOptions=provT.split("/")
-            provTOptions.append(provT)
-            for provTOption in provTOptions:
-              logger("provTOption= "+str(provTOption),LOGGER_WARN)
-              if isinstance(provTOption, basestring) and isinstance(provO, basestring):
-                jaroDistance = StringUtils.getJaroWinklerDistance(provTOption.lower(), provO.lower())
-                if jaroDistance > jDMaxP:
-                  logger("jaroDistance= "+str(jaroDistance),LOGGER_WARN)
-                  jDMaxP=jaroDistance
-                  possibleProv=provT
-                  possibleINEProv=j.get("ID")
-              else:
-                logger("El campo provincia o el diccionario tiene problemas", LOGGER_WARN) #CAMBIAR
-                continue
-        else:
-          possibleProv=provData.get("PROVINCIA")
-          possibleINEProv=provData.get("ID")
-          break
-  
-      storeP.dispose()
-  
-      mun=feature.get("COD_MUNICIPIO")
-      storeM = self.repo.getStore("ARENA2_DIC_INE_MUNICIPIO")
-  
-      builder = ExpressionUtils.createExpressionBuilder()
-      expression = builder.eq(builder.lower(builder.variable("MUNICIPIO")), builder.lower(builder.constant(mun))).toString()
-      munData = storeM.findFirst(expression)
-      if munData != None: # Si existe un resultado con equivalencia directa lo trata la transformacion
-        return
-  
-      jDMaxM=0
-      munOptions=mun.split("/")
-      munOptions.append(mun)
-      for k in munOptions:
-        logger("munOptions= "+str(k),LOGGER_WARN)
-        builder = ExpressionUtils.createExpressionBuilder()
-        expression = builder.eq(builder.lower(builder.variable("MUNICIPIO")), builder.lower(builder.constant(k))).toString()
-        munData = storeM.findFirst(expression)
-        if munData == None:
-          for l in storeM:
-            munO=unicodedata.normalize('NFKD', k).encode('ASCII', 'ignore')
-            munT=l.get("MUNICIPIO")
-            munT=unicodedata.normalize('NFKD', munT).encode('ASCII', 'ignore')
-            munTOptions=munT.split("/")
-            munTOptions.append(munT)
-            for munTOption in munTOptions:
-              logger("munTOption= "+str(munTOption),LOGGER_WARN)
-              if isinstance(munTOption, basestring) and isinstance(munO, basestring):
-                jaroDistance = StringUtils.getJaroWinklerDistance(munTOption.lower(), munO.lower())
-                if jaroDistance > jDMaxM:
-                  logger("jaroDistance= "+str(jaroDistance),LOGGER_WARN)
-                  jDMaxM=jaroDistance
-                  possibleMun=munT
-                  possibleINEMun=l.get("COD_INE")
-              else:
-                logger("El campo municipio o el diccionario tiene problemas", LOGGER_WARN) #CAMBIAR
-                continue
-  
-        else:
-          possibleMun=munData.get("MUNICIPIO")
-          possibleINEMun=munData.get("COD_INE")
-          break
-  
-      storeM.dispose()
-  
-      report.add(
-        feature.get("ID_ACCIDENTE"), 
-        CODERR_CODIGO_INE_NO_ENCONTRADO,
-        "Imposible asignar el codigo INE de la provincia "+str(prov)+" y el municipio "+ str(mun),
-        fixerID="IgnoreCodigoINEError",
-        selected=False,
-        INE_PROVINCIA=possibleINEProv,
-        PPROVINCIA=possibleProv,
-        INE_MUNICIPIO=possibleINEMun,
-        PMUNICIPIO=possibleMun
-      )
-  
-    except:
-      ex = sys.exc_info()[1]
-      logger("Error al ejecutar la regla codigo INE (Antes de la importacion)" + str(ex), gvsig.LOGGER_WARN, ex)
-      return
-
-  """
   def preprocess (self, report, feature):
     try:
       prov=feature.get("COD_PROVINCIA")
@@ -278,7 +185,7 @@ class CodigoINERule(Rule):
           selected=False,
           INE_PROVINCIA=None,
           PPROVINCIA=None,
-          INE_MUNICIPIO=munData.get("COD_INE"),
+          INE_MUNICIPIO=munData.get("MUN_INE"),
           PMUNICIPIO=munData.get("MUNICIPIO")
         )
         
@@ -289,7 +196,7 @@ class CodigoINERule(Rule):
           "Imposible asignar el codigo INE del municipio "+ str(mun),
           fixerID="IgnoreCodigoINEError",
           selected=False,
-          INE_PROVINCIA=provData.get("COD_INE"),
+          INE_PROVINCIA=provData.get("PROV_INE"),
           PPROVINCIA=provData.get("PROVINCIA"),
           INE_MUNICIPIO=None,
           PMUNICIPIO=None
@@ -320,7 +227,7 @@ class CodigoINERule(Rule):
         prov=feature.get("COD_PROVINCIA")
         storeP = self.repo.getStore("ARENA2_TR_INE_PROVINCIA")
 
-        possibleProvData=self.pProv(prov, storeP)
+        possibleProvData=self.possibleProv(prov, storeP)
 
         if possibleProvData["possible"]:
           report.add(
@@ -338,7 +245,7 @@ class CodigoINERule(Rule):
         mun=feature.get("COD_MUNICIPIO")
         storeM = self.repo.getStore("ARENA2_TR_INE_MUNICIPIO")
 
-        possibleMunData=self.pMun(mun, storeM)
+        possibleMunData=self.possibleMun(mun, storeM)
 
         if possibleMunData["possible"]:
           report.add(
@@ -359,11 +266,28 @@ class CodigoINERule(Rule):
         storeP = self.repo.getStore("ARENA2_TR_INE_PROVINCIA")
 
         builder = ExpressionUtils.createExpressionBuilder()
-        expression = builder.eq(builder.lower(builder.variable("COD_INE")), builder.lower(builder.constant(ineProv))).toString()
+        expression = builder.eq(builder.lower(builder.variable("PROV_INE")), builder.lower(builder.constant(ineProv))).toString()
         provData = storeP.findFirst(expression)
         if provData == None:
 
-          possibleProvData=self.pProv(prov, storeP)
+          possibleProvData=self.possibleProv(prov, storeP)
+
+          if possibleProvData["possible"]:
+            report.add(
+              feature.get("ID_ACCIDENTE"), 
+              CODERR_CODIGO_INE_PROVINCIA_ERRONEO,
+              "El codigo INE de la provincia "+str(prov)+" es erroneo ",
+              fixerID="IgnoreCodigoINEError",
+              selected=False,
+              INE_PROVINCIA=possibleProvData["INEProv"],
+              PPROVINCIA=possibleProvData["Prov"]
+            )
+
+        expression = builder.eq(builder.lower(builder.variable("PROVINCIA")), builder.lower(builder.constant(prov))).toString()
+        provData = storeP.findFirst(expression)
+        if provData.get("PROV_INE") != ineProv:
+
+          possibleProvData=self.possibleProv(prov, storeP)
 
           if possibleProvData["possible"]:
             report.add(
@@ -383,11 +307,11 @@ class CodigoINERule(Rule):
         storeM = self.repo.getStore("ARENA2_TR_INE_MUNICIPIO")
 
         builder = ExpressionUtils.createExpressionBuilder()
-        expression = builder.eq(builder.lower(builder.variable("COD_INE")), builder.lower(builder.constant(ineMun))).toString()
+        expression = builder.eq(builder.lower(builder.variable("MUN_INE")), builder.lower(builder.constant(ineMun))).toString()
         munData = storeM.findFirst(expression)
         if munData == None:
 
-          possibleMunData=self.pMun(mun, storeM)
+          possibleMunData=self.possibleMun(mun, storeM)
 
           if possibleMunData["possible"]:
             report.add(
@@ -399,7 +323,24 @@ class CodigoINERule(Rule):
               INE_MUNICIPIO=possibleMunData["INEMun"],
               PMUNICIPIO=possibleMunData["Mun"]
             )
-          storeM.dispose()
+
+        expression = builder.eq(builder.lower(builder.variable("MUNICIPIO")), builder.lower(builder.constant(mun))).toString()
+        munData = storeM.findFirst(expression)
+        if munData.get("MUN_INE") != ineMun:
+
+          possibleMunData=self.possibleMun(mun, storeM)
+
+          if possibleMunData["possible"]:
+            report.add(
+              feature.get("ID_ACCIDENTE"), 
+              CODERR_CODIGO_INE_MUNICIPIO_ERRONEO,
+              "El codigo INE del municipio "+str(mun)+" es erroneo ",
+              fixerID="IgnoreCodigoINEError",
+              selected=False,
+              INE_MUNICIPIO=possibleMunData["INEMun"],
+              PMUNICIPIO=possibleMunData["Mun"]
+            )
+        storeM.dispose()
       else:
         return
 
@@ -408,9 +349,9 @@ class CodigoINERule(Rule):
       logger("Error al ejecutar la regla codigo INE (Despues de la importacion)" + str(ex), gvsig.LOGGER_WARN, ex)
       return
 
-  def pProv (self, prov, storeP):
-    pProvData={}
-    pProvData["possible"]=False
+  def possibleProv (self, prov, storeP):
+    possibleProvData={}
+    possibleProvData["possible"]=False
     jDMaxP=0
     
     provOptions=prov.split("/")
@@ -428,18 +369,18 @@ class CodigoINERule(Rule):
             jaroDistance = StringUtils.getJaroWinklerDistance(provT.lower(), provO.lower())
             if jaroDistance > jDMaxP:
               jDMaxP=jaroDistance
-              pProvData["Prov"]=provT
-              pProvData["INEProv"]=j.get("COD_INE")
-              pProvData["possible"]=True
+              possibleProvData["Prov"]=j.get("PROVINCIA")
+              possibleProvData["INEProv"]=j.get("PROV_INE")
+              possibleProvData["possible"]=True
           else:
             logger("El campo provincia "+str(prov)+" o el campo "+str(j.get("PROVINCIA"))+" del diccionario tienen problemas", LOGGER_WARN) #CAMBIAR
             continue
 
-    return pProvData
+    return possibleProvData
 
-  def pMun (self, mun, storeM):
-    pMunData={}
-    pMunData["possible"]=False
+  def possibleMun (self, mun, storeM):
+    possibleMunData={}
+    possibleMunData["possible"]=False
     jDMaxM=0
     
     munOptions=mun.split("/")
@@ -457,14 +398,14 @@ class CodigoINERule(Rule):
             jaroDistance = StringUtils.getJaroWinklerDistance(munT.lower(), munO.lower())
             if jaroDistance > jDMaxM:
               jDMaxM=jaroDistance
-              pMunData["Mun"]=munT
-              pMunData["INEMun"]=j.get("COD_INE")
-              pMunData["possible"]=True
+              possibleMunData["Mun"]=j.get("MUNICIPIO")
+              possibleMunData["INEMun"]=j.get("MUN_INE")
+              possibleMunData["possible"]=True
           else:
-            logger("El campo municipio "+str(mun)+" o el campo "+str(l.get("MUNICIPIO"))+" del diccionario tienen problemas", LOGGER_WARN) #CAMBIAR
+            logger("El campo municipio "+str(mun)+" o el campo "+str(j.get("MUNICIPIO"))+" del diccionario tienen problemas", LOGGER_WARN) #CAMBIAR
             continue
             
-    return pMunData
+    return possibleMunData
 
 class CodigoINERuleFactory(RuleFactory):
   def __init__(self):
