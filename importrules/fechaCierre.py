@@ -12,24 +12,31 @@ from addons.AccidentRate.roadcatalog import findOwnership, checkRequirements
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory, RuleFixer
 from org.gvsig.expressionevaluator import ExpressionUtils
+from java.sql import Date
+from java.text import SimpleDateFormat
 
 CODERR_VALUES_FECHA_CIERRE = 571
 
 class DateLockRule(Rule):
   def __init__(self, factory, **args):
     Rule.__init__(self, factory)
+    self.workspace = args.get("workspace",None)
+    fechaDeCierreString = self.workspace.get('CEGESEV.accidentes.fecha_de_cierre')
+    self.fechaDeCierre = SimpleDateFormat("dd/MM/yyyy").parse(fechaDeCierreString)
     
   def execute(self, report, feature):
     ftype = feature.getStore().getDefaultFeatureType()
+    if ftype.get("FECHA_ACCIDENTE")==None:
+        return
     fecha = feature.get("FECHA_ACCIDENTE")
-    
-    report.add(
+    if fecha <= self.fechaDeCierre:
+      report.add(
               feature.get("ID_ACCIDENTE"),
               CODERR_VALUES_FECHA_CIERRE,
               "Fecha de cierre fuera: %s" % (
                 str(fecha)),
               fixerId = None, 
-              selected=True
+              selected=False
             )
 
 class DateLockRuleFactory(RuleFactory):
@@ -51,7 +58,7 @@ def selfRegister():
   #manager.addRuleFixer()
   manager.addRuleErrorCode(
     CODERR_VALUES_FECHA_CIERRE,
-    "%s - está fuera de la fecha de cierre" % CODERR_VALUES_FECHA_CIERRE
+    u"%s - está fuera de la fecha de cierre" % CODERR_VALUES_FECHA_CIERRE
   )
 
   manager.addReportAttribute("DATE_LOCK_CONSTRAINT",Date, size=40, label="Valor anterior a la fecha de cierre", isEditable=True)
@@ -61,6 +68,6 @@ def selfRegister():
     
 def main(*args):
   #test()
-  #selfRegister()
+  selfRegister()
   pass
 

@@ -48,7 +48,18 @@ class AccidentRateExtension(ScriptingExtension):
       self.addAccidentsLayer()
     elif actionCommand == "accidentrate-search":
       self.showAccidentsSearch()
-        
+    elif actionCommand == "accidentrate-importer-showvalidator":
+      self.validatorData()
+
+  def validatorData(self):
+    manager = getArena2ImportManager()
+    messages = manager.checkRequirements()
+    if messages!=None:
+      msgbox("\n".join(messages))
+      return
+    dialog = manager.createPostValidatorDialog()
+    dialog.showWindow("ARENA2 Validador accidentes")
+    
   def createTables(self):
     manager = getArena2ImportManager()
     #messages = manager.checkRequirements()
@@ -124,7 +135,9 @@ def registerActions():
 
   icon = File(getResource(__file__,"images","accidentrate-addlayer.png")).toURI().toURL()
   iconTheme.registerDefault("scripting.AccidentRateExtension", "action", "accidentrate-addlayer", None, icon)
-
+  
+  icon = File(getResource(__file__,"images","arena2-importer-showvalidator.png")).toURI().toURL()
+  iconTheme.registerDefault("scripting.AccidentRateExtension", "action", "accidentrate-importer-showvalidator", None, icon)
   #
   # Creamos la accion 
   actionManager = PluginsLocator.getActionInfoManager()
@@ -189,7 +202,19 @@ def registerActions():
     "Añadir capa de accidentes" # Tooltip
   )
   action = actionManager.registerAction(action, True)
-
+  
+  action = actionManager.createAction(
+    extension, 
+    "accidentrate-importer-showvalidator", # Action name
+    "ARENA2 validator", # Text
+    "accidentrate-importer-showvalidator", # Action command
+    "accidentrate-importer-showvalidator", # Icon name
+    None, # Accelerator
+    1009000904, # Position 
+    "_Show_the_ARENA2_validator_tool" # Tooltip
+  )
+  action = actionManager.registerAction(action, True)
+  
 def selfRegister():
 
   config = AccidentRateConfig()
@@ -218,7 +243,10 @@ def selfRegister():
 
   action = actionManager.getAction("accidentrate-addlayer")
   application.addMenu(action, u"tools/_AccidentRate/A\u00F1adir capa de accidentes")
-
+  
+  action = actionManager.getAction("accidentrate-importer-showvalidator")
+  application.addMenu(action, u"tools/_AccidentRate/Administration/Validador de accidentes")
+  
 def main(*args):
   #selfRegister()
   registerActions()
