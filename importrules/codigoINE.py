@@ -233,16 +233,20 @@ class CodigoINERule(Rule):
       mun=feature.get("COD_MUNICIPIO")
       ineMun=feature.get("INE_MUNICIPIO")
       storeM = self.repo.getStore("ARENA2_TR_INE_MUNICIPIO")
+
+      builder = ExpressionUtils.createExpressionBuilder()
+
       provMunEmpty=False
+      provMunError=False
       
       #PASO 1.- Comprueba si los campos INE_PROVINCIA y INE_MUNICIPIO estan vacios.
-      if feature.get("INE_PROVINCIA") == None and feature.get("INE_MUNICIPIO") == None: # Ambos campos estan vacios
+      if ineProv == None and ineMun == None: # Ambos campos estan vacios
 
         possibleProvData=self.possibleProv(prov, storeP)
         possibleMunData=self.possibleMun(mun, storeM)
 
 
-        if possibleProvData["possible"]:
+        if possibleProvData["possible"] and possibleMunData["possible"]:
           report.add(
             feature.get("ID_ACCIDENTE"), 
             CODERR_CODIGO_INE_NO_ENCONTRADO,
@@ -258,7 +262,7 @@ class CodigoINERule(Rule):
         provMunEmpty=True
         
       
-      if feature.get("INE_PROVINCIA") == None and provMunEmpty == False: #Solo el campo INE_PROVINCIA esta vacio
+      if ineProv == None and provMunEmpty == False: #Solo el campo INE_PROVINCIA esta vacio
 
         possibleProvData=self.possibleProv(prov, storeP)
 
@@ -274,7 +278,7 @@ class CodigoINERule(Rule):
           )
         storeP.dispose()
         
-      if feature.get("INE_MUNICIPIO") == None and provMunEmpty == False: #Solo el campo INE_MUNICIPIO esta vacio
+      if ineMun == None and provMunEmpty == False: #Solo el campo INE_MUNICIPIO esta vacio
 
         possibleMunData=self.possibleMun(mun, storeM)
 
@@ -292,11 +296,158 @@ class CodigoINERule(Rule):
 
       #PASO 2.- Comprueba si los campos INE_PROVINCIA y INE_MUNICIPIO son correctos conforme a los campos COD_PROVINCIA y COD_MUNICIPIO.
 
-#FIXME!--> FALTA AÑADIR LA OPCION DE CUANDO LOS DOS CAMPOS TIENES DATOS PERO LOS NOMBRES DE LOS DOS ESTAN MAL
+      if ineProv != None and ineMun != None:
+        #Primero comprueba si los campos COD_PROVINCIA y COD_MUNICIPIO se corresponden con algun valor de las tablas
+        # ARENA2_TR_INE_PROVINCIA y ARENA2_TR_INE_MUNICIPIO
+        expressionP = builder.eq(builder.lower(builder.variable("PROVINCIA")), builder.lower(builder.constant(prov))).toString()
+        expressionM = builder.eq(builder.lower(builder.variable("MUNICIPIO")), builder.lower(builder.constant(mun))).toString()
+        provData = storeP.findFirst(expressionP)
+        munData = storeM.findFirst(expressionM)
+        if provData == None and munData == None: # Si no hay equivalencia en ningun campo lanza sugerencia
+        
+          possibleProvData=self.possibleProv(prov, storeP)
+          possibleMunData=self.possibleMun(mun, storeM)
 
-      if feature.get("INE_PROVINCIA") != None:
+          if possibleProvData["possible"] and possibleMunData["possible"]:
+            report.add(
+              feature.get("ID_ACCIDENTE"), 
+              CODERR_CODIGO_INE_ERRONEO,
+              "La provincia "+str(prov)+" y el municipio "+str(mun)+" son erroneos ",
+              fixerID="CodigoINEError",
+              selected=False,
+              INE_PROVINCIA=possibleProvData["INEProv"],
+              PPROVINCIA=possibleProvData["Prov"],
+              INE_MUNICIPIO=possibleMunData["INEMun"],
+              PMUNICIPIO=possibleMunData["Mun"]
+            )
+        if provData != None and munData == None:
+          if provData.get("PROV_INE") != ineProv: # Si hay equivalencia comprueba que el codigo INE_PROVINCIA del accidente
+                                                  # se corresponde con el de la equivalencia de la tabla ARENA2_TR_INE_PROVINCIA
+  
+            possibleProvData=self.possibleProv(prov, storeP)
+            possibleMunData=self.possibleMun(mun, storeM)
+  
+            if possibleProvData["possible"] and possibleMunData["possible"]:
+              report.add(
+                feature.get("ID_ACCIDENTE"), 
+                CODERR_CODIGO_INE_ERRONEO,
+                "El codigo INE de la provincia "+str(prov)+" y el municipio "+str(mun)+" son erroneos ",
+                fixerID="CodigoINEError",
+                selected=False,
+                INE_PROVINCIA=possibleProvData["INEProv"],
+                PPROVINCIA=possibleProvData["Prov"],
+                INE_MUNICIPIO=possibleMunData["INEMun"],
+                PMUNICIPIO=possibleMunData["Mun"]
+              )
+          else:
+            possibleMunData=self.possibleMun(mun, storeM)
 
-        builder = ExpressionUtils.createExpressionBuilder()
+            if possibleMunData["possible"]:
+              report.add(
+                feature.get("ID_ACCIDENTE"), 
+                CODERR_CODIGO_INE_ERRONEO,
+                "El codigo INE de la provincia "+str(prov)+" es correcto pero el municipio "+str(mun)+" es erroneo ",
+                fixerID="CodigoINEError",
+                selected=False,
+                INE_PROVINCIA=ineProv,
+                PPROVINCIA=prov,
+                INE_MUNICIPIO=possibleMunData["INEMun"],
+                PMUNICIPIO=possibleMunData["Mun"]
+              )
+              
+        if provData == None and munData != None:
+          if munData.get("MUN_INE") != ineMun: # Si hay equivalencia comprueba que el codigo INE_MUNICIPIO del accidente
+                                               # se corresponde con el de la equivalencia de la tabla ARENA2_TR_INE_MUNICIPIO
+  
+            possibleProvData=self.possibleProv(prov, storeP)
+            possibleMunData=self.possibleMun(mun, storeM)
+  
+            if possibleProvData["possible"] and possibleMunData["possible"]:
+              report.add(
+                feature.get("ID_ACCIDENTE"), 
+                CODERR_CODIGO_INE_ERRONEO,
+                "La provincia "+str(prov)+" y el codigo INE del municipio "+str(mun)+" son erroneos ",
+                fixerID="CodigoINEError",
+                selected=False,
+                INE_PROVINCIA=possibleProvData["INEProv"],
+                PPROVINCIA=possibleProvData["Prov"],
+                INE_MUNICIPIO=possibleMunData["INEMun"],
+                PMUNICIPIO=possibleMunData["Mun"]
+              )
+          else:
+            possibleProvData=self.possibleProv(prov, storeP)
+
+            if possibleProvData["possible"]:
+              report.add(
+                feature.get("ID_ACCIDENTE"), 
+                CODERR_CODIGO_INE_ERRONEO,
+                "La provincia "+str(prov)+" es erronea y el codigo INE del municipio "+str(mun)+" es correcto ",
+                fixerID="CodigoINEError",
+                selected=False,
+                INE_PROVINCIA=possibleProvData["INEProv"],
+                PPROVINCIA=possibleProvData["Prov"],
+                INE_MUNICIPIO=ineMun,
+                PMUNICIPIO=mun
+              )
+        else:
+          if provData.get("PROV_INE") != ineProv and munData.get("MUN_INE") != ineMun:
+
+            possibleProvData=self.possibleProv(prov, storeP)
+            possibleMunData=self.possibleMun(mun, storeM)
+  
+            if possibleProvData["possible"] and possibleMunData["possible"] :
+              report.add(
+                feature.get("ID_ACCIDENTE"), 
+                CODERR_CODIGO_INE_ERRONEO,
+                "El codigo INE de la provincia "+str(prov)+" y del municipio "+str(mun)+" son erroneos ",
+                fixerID="CodigoINEError",
+                selected=False,
+                INE_PROVINCIA=possibleProvData["INEProv"],
+                PPROVINCIA=possibleProvData["Prov"],
+                INE_MUNICIPIO=possibleMunData["INEMun"],
+                PMUNICIPIO=possibleMunData["Mun"]
+              )
+              
+          if provData.get("PROV_INE") == ineProv and munData.get("MUN_INE") != ineMun:
+
+            possibleMunData=self.possibleMun(mun, storeM)
+  
+            if possibleMunData["possible"]:
+              report.add(
+                feature.get("ID_ACCIDENTE"), 
+                CODERR_CODIGO_INE_ERRONEO,
+                "El codigo INE de la provincia "+str(prov)+" es correcto pero el del municipio "+str(mun)+" es erroneo ",
+                fixerID="CodigoINEError",
+                selected=False,
+                INE_PROVINCIA=ineProv,
+                PPROVINCIA=prov,
+                INE_MUNICIPIO=possibleMunData["INEMun"],
+                PMUNICIPIO=possibleMunData["Mun"]
+              )
+
+          if provData.get("PROV_INE") != ineProv and munData.get("MUN_INE") == ineMun:
+
+            possibleProvData=self.possibleProv(prov, storeP)
+  
+            if possibleProvData["possible"]:
+              report.add(
+                feature.get("ID_ACCIDENTE"), 
+                CODERR_CODIGO_INE_ERRONEO,
+                "El codigo INE de la provincia "+str(prov)+" es erroneo y el del municipio "+str(mun)+" es correcto ",
+                fixerID="CodigoINEError",
+                selected=False,
+                INE_PROVINCIA=possibleProvData["INEProv"],
+                PPROVINCIA=possibleProvData["Prov"],
+                INE_MUNICIPIO=ineMun,
+                PMUNICIPIO=mun
+              )
+            
+        storeP.dispose()
+        storeM.dispose()
+        provMunError=True
+
+      if feature.get("INE_PROVINCIA") != None and provMunError == False:
+      
         #Primero comprueba si el campo COD_PROVINCIA se corresponde con algun valor de la tabla ARENA2_TR_INE_PROVINCIA
         expression = builder.eq(builder.lower(builder.variable("PROVINCIA")), builder.lower(builder.constant(prov))).toString()
         provData = storeP.findFirst(expression)
@@ -333,9 +484,8 @@ class CodigoINERule(Rule):
               )
         storeP.dispose()
 
-      if feature.get("INE_MUNICIPIO") != None:
+      if feature.get("INE_MUNICIPIO") != None and provMunError == False:
 
-        builder = ExpressionUtils.createExpressionBuilder()
         #Primero comprueba si el campo COD_MUNICIPIO se corresponde con algun valor de la tabla ARENA2_TR_INE_MUNICIPIO
         expression = builder.eq(builder.lower(builder.variable("MUNICIPIO")), builder.lower(builder.constant(mun))).toString()
         munData = storeM.findFirst(expression)
