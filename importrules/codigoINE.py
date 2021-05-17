@@ -303,7 +303,7 @@ class CodigoINERule(Rule):
         expressionM = builder.eq(builder.lower(builder.variable("MUNICIPIO")), builder.lower(builder.constant(mun))).toString()
         provData = storeP.findFirst(expressionP)
         munData = storeM.findFirst(expressionM)
-        if provData == None and munData == None: # Si no hay equivalencia en ningun campo lanza sugerencia
+        if provData == None and munData == None: # Si no hay equivalencia en ningun campo lanza sugerencias
         
           possibleProvData=self.possibleProv(prov, storeP)
           possibleMunData=self.possibleMun(mun, storeM)
@@ -320,9 +320,12 @@ class CodigoINERule(Rule):
               INE_MUNICIPIO=possibleMunData["INEMun"],
               PMUNICIPIO=possibleMunData["Mun"]
             )
-        if provData != None and munData == None:
-          if provData.get("PROV_INE") != ineProv: # Si hay equivalencia comprueba que el codigo INE_PROVINCIA del accidente
-                                                  # se corresponde con el de la equivalencia de la tabla ARENA2_TR_INE_PROVINCIA
+        if provData != None and munData == None:# Si solo hay equivalencia en el campo COD_PROVINCIA 
+                                                # comprueba que el codigo INE_PROVINCIA del accidente
+                                                # se corresponde con el de la equivalencia de la tabla 
+                                                # ARENA2_TR_INE_PROVINCIA
+                                                
+          if provData.get("PROV_INE") != ineProv: # No existe correspondencia, lanza sugerencias
   
             possibleProvData=self.possibleProv(prov, storeP)
             possibleMunData=self.possibleMun(mun, storeM)
@@ -339,7 +342,7 @@ class CodigoINERule(Rule):
                 INE_MUNICIPIO=possibleMunData["INEMun"],
                 PMUNICIPIO=possibleMunData["Mun"]
               )
-          else:
+          else: # Existe correspondencia, lanza sugerencias solo para el municipio
             possibleMunData=self.possibleMun(mun, storeM)
 
             if possibleMunData["possible"]:
@@ -355,9 +358,13 @@ class CodigoINERule(Rule):
                 PMUNICIPIO=possibleMunData["Mun"]
               )
               
-        if provData == None and munData != None:
-          if munData.get("MUN_INE") != ineMun: # Si hay equivalencia comprueba que el codigo INE_MUNICIPIO del accidente
-                                               # se corresponde con el de la equivalencia de la tabla ARENA2_TR_INE_MUNICIPIO
+        if provData == None and munData != None: # Si solo hay equivalencia en el campo COD_MUNICIPIO 
+                                                 # comprueba que el codigo INE_MUNICIPIO del accidente
+                                                 # se corresponde con el de la equivalencia de la tabla 
+                                                 # ARENA2_TR_INE_MUNICIPIO
+                                                
+        
+          if munData.get("MUN_INE") != ineMun: # No existe correspondencia, lanza sugerencias
   
             possibleProvData=self.possibleProv(prov, storeP)
             possibleMunData=self.possibleMun(mun, storeM)
@@ -374,7 +381,7 @@ class CodigoINERule(Rule):
                 INE_MUNICIPIO=possibleMunData["INEMun"],
                 PMUNICIPIO=possibleMunData["Mun"]
               )
-          else:
+          else: # Existe correspondencia, lanza sugerencias solo para la provincia
             possibleProvData=self.possibleProv(prov, storeP)
 
             if possibleProvData["possible"]:
@@ -389,8 +396,11 @@ class CodigoINERule(Rule):
                 INE_MUNICIPIO=ineMun,
                 PMUNICIPIO=mun
               )
-        else:
-          if provData.get("PROV_INE") != ineProv and munData.get("MUN_INE") != ineMun:
+        else: # Si hay equivalencia en los dos campos comprueba la correspondencia de los codigos INE del accidente 
+              # con los de los elementos correspondientes de las tablas
+          if provData.get("PROV_INE") != ineProv and munData.get("MUN_INE") != ineMun: # Los codigos INE del accidente 
+                                                                                       # de ambos campos no se corresponden
+                                                                                       # con los de las tablas.
 
             possibleProvData=self.possibleProv(prov, storeP)
             possibleMunData=self.possibleMun(mun, storeM)
@@ -408,7 +418,8 @@ class CodigoINERule(Rule):
                 PMUNICIPIO=possibleMunData["Mun"]
               )
               
-          if provData.get("PROV_INE") == ineProv and munData.get("MUN_INE") != ineMun:
+          if provData.get("PROV_INE") == ineProv and munData.get("MUN_INE") != ineMun: # Solo el codigo INE de la provincia 
+                                                                                       # se corresponde
 
             possibleMunData=self.possibleMun(mun, storeM)
   
@@ -425,7 +436,8 @@ class CodigoINERule(Rule):
                 PMUNICIPIO=possibleMunData["Mun"]
               )
 
-          if provData.get("PROV_INE") != ineProv and munData.get("MUN_INE") == ineMun:
+          if provData.get("PROV_INE") != ineProv and munData.get("MUN_INE") == ineMun: # Solo el codigo INE del municipio 
+                                                                                       # se corresponde
 
             possibleProvData=self.possibleProv(prov, storeP)
   
