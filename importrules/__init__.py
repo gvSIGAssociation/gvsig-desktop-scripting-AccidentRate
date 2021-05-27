@@ -18,5 +18,5 @@ def selfRegister():
   #peatones.selfRegister()
   #conteoVehiculos.selfRegister()
   #valoresDisponibles.selfRegister()
-  fechaCierre.selfRegister()
-  #codigoINE.selfRegister()
+  #fechaCierre.selfRegister()
+  codigoINE.selfRegister()
