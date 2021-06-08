@@ -37,6 +37,7 @@ class CodigoINETransform(Transform):
 
   def apply(self, feature, *args):
     #mirar que tiene los campos provincia y municipio, si no los tiene return
+    
     try:
       ft = feature.getStore().getDefaultFeatureType()
       if ft.get("COD_PROVINCIA") == None or ft.get("INE_PROVINCIA") == None or ft.get("COD_MUNICIPIO") == None or ft.get("INE_MUNICIPIO") == None:

@@ -129,7 +129,7 @@ def selfConfigureCodigoINE(ws): #workspace
     server = ws.getServerExplorer()
 
     # Tables to configure
-    tables_to_configure = ["ARENA2_DIC_INE_MUNICIPIO", "ARENA2_DIC_INE_PROVINCIA", "ARENA2_TR_INE_PROVINCIA", "ARENA2_TR_INE_PROVINCIA"]
+    tables_to_configure = ["ARENA2_DIC_INE_MUNICIPIO", "ARENA2_DIC_INE_PROVINCIA", "ARENA2_TR_INE_PROVINCIA", "ARENA2_TR_INE_MUNICIPIO"]
 
     for table_to_configure in tables_to_configure:
       if not server.exists(server.get(table_to_configure)):

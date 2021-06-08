@@ -20,3 +20,6 @@ def selfRegister():
   #valoresDisponibles.selfRegister()
   #fechaCierre.selfRegister()
   codigoINE.selfRegister()
+
+def main(*args):
+  selfRegister()
