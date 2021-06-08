@@ -9,7 +9,7 @@ from addons.AccidentRate.importrules import peatones
 from addons.AccidentRate.importrules import conteoVehiculos
 from addons.AccidentRate.importrules import valoresDisponibles
 from addons.AccidentRate.importrules import fechaCierre
-from addons.AccidentRate.importrules import codigoINE
+from addons.AccidentRate.importrules.codigoINE import codigoINE
 
 def selfRegister():
   #geocode.selfRegister()
