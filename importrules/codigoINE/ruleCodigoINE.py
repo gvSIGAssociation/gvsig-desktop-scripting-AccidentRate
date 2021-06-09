@@ -26,6 +26,7 @@ import java.lang.Throwable
 from java.lang import String, Integer
 
 from java.lang import Throwable
+from addons.AccidentRate.importrules.codigoINE import codigoINE
 
 ###
 ### RULE
@@ -38,7 +39,7 @@ class CodigoINERule(Rule):
     self.repo = self.workspace.getStoresRepository()
 
   def selfConfigure(self, ws): #, explorer):
-    selfConfigureCodigoINE(ws)
+    codigoINE.selfConfigureCodigoINE(ws)
     
   def execute(self, report, feature):
     try:
