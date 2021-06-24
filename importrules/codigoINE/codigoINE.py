@@ -28,7 +28,7 @@ from java.lang import Throwable
 
 from transformCodigoINE import CodigoINETransformFactory
 from ruleCodigoINE import CodigoINERuleFactory
-
+from org.gvsig.tools.dispose import DisposeUtils
 import unicodedata
 
 CODERR_CODIGO_INE_ERRONEO=1000
@@ -160,6 +160,7 @@ def selfConfigureCodigoINE(ws): #workspace
       store.update(eft)
     if store.isEditing():
       store.finishEditing()
+    DisposeUtils.dispose(store)
 
 
 

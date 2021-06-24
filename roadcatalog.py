@@ -23,22 +23,27 @@ class StretchFeatureStoreCache(CachedValue):
     #store = getCarreterasManager().getStretchFeatureStore()
     dataManager = DALLocator.getDataManager()
     pool = dataManager.getDataServerExplorerPool()
+    #explorerParams = pool.get("carreteras_gva")#.getExplorerParameters()
+
+    #if explorerParams==None:
+    ws = dataManager.getDatabaseWorkspace("ARENA2_DB")
+
+    # Tags values CONFIG table
+    poolCarreterasSchema = ws.get("TRAMOS_CARRETERAS_SCHEMA")
+    poolCarreterasName = ws.get("TRAMOS_CARRETERAS_NAME")
     
-    explorerParams = pool.get("carreteras_gva").getExplorerParameters()
-    poolCarreterasSchema = DALLocator.getDataManager().getDatabaseWorkspace("ARENA2_DB").get("TRAMOS_CARRETERAS_SCHEMA")
-    explorerParams.setSchema(poolCarreterasSchema)
-    explorer = dataManager.openServerExplorer(explorerParams.getProviderName(), explorerParams)
-    
-    poolCarreterasName = DALLocator.getDataManager().getDatabaseWorkspace("ARENA2_DB").get("TRAMOS_CARRETERAS_NAME")
-    params = explorer.get(poolCarreterasName)
-    
-    store = dataManager.openStore(params.getProviderName(), params)
-    explorer.dispose()
+    repo = ws.getStoresRepository()
+    server_explorer = ws.getServerExplorer()
+    explorer_params = server_explorer.get(poolCarreterasName)
+    explorer_params.setSchema(poolCarreterasSchema)
+    explorer_name = explorer_params.getProviderName()
+
+    store = dataManager.openStore(explorer_name, explorer_params)
+    #store.dispose()
     self.setValue(store)
 
 lrsManager = None
 stretchFeatureStore = StretchFeatureStoreCache(5000);
-
 
 def getLRSManager():
   if LrsAlgorithmsLocator == None:
@@ -50,6 +55,7 @@ def getLRSManager():
 
 def getStretchFeatureStore():
   return stretchFeatureStore.get()
+  
 
 def checkRequirements():
   """
@@ -139,6 +145,7 @@ def geocodificar(fecha, carretera, pk):
     return (None, None, "kilometro %s no encontrado en '%s'." % (pk,carretera))
   finally:
     DisposeUtils.disposeQuietly(streches)
+    #DisposeUtils.disposeQuietly(strechesStore)
 
 def findOwnership(fecha, carretera, pk):
   if fecha == None or carretera == None or pk == None:
@@ -155,6 +162,7 @@ def findOwnership(fecha, carretera, pk):
   query.addFilter(expression)
   query.retrievesAllAttributes()
   feature = strechesStore.findFirst(query)
+  #DisposeUtils.disposeQuietly(strechesStore)
   if feature == None:
     return None
   return feature.get("titularidad")
@@ -175,3 +183,6 @@ def main(*args):
       ))
     ).toString()      
     print builder.toString()
+    print getStretchFeatureStore()
+    
+    print "f",findOwnership(fecha, 'CV301', 10)

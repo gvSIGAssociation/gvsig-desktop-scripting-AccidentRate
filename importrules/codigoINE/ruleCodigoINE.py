@@ -27,7 +27,6 @@ from java.lang import String, Integer
 
 from java.lang import Throwable
 from addons.AccidentRate.importrules.codigoINE import codigoINE
-
 ###
 ### RULE
 ###
@@ -64,8 +63,8 @@ class CodigoINERule(Rule):
       mun=feature.get("COD_MUNICIPIO")
       storeM = self.repo.getStore("ARENA2_TR_INE_MUNICIPIO")
 
-      logger(prov)
-      logger(mun)
+      #logger(prov)
+      #logger(mun)
 
       builder = ExpressionUtils.createExpressionBuilder()
       expression = builder.eq(builder.lower(builder.variable("PROVINCIA")), builder.lower(builder.constant(prov))).toString()
@@ -83,7 +82,7 @@ class CodigoINERule(Rule):
       elif provData == None and munData != None:
         report.add(
           feature.get("ID_ACCIDENTE"), 
-          CODERR_CODIGO_INE_NO_ENCONTRADO,
+          codigoINE.CODERR_CODIGO_INE_NO_ENCONTRADO,
           "Imposible asignar el codigo INE de la provincia "+str(prov),
           fixerID="IgnoreCodigoINEError",
           selected=False,
@@ -96,7 +95,7 @@ class CodigoINERule(Rule):
       elif provData != None and munData == None:
         report.add(
           feature.get("ID_ACCIDENTE"), 
-          CODERR_CODIGO_INE_NO_ENCONTRADO,
+          codigoINE.CODERR_CODIGO_INE_NO_ENCONTRADO,
           "Imposible asignar el codigo INE del municipio "+ str(mun),
           fixerID="IgnoreCodigoINEError",
           selected=False,
@@ -109,7 +108,7 @@ class CodigoINERule(Rule):
       else:
         report.add(
           feature.get("ID_ACCIDENTE"), 
-          CODERR_CODIGO_INE_NO_ENCONTRADO,
+          codigoINE.CODERR_CODIGO_INE_NO_ENCONTRADO,
           "Imposible asignar el codigo INE de la provincia "+str(prov)+" y el municipio "+ str(mun),
           fixerID="IgnoreCodigoINEError",
           selected=False,
@@ -136,7 +135,7 @@ class CodigoINERule(Rule):
         if possibleProvData["possible"]:
           report.add(
             feature.get("ID_ACCIDENTE"), 
-            CODERR_CODIGO_INE_PROVINCIA_NO_ENCONTRADO,
+            codigoINE.CODERR_CODIGO_INE_PROVINCIA_NO_ENCONTRADO,
             "No se ha podido asignar el codigo INE de la provincia "+ str(prov),
             fixerID="IgnoreCodigoINEError",
             selected=False,
@@ -154,7 +153,7 @@ class CodigoINERule(Rule):
         if possibleMunData["possible"]:
           report.add(
             feature.get("ID_ACCIDENTE"), 
-            CODERR_CODIGO_INE_MUNICIPIO_NO_ENCONTRADO,
+            codigoINE.CODERR_CODIGO_INE_MUNICIPIO_NO_ENCONTRADO,
             "No se ha podido asignar el codigo INE del municipio "+ str(mun),
             fixerID="IgnoreCodigoINEError",
             selected=False,
@@ -179,7 +178,7 @@ class CodigoINERule(Rule):
           if possibleProvData["possible"]:
             report.add(
               feature.get("ID_ACCIDENTE"), 
-              CODERR_CODIGO_INE_PROVINCIA_ERRONEO,
+              codigoINE.CODERR_CODIGO_INE_PROVINCIA_ERRONEO,
               "El codigo INE de la provincia "+str(prov)+" es erroneo ",
               fixerID="IgnoreCodigoINEError",
               selected=False,
@@ -196,7 +195,7 @@ class CodigoINERule(Rule):
           if possibleProvData["possible"]:
             report.add(
               feature.get("ID_ACCIDENTE"), 
-              CODERR_CODIGO_INE_PROVINCIA_ERRONEO,
+              codigoINE.CODERR_CODIGO_INE_PROVINCIA_ERRONEO,
               "El codigo INE de la provincia "+str(prov)+" es erroneo ",
               fixerID="IgnoreCodigoINEError",
               selected=False,
@@ -220,7 +219,7 @@ class CodigoINERule(Rule):
           if possibleMunData["possible"]:
             report.add(
               feature.get("ID_ACCIDENTE"), 
-              CODERR_CODIGO_INE_MUNICIPIO_ERRONEO,
+              codigoINE.CODERR_CODIGO_INE_MUNICIPIO_ERRONEO,
               "El codigo INE del municipio "+str(mun)+" es erroneo ",
               fixerID="IgnoreCodigoINEError",
               selected=False,
@@ -237,7 +236,7 @@ class CodigoINERule(Rule):
           if possibleMunData["possible"]:
             report.add(
               feature.get("ID_ACCIDENTE"), 
-              CODERR_CODIGO_INE_MUNICIPIO_ERRONEO,
+              codigoINE.CODERR_CODIGO_INE_MUNICIPIO_ERRONEO,
               "El codigo INE del municipio "+str(mun)+" es erroneo ",
               fixerID="IgnoreCodigoINEError",
               selected=False,

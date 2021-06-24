@@ -126,14 +126,15 @@ class CodigoINETransformFactory(TransformFactory):
   def selfConfigure(self, ws): #, explorer):
     codigoINE.selfConfigureCodigoINE(ws)
 
-      
-def main(*args):
+def updateWorkspace():
   dataManager = DALLocator.getDataManager()
   ws = dataManager.getDatabaseWorkspace("ARENA2_DB")
   f = CodigoINETransformFactory()
   f.create(workspace=ws)
   f.selfConfigure(ws)
-  print f
+  
+def main(*args):
+  #updateWorkspace()
   """
   server = ws.getServerExplorer()
   print "one:",type(server)

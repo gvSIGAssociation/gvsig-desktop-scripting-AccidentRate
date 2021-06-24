@@ -9,11 +9,16 @@ from addons.AccidentRate.importrules.titularidad import CODERR_KM_NO_ENCONTRADO
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory, RuleFixer
 
+from org.gvsig.fmap.dal import DALLocator
+from org.gvsig.tools.dataTypes import DataTypes
+from org.gvsig.tools.dispose import DisposeUtils
 
 class GeocodeTransform(Transform):
-  def __init__(self, factory):
+  def __init__(self, factory, **args):
     Transform.__init__(self, factory)
-
+    self.workspace = args.get("workspace",None)
+    self.repo = self.workspace.getStoresRepository()
+    
   def apply(self, feature, *args):
     if feature.getType().get("LID_ACCIDENTE") == None:
       # Si no es la tabla de accidentes no hacenos nada
@@ -42,8 +47,50 @@ class GeocodeTransformFactory(TransformFactory):
       return self.getName()+".\nNo es posible realizar la geocodificacion.\n"+s
     return None
     
-  def create(self, *args):
-    return GeocodeTransform(self)
+  def create(self,  **args):
+    return GeocodeTransform(self, **args)
+    
+  def selfConfigure(self, ws):
+    # crear campo ID_TRAMO
+    server = ws.getServerExplorer()
+    accidentesParameters = server.get("ARENA2_ACCIDENTES")
+    dataManager = DALLocator.getDataManager()
+    store = dataManager.openStore(accidentesParameters.getProviderName(),accidentesParameters)
+    ft = store.getDefaultFeatureType()
+    eft = None #store.getDefaultFeatureType().getEditable()
+    if ft.get("ID_TRAMO")==None: 
+      if not store.isEditing():
+        store.edit()
+      if eft==None: 
+        eft = store.getDefaultFeatureType().getEditable()
+      add_attribute_ID_TRAMO(eft)
+    
+    if eft!=None:
+      store.update(eft)
+    if store.isEditing():
+      store.finishEditing()
+    DisposeUtils.dispose(store)
+    return
+    
+def add_attribute_ID_TRAMO(ft):
+    attr = ft.add("ID_TRAMO",DataTypes.INT)
+    attr.setSize(10)
+    attr.setAllowIndexDuplicateds(True)
+    attr.setAllowNull(True)
+    attr.setDataProfileName(None)
+    attr.setDescription(u'ID_TRAMO')
+    attr.setGroup(None)
+    attr.setHidden(False)
+    attr.setIsAutomatic(False)
+    attr.setIsIndexAscending(True)
+    attr.setIsIndexed(True)
+    attr.setIsPrimaryKey(False)
+    attr.setIsReadOnly(False)
+    attr.setIsTime(False)
+    attr.setLabel(u'_ID_Tramo')
+    attr.setOrder(140)
+    attr.setPrecision(0)
+    attr.setReadOnly(False)
     
 class IgnoreGeocodeErrorAction(RuleFixer):
   def __init__(self):
@@ -122,8 +169,17 @@ def test():
   for dato in datos:
     transform.apply(dato)
     print dato.get("MAPA",None)
-      
+    
+def updateWorkspace():
+  dataManager = DALLocator.getDataManager()
+  ws = dataManager.getDatabaseWorkspace("ARENA2_DB")
+  f = GeocodeTransformFactory()
+  f.create(workspace=ws)
+  f.selfConfigure(ws)
+  
 def main(*args):
   #test()
-  selfRegister()
+  updateWorkspace()
+  #selfRegister()
+  
   

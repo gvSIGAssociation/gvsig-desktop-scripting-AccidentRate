@@ -1,0 +1,12 @@
+[Script]
+enable = true
+main = main
+Lang = python
+
+[Unit]
+type = Script
+name = make_manual_ws_update
+description = 
+createdBy = 
+version = 
+

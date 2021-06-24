@@ -14,7 +14,7 @@ from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, R
 from org.gvsig.expressionevaluator import ExpressionUtils
 from java.sql import Date
 from java.text import SimpleDateFormat
-
+from org.apache.commons.lang3 import StringUtils
 CODERR_VALUES_FECHA_CIERRE = 571
 
 class DateLockRule(Rule):
@@ -22,9 +22,14 @@ class DateLockRule(Rule):
     Rule.__init__(self, factory)
     self.workspace = args.get("workspace",None)
     fechaDeCierreString = self.workspace.get('CEGESEV.accidentes.fecha_de_cierre')
-    self.fechaDeCierre = SimpleDateFormat("dd/MM/yyyy").parse(fechaDeCierreString)
+    if fechaDeCierreString == None or StringUtils.isEmpty(fechaDeCierreString):
+      self.fechaDeCierre = None
+    else:
+      self.fechaDeCierre = SimpleDateFormat("dd/MM/yyyy").parse(fechaDeCierreString)
     
   def execute(self, report, feature):
+    if self.fechaDeCierre == None:
+        return
     ftype = feature.getStore().getDefaultFeatureType()
     if ftype.get("FECHA_ACCIDENTE")==None:
         return
@@ -33,8 +38,9 @@ class DateLockRule(Rule):
       report.add(
               feature.get("ID_ACCIDENTE"),
               CODERR_VALUES_FECHA_CIERRE,
-              "Fecha de cierre fuera: %s" % (
-                str(fecha)),
+              "Fecha de cierre fuera: %s, establecida: %s" % (
+                str(fecha),
+                str(self.fechaDeCierre)),
               fixerId = None, 
               selected=False
             )
