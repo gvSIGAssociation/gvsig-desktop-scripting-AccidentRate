@@ -1,15 +1,16 @@
 #
-#Thu Apr 08 08:30:22 CEST 2021
+#Thu Jun 24 11:51:16 CEST 2021
 owner=Asociacion gvSIG
 code=AccidentRate
+download-url=https\://github.com/gvSIGAssociation/gvsig-desktop-scripting-AccidentRate/releases/download/1.0.0-3/gvSIG-desktop-2.6.0-AccidentRate-1.0.0-3-testing-all-all-j1_8.gvspkg
 java-version=j1_8
 operating-system=all
 description=
 official=true
 type=Script
 web-url=
-version=1.0.0-2
-buildNumber=2
+version=1.0.0-3
+buildNumber=3
 owner-url=http\://www.gvsig.com
 dependencies=
 sources-url=https\://github.com/gvSIGAssociation/gvsig-desktop-scripting-AccidentRate
