@@ -90,17 +90,18 @@ class CodigoINETransform(Transform):
 
       storeM = self.repo.getStore("ARENA2_TR_INE_MUNICIPIO")
 
-      munOptions=mun.split("/")
-      munOptions.append(mun)
-      for j in munOptions:
-        builder = ExpressionUtils.createExpressionBuilder()
-        expression = builder.eq(builder.lower(builder.variable("MUNICIPIO")), builder.lower(builder.constant(j))).toString()
-        munData = storeM.findFirst(expression)
-        if munData == None:
-          logger("El municipio "+j+" no se encuentra en la tabla ARENA2_TR_INE_MUNICIPIO" , LOGGER_INFO)
-          continue
+      #munOptions=mun.split("/")
+      #munOptions.append(mun)
+      #for j in munOptions:
+      builder = ExpressionUtils.createExpressionBuilder()
+      expression = builder.eq(builder.lower(builder.variable("MUNICIPIO")), builder.lower(builder.constant(mun))).toString()
+      munData = storeM.findFirst(expression)
+      if munData == None:
+        logger("El municipio "+mun+" no se encuentra en la tabla ARENA2_TR_INE_MUNICIPIO" , LOGGER_INFO)
+      else:
         feature.set("INE_MUNICIPIO",munData.get("MUN_INE"))
-        break
+        logger("El municipio "+mun+" actualizado con: "+str(munData.get("MUN_INE")) , LOGGER_INFO)
+      
       storeM.dispose()
     except:
       ex = sys.exc_info()[1]
