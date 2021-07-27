@@ -855,3 +855,4 @@ PROV_INE:Integer;MUN_INE:Integer;MUNICIPIO:String:set:size=100
 12;12130;"Villahermosa del RÃ­o"
 12;12130;"Villahermosa del RÃ-­o" 
 12;12130;"Villahermosa del RÃo"
+12;12129;"VILLAFRANCA DEL CID/VILAFRANCA"
