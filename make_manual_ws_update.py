@@ -554,6 +554,6 @@ def updateDGT():
     
 def main(*args):
     #updateDGT()
-    #updateft()
+    updateft()
     updateForRules()
     pass
