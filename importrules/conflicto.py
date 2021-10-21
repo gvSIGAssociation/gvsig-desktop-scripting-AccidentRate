@@ -46,7 +46,7 @@ class ConflictRule(Rule):
       feature.get("ID_ACCIDENTE"), 
       200,
       "Conflicto en %s." % str(conflictos),
-      selected=False,
+      selected=True,
       CARRETERA=feature.get("CARRETERA"),
       PK=feature.get("KM"),
       TITULARIDAD=None,

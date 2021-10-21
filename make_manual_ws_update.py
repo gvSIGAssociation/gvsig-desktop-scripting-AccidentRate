@@ -93,7 +93,7 @@ def updateft():
     
 def updateForRules():
     transformCodigoINE.updateWorkspace()
-    geocode.updateWorkspace()
+    #geocode.updateWorkspace()
 
 
 
@@ -555,5 +555,5 @@ def updateDGT():
 def main(*args):
     #updateDGT()
     updateft()
-    updateForRules()
+    #updateForRules()
     pass

@@ -10,6 +10,7 @@ from addons.AccidentRate.roadcatalog import findOwnership, checkRequirements
 
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory, RuleFixer
+import pdb
 
 CODERR_CARRETERAKM_NO_ENCONTRADA = 100
 CODERR_KM_NO_ENCONTRADO = 101
@@ -61,7 +62,14 @@ class OwnershipRule(Rule):
     if feature.getType().get("LID_ACCIDENTE") == None:
       # Si no es la tabla de accidentes no hacenos nada
       return
+    pdb.set_trace()
+    if feature.getType().get("TITULARIDAD_VIA_DGT"):
+      print "tiene dgt:", feature.get("TITULARIDAD_VIA_DGT")
+    else:
+      print "no tiene dgt"
+    return
     titularidad_accidente = feature.get("TITULARIDAD_VIA")
+    print "Feature:",feature.get("ID_ACCIDENTE"), feature.get("CARRETERA"), feature.get("TITULARIDAD_VIA"),feature.get("TITULARIDAD_VIA_DGT"), feature.get("KM")
     if feature.get("CARRETERA") == None:
       if titularidad_accidente==TITULARIDAD_AUTONOMICA: 
         # No se ha indicado carretera y titularidad en el acidente a Autonomica
@@ -75,7 +83,7 @@ class OwnershipRule(Rule):
             feature.get("FECHA_ACCIDENTE")
           ),
           fixerId = "SetOwnership", 
-          selected=False,
+          selected=True,
           PK=feature.get("KM"),
           TITULARIDAD=TITULARIDAD_DESCONOCIDA,
           TITULARIDAD_ACCIDENTE=titularidad_accidente,
@@ -102,7 +110,7 @@ class OwnershipRule(Rule):
             feature.get("FECHA_ACCIDENTE")
           ),
           fixerId = "SetOwnership", 
-          selected=False,
+          selected=True,
           CARRETERA=feature.get("CARRETERA"),
           PK=feature.get("KM"),
           TITULARIDAD=TITULARIDAD_DESCONOCIDA,
@@ -114,7 +122,10 @@ class OwnershipRule(Rule):
       return 
     # Convertimos la titularidad obtenida de la BBDD 
     # de la GVA a la de la DGT
-    titularidad_tramo = self.__titularidadGVA2DGT.get(titularidad_tramo,TITULARIDAD_DESCONOCIDA)
+    if titularidad_tramo not in [1,2,3,4,5]:
+      titularidad_tramo = self.__titularidadGVA2DGT.get(titularidad_tramo,TITULARIDAD_DESCONOCIDA)
+    else:
+      print "notin: no se tiene que transformar ya es correcta", titularidad_tramo
 
     if titularidad_tramo == titularidad_accidente:
       return
@@ -198,5 +209,5 @@ def selfRegister():
     
 def main(*args):
   #test()
-  #selfRegister()
+  selfRegister()
   pass

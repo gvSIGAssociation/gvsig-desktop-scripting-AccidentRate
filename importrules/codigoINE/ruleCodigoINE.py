@@ -85,7 +85,7 @@ class CodigoINERule(Rule):
           codigoINE.CODERR_CODIGO_INE_NO_ENCONTRADO,
           "Imposible asignar el codigo INE de la provincia "+str(prov),
           fixerID="IgnoreCodigoINEError",
-          selected=False,
+          selected=True,
           INE_PROVINCIA=None,
           PPROVINCIA=None,
           INE_MUNICIPIO=munData.get("MUN_INE"),
@@ -98,7 +98,7 @@ class CodigoINERule(Rule):
           codigoINE.CODERR_CODIGO_INE_NO_ENCONTRADO,
           "Imposible asignar el codigo INE del municipio "+ str(mun),
           fixerID="IgnoreCodigoINEError",
-          selected=False,
+          selected=True,
           INE_PROVINCIA=provData.get("PROV_INE"),
           PPROVINCIA=provData.get("PROVINCIA"),
           INE_MUNICIPIO=None,
@@ -111,7 +111,7 @@ class CodigoINERule(Rule):
           codigoINE.CODERR_CODIGO_INE_NO_ENCONTRADO,
           "Imposible asignar el codigo INE de la provincia "+str(prov)+" y el municipio "+ str(mun),
           fixerID="IgnoreCodigoINEError",
-          selected=False,
+          selected=True,
           INE_PROVINCIA=None,
           PPROVINCIA=None,
           INE_MUNICIPIO=None,
@@ -138,7 +138,7 @@ class CodigoINERule(Rule):
             codigoINE.CODERR_CODIGO_INE_PROVINCIA_NO_ENCONTRADO,
             "No se ha podido asignar el codigo INE de la provincia "+ str(prov),
             fixerID="IgnoreCodigoINEError",
-            selected=False,
+            selected=True,
             INE_PROVINCIA=possibleProvData["INEProv"],
             PPROVINCIA=possibleProvData["Prov"]
           )
@@ -156,7 +156,7 @@ class CodigoINERule(Rule):
             codigoINE.CODERR_CODIGO_INE_MUNICIPIO_NO_ENCONTRADO,
             "No se ha podido asignar el codigo INE del municipio "+ str(mun),
             fixerID="IgnoreCodigoINEError",
-            selected=False,
+            selected=True,
             INE_MUNICIPIO=possibleMunData["INEMun"],
             PMUNICIPIO=possibleMunData["Mun"]
           )
@@ -181,7 +181,7 @@ class CodigoINERule(Rule):
               codigoINE.CODERR_CODIGO_INE_PROVINCIA_ERRONEO,
               "El codigo INE de la provincia "+str(prov)+" es erroneo ",
               fixerID="IgnoreCodigoINEError",
-              selected=False,
+              selected=True,
               INE_PROVINCIA=possibleProvData["INEProv"],
               PPROVINCIA=possibleProvData["Prov"]
             )
@@ -198,7 +198,7 @@ class CodigoINERule(Rule):
               codigoINE.CODERR_CODIGO_INE_PROVINCIA_ERRONEO,
               "El codigo INE de la provincia "+str(prov)+" es erroneo ",
               fixerID="IgnoreCodigoINEError",
-              selected=False,
+              selected=True,
               INE_PROVINCIA=possibleProvData["INEProv"],
               PPROVINCIA=possibleProvData["Prov"]
             )
@@ -222,7 +222,7 @@ class CodigoINERule(Rule):
               codigoINE.CODERR_CODIGO_INE_MUNICIPIO_ERRONEO,
               "El codigo INE del municipio "+str(mun)+" es erroneo ",
               fixerID="IgnoreCodigoINEError",
-              selected=False,
+              selected=True,
               INE_MUNICIPIO=possibleMunData["INEMun"],
               PMUNICIPIO=possibleMunData["Mun"]
             )
@@ -239,7 +239,7 @@ class CodigoINERule(Rule):
               codigoINE.CODERR_CODIGO_INE_MUNICIPIO_ERRONEO,
               "El codigo INE del municipio "+str(mun)+" es erroneo ",
               fixerID="IgnoreCodigoINEError",
-              selected=False,
+              selected=True,
               INE_MUNICIPIO=possibleMunData["INEMun"],
               PMUNICIPIO=possibleMunData["Mun"]
             )

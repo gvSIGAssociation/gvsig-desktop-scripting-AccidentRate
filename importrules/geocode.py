@@ -123,6 +123,7 @@ class GeocodeRule(Rule):
         errcode,
         msg,
         fixerID="IgnoreGeocodeError",
+        selected=True,
         CARRETERA=feature.get("CARRETERA"),
         PK=feature.get("KM"),        
         TITULARIDAD_ACCIDENTE=titularidad_accidente,

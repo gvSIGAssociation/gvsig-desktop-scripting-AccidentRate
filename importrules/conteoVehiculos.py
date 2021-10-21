@@ -122,7 +122,7 @@ class CountVehiclesRule(Rule):
                     builder.toString(),
                   ),
                   fixerId = "UpdateCountVehicles", 
-                  selected=False,
+                  selected=True,
                   NUM_TURISMOS=conteoPorTablas['NUM_TURISMOS'],
                   NUM_FURGONETAS=conteoPorTablas['NUM_FURGONETAS'],
                   NUM_CAMIONES=conteoPorTablas['NUM_CAMIONES'],

@@ -186,3 +186,5 @@ def main(*args):
     print getStretchFeatureStore()
     
     print "f",findOwnership(fecha, 'CV301', 10)
+    
+    print "f",findOwnership(fecha, 'CV-70', 49.7)

@@ -35,7 +35,7 @@ class AvailableValuesRule(Rule):
                         str(attr.getName())
                       ),
                       fixerId = None, 
-                      selected=False,
+                      selected=True,
                       FIELD_NO_AVAILABLE=attr.getName()
                     )
 

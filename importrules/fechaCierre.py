@@ -15,6 +15,7 @@ from org.gvsig.expressionevaluator import ExpressionUtils
 from java.sql import Date
 from java.text import SimpleDateFormat
 from org.apache.commons.lang3 import StringUtils
+from org.gvsig.tools.dataTypes import DataTypeUtils
 CODERR_VALUES_FECHA_CIERRE = 571
 
 class DateLockRule(Rule):
@@ -25,16 +26,26 @@ class DateLockRule(Rule):
     if fechaDeCierreString == None or StringUtils.isEmpty(fechaDeCierreString):
       self.fechaDeCierre = None
     else:
-      self.fechaDeCierre = SimpleDateFormat("dd/MM/yyyy").parse(fechaDeCierreString)
+      #self.fechaDeCierre = SimpleDateFormat("dd/MM/yyyy").parse(fechaDeCierreString)
+      self.fechaDeCierre = DataTypeUtils.toDate(fechaDeCierreString)
+
     
   def execute(self, report, feature):
+    
     if self.fechaDeCierre == None:
         return
     ftype = feature.getStore().getDefaultFeatureType()
     if ftype.get("FECHA_ACCIDENTE")==None:
         return
-    fecha = feature.get("FECHA_ACCIDENTE")
+    fecha = DataTypeUtils.toDate(feature.get("FECHA_ACCIDENTE"))
+    #print ". f. fecha:", fecha, type(fecha)
+    #print DataTypeUtils.toDate(self.fechaDeCierreString), type(DataTypeUtils.toDate(self.fechaDeCierreString))
+    #print DataTypeUtils.toDate(self.fechaDeCierre)
+    #print ".. compare:", fecha <= self.fechaDeCierre
+    print "Test:", self.fechaDeCierre, fecha, fecha <= self.fechaDeCierre
+    print type(self.fechaDeCierre), type(fecha)
     if fecha <= self.fechaDeCierre:
+      print ".. added"
       report.add(
               feature.get("ID_ACCIDENTE"),
               CODERR_VALUES_FECHA_CIERRE,

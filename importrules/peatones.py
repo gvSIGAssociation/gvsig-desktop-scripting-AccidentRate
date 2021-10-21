@@ -53,7 +53,7 @@ class PeatonesRule(Rule):
                     str(totalPeatones)
                   ),
                   fixerId = "AssignPeatonesFromTableFixer", 
-                  selected=False,
+                  selected=True,
                   TOTAL_PEATONES=totalPeatones
                 )
     DisposeUtils.dispose(storePeatones)
