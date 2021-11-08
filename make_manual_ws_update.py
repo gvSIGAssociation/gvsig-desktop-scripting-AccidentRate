@@ -544,9 +544,91 @@ def updateDGT():
 
 
 
+def updateFormat():
+    dataManager = DALLocator.getDataManager()
+    ws = dataManager.getDatabaseWorkspace("ARENA2_DB")
+    server = ws.getServerExplorer()
+    accidentesParameters = server.get("ARENA2_ACCIDENTES")
+    dataManager = DALLocator.getDataManager()
+    store = dataManager.openStore(accidentesParameters.getProviderName(),accidentesParameters)
+    ft = store.getDefaultFeatureType()
+    eft = None #store.getDefaultFeatureType().getEditable()
 
+    if not store.isEditing():
+       store.edit()
+    if eft==None: 
+       eft = store.getDefaultFeatureType().getEditable()
 
+    e = eft.getEditableAttributeDescriptor("HORA_ACCIDENTE")
+    e.setDefaultFormat("%tR")
 
+    e = eft.getEditableAttributeDescriptor("KM")
+    e.setDefaultFormat("%.3f")
+    
+
+    if eft!=None:
+      store.update(eft)
+      print eft.getAttributeDescriptor("HORA_ACCIDENTE").getDefaultFormat()
+      print eft.getAttributeDescriptor("KM").getDefaultFormat()
+    print "store editing:", store.isEditing()
+    if store.isEditing():
+      store.finishEditing()
+      print "finish"
+    DisposeUtils.dispose(store)
+    return
+
+def updatePriority():
+    dataManager = DALLocator.getDataManager()
+    ws = dataManager.getDatabaseWorkspace("ARENA2_DB")
+    server = ws.getServerExplorer()
+    accidentesParameters = server.get("ARENA2_ACCIDENTES")
+    dataManager = DALLocator.getDataManager()
+    store = dataManager.openStore(accidentesParameters.getProviderName(),accidentesParameters)
+    ft = store.getDefaultFeatureType()
+    eft = None #store.getDefaultFeatureType().getEditable()
+
+    if not store.isEditing():
+       store.edit()
+    if eft==None: 
+       eft = store.getDefaultFeatureType().getEditable()
+    #tags = attr.getTags()
+    #tags.set(u'report.attr.label', u"FOREING_VALUE('ESTADO_ACCIDENTE.DESCRIPCION')")
+
+    e = eft.getEditableAttributeDescriptor("HORA_ACCIDENTE")
+    tags = e.getTags()
+    tags.set(u'dal.search.attribute.priority', 1)
+    
+
+    if eft!=None:
+      store.update(eft)
+      print eft.getAttributeDescriptor("HORA_ACCIDENTE").getDefaultFormat()
+      print eft.getAttributeDescriptor("KM").getDefaultFormat()
+    print "store editing:", store.isEditing()
+    if store.isEditing():
+      store.finishEditing()
+      print "finish"
+    DisposeUtils.dispose(store)
+    return
+    
+def testFormat():
+    dataManager = DALLocator.getDataManager()
+    ws = dataManager.getDatabaseWorkspace("ARENA2_DB")
+    server = ws.getServerExplorer()
+    accidentesParameters = server.get("ARENA2_ACCIDENTES")
+    dataManager = DALLocator.getDataManager()
+    store = dataManager.openStore(accidentesParameters.getProviderName(),accidentesParameters)
+    ft = store.getDefaultFeatureType()
+    ehora = ft.getAttributeDescriptor("HORA_ACCIDENTE")
+    ekm = ft.getAttributeDescriptor("KM")
+    from java.sql import Timestamp
+    from java.util import Date
+    ts = Timestamp(Date().getTime())
+    print ehora.format(ts)
+    
+    print ekm.format(10.282999895)
+    from java.lang import String
+    print String.format("%.3f", 10.39283)
+    print String.format("%tR", Timestamp(Date().getTime()))
 
 
 
@@ -554,6 +636,8 @@ def updateDGT():
     
 def main(*args):
     #updateDGT()
-    updateft()
+    #updateft()
     #updateForRules()
+    #updateFormat()
+    #testFormat()
     pass

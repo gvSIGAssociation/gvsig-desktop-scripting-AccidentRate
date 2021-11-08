@@ -62,14 +62,14 @@ class OwnershipRule(Rule):
     if feature.getType().get("LID_ACCIDENTE") == None:
       # Si no es la tabla de accidentes no hacenos nada
       return
-    pdb.set_trace()
-    if feature.getType().get("TITULARIDAD_VIA_DGT"):
-      print "tiene dgt:", feature.get("TITULARIDAD_VIA_DGT")
-    else:
-      print "no tiene dgt"
-    return
+    #pdb.set_trace()
+    #if feature.getType().get("TITULARIDAD_VIA_DGT"):
+    # print "tiene dgt:", feature.get("TITULARIDAD_VIA_DGT")
+    #else:
+    #  print "no tiene dgt"
+    #return
     titularidad_accidente = feature.get("TITULARIDAD_VIA")
-    print "Feature:",feature.get("ID_ACCIDENTE"), feature.get("CARRETERA"), feature.get("TITULARIDAD_VIA"),feature.get("TITULARIDAD_VIA_DGT"), feature.get("KM")
+    #print "Feature:",feature.get("ID_ACCIDENTE"), feature.get("CARRETERA"), feature.get("TITULARIDAD_VIA"),feature.get("TITULARIDAD_VIA_DGT"), feature.get("KM")
     if feature.get("CARRETERA") == None:
       if titularidad_accidente==TITULARIDAD_AUTONOMICA: 
         # No se ha indicado carretera y titularidad en el acidente a Autonomica
