@@ -109,7 +109,10 @@ class CountVehiclesRule(Rule):
       toReport = False
       builder = StringBuilder()
       for key in conteoPorTablas.keys():
-        if conteoPorTablas[key] != conteoPorFeature[key]:
+        n = conteoPorFeature[key]
+        if n == None:
+          n = 0
+        if conteoPorTablas[key] != n:
           if toReport:
             builder.append(", ")
           toReport = True

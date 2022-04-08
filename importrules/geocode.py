@@ -5,6 +5,8 @@ import gvsig
 from addons.AccidentRate.roadcatalog import geocodificar, checkRequirements
 from addons.AccidentRate.importrules.titularidad import CODERR_CARRETERAKM_NO_ENCONTRADA
 from addons.AccidentRate.importrules.titularidad import CODERR_KM_NO_ENCONTRADO
+from addons.AccidentRate.importrules.titularidad import CODERR_CARRETERA_NO_INDICADA, TITULARIDAD_AUTONOMICA
+
 
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory, RuleFixer
@@ -22,6 +24,10 @@ class GeocodeTransform(Transform):
   def apply(self, feature, *args):
     if feature.getType().get("LID_ACCIDENTE") == None:
       # Si no es la tabla de accidentes no hacenos nada
+      return
+    carretera = feature.get("CARRETERA")
+    if carretera in ("",None):
+      feature.set("MAPA",None)
       return
     p, f, msg = geocodificar(
       feature.get("FECHA_ACCIDENTE"), 
@@ -109,12 +115,31 @@ class GeocodeRule(Rule):
       # Si no es la tabla de accidentes no hacenos nada
       return
     titularidad_accidente = feature.get("TITULARIDAD_VIA")
+    carretera = feature.get("CARRETERA")
+    calleNombre = feature.get("CALLE_NOMBRE")
+    if not (calleNombre in ("",None)):
+      return
+    if carretera in ("",None):
+      errcode = CODERR_CARRETERA_NO_INDICADA
+      report.add(
+        feature.get("ID_ACCIDENTE"), 
+        errcode,
+        "Ni carretera ni calle indicadas",
+        fixerID="IgnoreGeocodeError",
+        selected=True,
+        CARRETERA=feature.get("CARRETERA"),
+        PK=feature.get("KM"),        
+        TITULARIDAD_ACCIDENTE=titularidad_accidente,
+        FECHA=feature.get("FECHA_ACCIDENTE"),
+        PROVINCIA=feature.get("COD_PROVINCIA")
+      )      
+      return
     p, f, msg = geocodificar(
       feature.get("FECHA_ACCIDENTE"), 
-      feature.get("CARRETERA"), 
+      carretera, 
       feature.get("KM")
     )
-    if p==None:
+    if p==None and titularidad_accidente == TITULARIDAD_AUTONOMICA:
       errcode = CODERR_CARRETERAKM_NO_ENCONTRADA
       if msg.lower().startswith("kilometro"):
         errcode = CODERR_KM_NO_ENCONTRADO

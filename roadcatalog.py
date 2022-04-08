@@ -6,6 +6,7 @@ from gvsig.uselib import use_plugin
 
 use_plugin("org.gvsig.lrs.app.mainplugin")
 
+from java.lang import String
 from java.text import SimpleDateFormat
 from org.gvsig.tools.dispose import DisposeUtils
 from org.gvsig.tools.util import CachedValue
@@ -20,26 +21,19 @@ except:
 
 class StretchFeatureStoreCache(CachedValue):
   def reload(self):
-    #store = getCarreterasManager().getStretchFeatureStore()
     dataManager = DALLocator.getDataManager()
-    pool = dataManager.getDataServerExplorerPool()
-    #explorerParams = pool.get("carreteras_gva")#.getExplorerParameters()
-
-    #if explorerParams==None:
     ws = dataManager.getDatabaseWorkspace("ARENA2_DB")
 
-    # Tags values CONFIG table
-    poolCarreterasSchema = ws.get("TRAMOS_CARRETERAS_SCHEMA")
-    poolCarreterasName = ws.get("TRAMOS_CARRETERAS_NAME")
+    tramosSchemaName = ws.get("TRAMOS_CARRETERAS_SCHEMA")
+    tramosTableName = ws.get("TRAMOS_CARRETERAS_NAME")
     
     repo = ws.getStoresRepository()
     server_explorer = ws.getServerExplorer()
-    explorer_params = server_explorer.get(poolCarreterasName)
-    explorer_params.setSchema(poolCarreterasSchema)
+    explorer_params = server_explorer.get(tramosTableName)
+    explorer_params.setSchema(tramosSchemaName)
     explorer_name = explorer_params.getProviderName()
 
     store = dataManager.openStore(explorer_name, explorer_params)
-    #store.dispose()
     self.setValue(store)
 
 lrsManager = None
@@ -58,34 +52,43 @@ def getStretchFeatureStore():
   
 
 def checkRequirements():
-  """
   dataManager = DALLocator.getDataManager()
-  s = ""
+  s = u""
   if getLRSManager()==None:
-    s += "No se ha podido acceder al plugin de LRS, es posible que no se encuentre instalado.\n"
-  pool = dataManager.getDataServerExplorerPool()
-  if pool.get("carreteras_gva")==None:
-    s += "No se ha podido localizar la conexion 'carreteras_gva' para poder acceder a las capas de carreteras\n"
-  else:
-    try:
-      explorerParams = pool.get("carreteras_gva").getExplorerParameters()    
-      poolCarreterasSchema = DALLocator.getDataManager().getDatabaseWorkspace("ARENA2_DB").get("TRAMOS_CARRETERAS_SCHEMA")
-      explorerParams.setSchema(poolCarreterasSchema)
-      explorer = dataManager.openServerExplorer(explorerParams.getProviderName(), explorerParams)
-
-      poolCarreterasName = DALLocator.getDataManager().getDatabaseWorkspace("ARENA2_DB").get("TRAMOS_CARRETERAS_NAME")
-      params = explorer.get(poolCarreterasName)
-      explorer.dispose()
-    except:
-      params = None
-      
-    if params == None:
-      s += "No se ha podido acceder a la tabla 'layers.tramos_carreteras'.\n"
+    s += u"No se ha podido acceder al plugin de LRS, es posible que no se encuentre instalado.\n"
+  try:
+    ws = dataManager.getDatabaseWorkspace("ARENA2_DB")
+    if ws == None:
+      s += u"No se ha encontrado el espacio de trabajo de ARENA2_DB.\n"
+    else:
+      if not ws.isConnected():
+        s += u"No se está conectado a un espacio de trabajo de ARENA2_DB.\n"
+      else:
+        tramosSchemaName = ws.get("TRAMOS_CARRETERAS_SCHEMA")
+        if tramosSchemaName in ("", None):
+          s += u"No se ha encontrado la variable de configuración 'TRAMOS_CARRETERAS_SCHEMA'.\n"
+          
+        tramosTableName = ws.get("TRAMOS_CARRETERAS_NAME")
+        if tramosTableName in ("", None):
+          s += u"No se ha encontrado la variable de configuración 'TRAMOS_CARRETERAS_NAME'.\n"
+        else:
+          try:
+            repo = ws.getStoresRepository()
+            server_explorer = ws.getServerExplorer()
+            explorer_params = server_explorer.get(tramosTableName)
+            explorer_params.setSchema(tramosSchemaName)
+            explorer_name = explorer_params.getProviderName()
+        
+            store = dataManager.openStore(explorer_name, explorer_params)
+            store.dispose()
+          except:
+            s += u"No se ha podido acceder a la tabla '%s', revise las variable de configuración 'TRAMOS_CARRETERAS_SCHEMA' y 'TRAMOS_CARRETERAS_NAME'.\n"%tramosTableName
+  except:
+    s += u"No se ha podido acceder a la tabla de tramos de carreteras.\n"
   if s.strip() == "":
     return None
   return s
-  """
-  return None
+
 def getVigentStretchesQuery(store, fecha):
   builder = ExpressionUtils.createExpressionBuilder()
   filtro = builder.and( 
@@ -98,13 +101,6 @@ def getVigentStretchesQuery(store, fecha):
         builder.is_null(builder.variable("fecha_salida"))
     ))
   ).toString()
-  
-  #dateFormatter = SimpleDateFormat("dd/MM/yyyy")
-  #formatedDate = dateFormatter.format(fecha)
-  #filtro = "( fecha_entrada <= '%s' OR fecha_entrada IS NULL) AND ('%s' <= fecha_salida OR fecha_salida IS NULL)" % (
-  #  formatedDate,
-  #  formatedDate
-  #)
   
   query = store.createFeatureQuery()
   query.addFilter(filtro)
@@ -128,7 +124,6 @@ def geocodificar(fecha, carretera, pk):
 
   builder = ExpressionUtils.createExpressionBuilder()
   expression = builder.eq(builder.variable("matricula"), builder.constant(carretera)).toString()
-  #expression = "matricula = '%s'" % carretera
   try:
     query.addFilter(expression)
     query.retrievesAllAttributes()
@@ -142,10 +137,9 @@ def geocodificar(fecha, carretera, pk):
         # LRS devuelve un Point2DM y falla al guardarse en la BBDD (H2 por lo menos)
         location = GeometryUtils.createPoint(location.getX(), location.getY())
         return (location, strech, None)
-    return (None, None, "kilometro %s no encontrado en '%s'." % (pk,carretera))
+    return (None, None, "kilometro %.3f no encontrado a fecha %s en '%s'." % (pk/1000,String.format("%td/%tm/%tY",fecha,fecha,fecha),carretera))
   finally:
     DisposeUtils.disposeQuietly(streches)
-    #DisposeUtils.disposeQuietly(strechesStore)
 
 def findOwnership(fecha, carretera, pk):
   if fecha == None or carretera == None or pk == None:
@@ -158,17 +152,17 @@ def findOwnership(fecha, carretera, pk):
   builder.and( builder.le(builder.variable("pk_i"), builder.constant(pk)))
   builder.and( builder.ge(builder.variable("pk_f"), builder.constant(pk)))
   expression = builder.toString()
-  #expression = "matricula = '%s' and pk_i >= %s and pk_f <= %s" % (carretera, pk, pk)
   query.addFilter(expression)
   query.retrievesAllAttributes()
   feature = strechesStore.findFirst(query)
-  #DisposeUtils.disposeQuietly(strechesStore)
   if feature == None:
     return None
   return feature.get("titularidad")
 
-
 def main(*args):
+  print checkRequirements()  
+
+def main0(*args):
     from java.util import Date
     fecha = Date()
     builder = ExpressionUtils.createExpressionBuilder()

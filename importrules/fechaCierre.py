@@ -42,8 +42,8 @@ class DateLockRule(Rule):
     #print DataTypeUtils.toDate(self.fechaDeCierreString), type(DataTypeUtils.toDate(self.fechaDeCierreString))
     #print DataTypeUtils.toDate(self.fechaDeCierre)
     #print ".. compare:", fecha <= self.fechaDeCierre
-    print "Test:", self.fechaDeCierre, fecha, fecha <= self.fechaDeCierre
-    print type(self.fechaDeCierre), type(fecha)
+    #print "Test:", self.fechaDeCierre, fecha, fecha <= self.fechaDeCierre
+    #print type(self.fechaDeCierre), type(fecha)
     if fecha <= self.fechaDeCierre:
       print ".. added"
       report.add(

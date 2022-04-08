@@ -165,7 +165,7 @@ class CodigoINERule(Rule):
       #COMPROBAR SI ESTAN BIEN 
       if feature.get("INE_PROVINCIA") != None:
         prov=feature.get("COD_PROVINCIA")
-        ineProv=feature.get("INE_PROVINCIA")
+        ineProv=feature.getString("INE_PROVINCIA")
         storeP = self.repo.getStore("ARENA2_TR_INE_PROVINCIA")
 
         builder = ExpressionUtils.createExpressionBuilder()
@@ -315,7 +315,7 @@ class CodigoINERule(Rule):
 ###
 class CodigoINERuleFactory(RuleFactory):
   def __init__(self):
-    RuleFactory.__init__(self,"[GVA] Fail if not add INE Code (LRS)")
+    RuleFactory.__init__(self,"[GVA] Fail if not add INE Code")
 
   def create(self, **args):
     rule = CodigoINERule(self, **args)
