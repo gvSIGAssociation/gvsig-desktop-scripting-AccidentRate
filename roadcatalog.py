@@ -124,6 +124,7 @@ def geocodificar(fecha, carretera, pk):
 
   builder = ExpressionUtils.createExpressionBuilder()
   expression = builder.eq(builder.variable("matricula"), builder.constant(carretera)).toString()
+  streches = None  
   try:
     query.addFilter(expression)
     query.retrievesAllAttributes()
