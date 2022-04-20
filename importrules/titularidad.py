@@ -4,7 +4,7 @@ import gvsig
 
 from collections import OrderedDict
 
-from java.lang import String, Integer
+from java.lang import String, Integer, Double
 
 from addons.AccidentRate.roadcatalog import findOwnership, checkRequirements
 
@@ -202,7 +202,7 @@ def selfRegister():
   )
 
   manager.addReportAttribute("CARRETERA",String, size=45, label="Carretera")
-  manager.addReportAttribute("PK",Integer, label="PK")
+  manager.addReportAttribute("PK",Double, label="PK")
   manager.addReportAttribute("TITULARIDAD",Integer, size=10, label="Titularidad", isEditable=True, availableValues=valoresTitularidad)
   manager.addReportAttribute("TITULARIDAD_ACCIDENTE",Integer, size=10, label="Titularidad acc.", availableValues=valoresTitularidad)
   manager.addReportAttribute("TITULARIDAD_TRAMO",Integer, size=10, label="Titularidad tramo", availableValues=valoresTitularidad)
