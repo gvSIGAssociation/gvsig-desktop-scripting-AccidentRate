@@ -48,7 +48,8 @@ class CodigoINERule(Rule):
         
       if ft.get("INE_PROVINCIA") == None or ft.get("INE_MUNICIPIO") == None:
         self.preprocess( report, feature)
-      if ft.get("INE_PROVINCIA") != None and ft.get("INE_MUNICIPIO") != None:
+      else:
+        #if ft.get("INE_PROVINCIA") != None and ft.get("INE_MUNICIPIO") != None:
         self.postprocess( report, feature)
 
     except:
@@ -56,7 +57,7 @@ class CodigoINERule(Rule):
       logger("Error al ejecutar la regla codigo INE, " + str(ex), gvsig.LOGGER_WARN, ex)
       return
 
-  def preprocess (self, report, feature):
+  def preprocess (self, report, feature): #process without INE fields
     try:
       prov=feature.get("COD_PROVINCIA")
       storeP = self.repo.getStore("ARENA2_TR_INE_PROVINCIA")
@@ -84,12 +85,10 @@ class CodigoINERule(Rule):
           feature.get("ID_ACCIDENTE"), 
           codigoINE.CODERR_CODIGO_INE_NO_ENCONTRADO,
           "Imposible asignar el codigo INE de la provincia "+str(prov),
-          fixerID="IgnoreCodigoINEError",
-          selected=True,
-          INE_PROVINCIA=None,
-          PPROVINCIA=None,
-          INE_MUNICIPIO=munData.get("MUN_INE"),
-          PMUNICIPIO=munData.get("MUNICIPIO")
+          fixerID="FixCodigoINEProvError",
+          selected=False #,
+          #INE_MUNICIPIO=munData.get("MUN_INE"),
+          #PMUNICIPIO=munData.get("MUNICIPIO")
         )
         
       elif provData != None and munData == None:
@@ -97,25 +96,23 @@ class CodigoINERule(Rule):
           feature.get("ID_ACCIDENTE"), 
           codigoINE.CODERR_CODIGO_INE_NO_ENCONTRADO,
           "Imposible asignar el codigo INE del municipio "+ str(mun),
-          fixerID="IgnoreCodigoINEError",
-          selected=True,
-          INE_PROVINCIA=provData.get("PROV_INE"),
-          PPROVINCIA=provData.get("PROVINCIA"),
-          INE_MUNICIPIO=None,
-          PMUNICIPIO=None
+          fixerID="FixCodigoINEMuniError",
+          selected=False #,
+          #INE_PROVINCIA=provData.get("PROV_INE"),
+          #PPROVINCIA=provData.get("PROVINCIA")
         )
         
       else:
         report.add(
           feature.get("ID_ACCIDENTE"), 
           codigoINE.CODERR_CODIGO_INE_NO_ENCONTRADO,
-          "Imposible asignar el codigo INE de la provincia "+str(prov)+" y el municipio "+ str(mun),
-          fixerID="IgnoreCodigoINEError",
-          selected=True,
-          INE_PROVINCIA=None,
-          PPROVINCIA=None,
-          INE_MUNICIPIO=None,
-          PMUNICIPIO=None
+          "Imposible asignar los codigos INE de la provincia "+str(prov)+" y el municipio "+ str(mun),
+          fixerID="FixCodigoINEProvMuniError",
+          selected=False #,
+          #INE_PROVINCIA=None,
+          #PPROVINCIA=None,
+          #INE_MUNICIPIO=None,
+          #PMUNICIPIO=None
         )
 
     except:
@@ -123,7 +120,11 @@ class CodigoINERule(Rule):
       logger("Error al ejecutar la regla codigo INE (Antes de la importacion)" + str(ex), gvsig.LOGGER_WARN, ex)
       return
 
-  def postprocess (self, report, feature):
+  def postprocess (self, report, feature): #process with INE fields
+    issueProv = None
+    issueINEProv = None
+    issueMuni = None
+    issueINEMuni = None
     try:
       #COMPROBAR SI ESTAN VACIOS
       if feature.get("INE_PROVINCIA") == None: 
@@ -137,7 +138,7 @@ class CodigoINERule(Rule):
             feature.get("ID_ACCIDENTE"), 
             codigoINE.CODERR_CODIGO_INE_PROVINCIA_NO_ENCONTRADO,
             "No se ha podido asignar el codigo INE de la provincia "+ str(prov),
-            fixerID="IgnoreCodigoINEError",
+            fixerID="FixCodigoINEProvError",
             selected=True,
             INE_PROVINCIA=possibleProvData["INEProv"],
             PPROVINCIA=possibleProvData["Prov"]
@@ -155,7 +156,7 @@ class CodigoINERule(Rule):
             feature.get("ID_ACCIDENTE"), 
             codigoINE.CODERR_CODIGO_INE_MUNICIPIO_NO_ENCONTRADO,
             "No se ha podido asignar el codigo INE del municipio "+ str(mun),
-            fixerID="IgnoreCodigoINEError",
+            fixerID="FixCodigoINEMuniError",
             selected=True,
             INE_MUNICIPIO=possibleMunData["INEMun"],
             PMUNICIPIO=possibleMunData["Mun"]
@@ -176,11 +177,11 @@ class CodigoINERule(Rule):
           possibleProvData=self.possibleProv(prov, storeP)
 
           if possibleProvData["possible"]:
-            report.add(
+            issueINEProv = report.add(
               feature.get("ID_ACCIDENTE"), 
               codigoINE.CODERR_CODIGO_INE_PROVINCIA_ERRONEO,
               "El codigo INE de la provincia "+str(prov)+" es erroneo ",
-              fixerID="IgnoreCodigoINEError",
+              fixerID="FixCodigoINEProvError",
               selected=True,
               INE_PROVINCIA=possibleProvData["INEProv"],
               PPROVINCIA=possibleProvData["Prov"]
@@ -193,17 +194,22 @@ class CodigoINERule(Rule):
           possibleProvData=self.possibleProv(prov, storeP)
 
           if possibleProvData["possible"]:
-            report.add(
+            issueProv = report.add(
               feature.get("ID_ACCIDENTE"), 
               codigoINE.CODERR_CODIGO_INE_PROVINCIA_ERRONEO,
               "El codigo INE de la provincia "+str(prov)+" es erroneo ",
-              fixerID="IgnoreCodigoINEError",
+              fixerID="FixCodigoINEProvError",
               selected=True,
               INE_PROVINCIA=possibleProvData["INEProv"],
               PPROVINCIA=possibleProvData["Prov"]
             )
           storeP.dispose()
-
+      if issueProv != None and issueINEProv != None:
+        issueProv.set("SELECTED",False)
+        issueINEProv.set("SELECTED",False)
+        report.updateIssue(issueProv)
+        report.updateIssue(issueINEProv)
+      
       if feature.get("INE_MUNICIPIO") != None:
         mun=feature.get("COD_MUNICIPIO")
         ineMun=feature.get("INE_MUNICIPIO")
@@ -217,11 +223,11 @@ class CodigoINERule(Rule):
           possibleMunData=self.possibleMun(mun, storeM)
 
           if possibleMunData["possible"]:
-            report.add(
+            issueINEMuni=report.add(
               feature.get("ID_ACCIDENTE"), 
               codigoINE.CODERR_CODIGO_INE_MUNICIPIO_ERRONEO,
               "El codigo INE del municipio "+str(mun)+" es erroneo ",
-              fixerID="IgnoreCodigoINEError",
+              fixerID="FixCodigoINEMuniError",
               selected=True,
               INE_MUNICIPIO=possibleMunData["INEMun"],
               PMUNICIPIO=possibleMunData["Mun"]
@@ -234,15 +240,22 @@ class CodigoINERule(Rule):
           possibleMunData=self.possibleMun(mun, storeM)
 
           if possibleMunData["possible"]:
-            report.add(
+            issueMuni=report.add(
               feature.get("ID_ACCIDENTE"), 
               codigoINE.CODERR_CODIGO_INE_MUNICIPIO_ERRONEO,
               "El codigo INE del municipio "+str(mun)+" es erroneo ",
-              fixerID="IgnoreCodigoINEError",
+              fixerID="FixCodigoINEMuniError",
               selected=True,
               INE_MUNICIPIO=possibleMunData["INEMun"],
               PMUNICIPIO=possibleMunData["Mun"]
             )
+            
+      if issueMuni != None and issueINEMuni != None:
+        issueMuni.set("SELECTED",False)
+        issueINEMuni.set("SELECTED",False)
+        report.updateIssue(issueMuni)
+        report.updateIssue(issueINEMuni)
+
         storeM.dispose()
       else:
         return

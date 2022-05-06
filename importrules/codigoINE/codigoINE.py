@@ -33,6 +33,12 @@ import unicodedata
 
 CODERR_CODIGO_INE_ERRONEO=1000
 CODERR_CODIGO_INE_NO_ENCONTRADO=1001
+CODERR_CODIGO_INE_PROV_ERRONEO=1002
+CODERR_CODIGO_INE_PROV_NO_ENCONTRADO=1003
+CODERR_CODIGO_INE_MUNI_ERRONEO=1004
+CODERR_CODIGO_INE_MUNI_NO_ENCONTRADO=1005
+CODERR_CODIGO_INE_PROV_MUNI_ERRONEO=1006
+CODERR_CODIGO_INE_PROV_MUNI_NO_ENCONTRADO=1007
 
 
 def add_attribute_INE_PROVINCIA(ft):
@@ -165,9 +171,32 @@ def selfConfigureCodigoINE(ws): #workspace
 
 
 
-class IgnoreCodigoINEErrorAction(RuleFixer):
+class FixCodigoINEProvErrorAction(RuleFixer):
   def __init__(self):
-    RuleFixer.__init__(self, "IgnoreCodigoINEError", "Ignora errores al obtener el codigo INE", True)
+    RuleFixer.__init__(self, "FixCodigoINEProvError", "Arregla el codigo INE de la provincia", True)
+
+  def fix(self,feature, issue):
+    ft = feature.getStore().getDefaultFeatureType()
+    if ft.get("COD_PROVINCIA") == None or ft.get("INE_PROVINCIA") == None:
+      return
+    ineCodP=issue.get("INE_PROVINCIA")
+    feature["INE_PROVINCIA"]=ineCodP
+
+
+class FixCodigoINEMuniErrorAction(RuleFixer):
+  def __init__(self):
+    RuleFixer.__init__(self, "FixCodigoINEMuniError", "Arregla el codigo INE del municipio", True)
+
+  def fix(self,feature, issue):
+    ft = feature.getStore().getDefaultFeatureType()
+    if ft.get("COD_MUNICIPIO") == None or ft.get("INE_MUNICIPIO") == None:
+      return
+    ineCodM=issue.get("INE_MUNICIPIO")
+    feature["INE_MUNICIPIO"]=ineCodM
+
+class FixCodigoINEProvMuniErrorAction(RuleFixer):
+  def __init__(self):
+    RuleFixer.__init__(self, "FixCodigoINEProvMuniError", "Arregla el codigo INE de la provincia y municipio", True)
 
   def fix(self,feature, issue):
     ft = feature.getStore().getDefaultFeatureType()
@@ -184,7 +213,9 @@ def selfRegister():
   manager = getArena2ImportManager()
   manager.addTransformFactory(CodigoINETransformFactory())
   manager.addRuleFactory(CodigoINERuleFactory())
-  manager.addRuleFixer(IgnoreCodigoINEErrorAction())
+  manager.addRuleFixer(FixCodigoINEProvErrorAction())
+  manager.addRuleFixer(FixCodigoINEMuniErrorAction())
+  manager.addRuleFixer(FixCodigoINEProvMuniErrorAction())
   manager.addRuleErrorCode(
     CODERR_CODIGO_INE_NO_ENCONTRADO,
     "%s - Codigo INE no encontrado" % CODERR_CODIGO_INE_NO_ENCONTRADO
@@ -193,6 +224,7 @@ def selfRegister():
     CODERR_CODIGO_INE_ERRONEO,
     "%s - Codigo INE erroneo" % CODERR_CODIGO_INE_ERRONEO
   )
+
 
   manager.addReportAttribute("INE_PROVINCIA", Integer, size=02, label="Codigo INE Provincia propuesto", isEditable=True)
   manager.addReportAttribute("INE_MUNICIPIO", Integer, size=05, label="Codigo INE Municipio propuesto", isEditable=True)

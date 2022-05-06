@@ -36,6 +36,8 @@ class SetOwnershipRuleFixer(RuleFixer):
       return
     titularidad = issue.get("TITULARIDAD")
     feature["TITULARIDAD_VIA"] = titularidad
+    feature["CARRETERA"] = issue.get("CARRETERA")
+    feature["KM"] = issue.get("PK")
 
 class OwnershipRule(Rule):
   def __init__(self, factory, **args):
@@ -86,6 +88,9 @@ class OwnershipRule(Rule):
           fixerId = "SetOwnership", 
           selected=True,
           PK=feature.get("KM"),
+          PK_ACCIDENTE=feature.get("KM"),
+          CARRETERA=feature.get("CARRETERA"),
+          CARRETERA_ACCIDENTE=feature.get("CARRETERA"),
           TITULARIDAD=TITULARIDAD_DESCONOCIDA,
           TITULARIDAD_ACCIDENTE=titularidad_accidente,
           TITULARIDAD_TRAMO=TITULARIDAD_DESCONOCIDA,
@@ -201,9 +206,11 @@ def selfRegister():
     "%s - Titularidad autonomica sin especificar carretera" % CODERR_TITULARIDAD_AUTONOMICA_SIN_CARETERA
   )
 
-  manager.addReportAttribute("CARRETERA",String, size=45, label="Carretera")
-  manager.addReportAttribute("PK",Double, label="PK")
+  manager.addReportAttribute("CARRETERA",String, size=45, label="Carretera", isEditable=True)
+  manager.addReportAttribute("PK",Double, label="PK", isEditable=True)
   manager.addReportAttribute("TITULARIDAD",Integer, size=10, label="Titularidad", isEditable=True, availableValues=valoresTitularidad)
+  manager.addReportAttribute("CARRETERA_ACCIDENTE",String, size=45, label="Carretera acc.")
+  manager.addReportAttribute("PK_ACCIDENTE",Double, label="PK acc.")
   manager.addReportAttribute("TITULARIDAD_ACCIDENTE",Integer, size=10, label="Titularidad acc.", availableValues=valoresTitularidad)
   manager.addReportAttribute("TITULARIDAD_TRAMO",Integer, size=10, label="Titularidad tramo", availableValues=valoresTitularidad)
   manager.addReportAttribute("FECHA",String, size=45, label="Fecha")
