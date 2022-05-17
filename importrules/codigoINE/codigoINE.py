@@ -26,8 +26,8 @@ from java.lang import String, Integer
 
 from java.lang import Throwable
 
-from transformCodigoINE import CodigoINETransformFactory
-from ruleCodigoINE import CodigoINERuleFactory
+#from addons.AccidentRate.importrules.codigoINE.transformCodigoINE import CodigoINETransformFactory
+#from addons.AccidentRate.importrules.codigoINE.ruleCodigoINE import CodigoINERuleFactory
 from org.gvsig.tools.dispose import DisposeUtils
 import unicodedata
 
@@ -209,7 +209,8 @@ class FixCodigoINEProvMuniErrorAction(RuleFixer):
 
       
 def selfRegister():
-
+  from addons.AccidentRate.importrules.codigoINE.transformCodigoINE import CodigoINETransformFactory
+  from addons.AccidentRate.importrules.codigoINE.ruleCodigoINE import CodigoINERuleFactory
   manager = getArena2ImportManager()
   manager.addTransformFactory(CodigoINETransformFactory())
   manager.addRuleFactory(CodigoINERuleFactory())
@@ -230,6 +231,68 @@ def selfRegister():
   manager.addReportAttribute("INE_MUNICIPIO", Integer, size=05, label="Codigo INE Municipio propuesto", isEditable=True)
   manager.addReportAttribute("PPROVINCIA", String, size=100, label="Provincia propuesto", isEditable=True)
   manager.addReportAttribute("PMUNICIPIO", String, size=100, label="Municipio propuesto", isEditable=True)
+
+class IneUtils(object):
+  def __init__(self, repo):
+    self.munis = None
+    self.munisByINE = None
+    self.provs = None
+    self.provsByINE = None
+    self.repo = repo
+
+  def findMuni(self, codMuni):
+    self.loadMunis()
+    return self.munis.get(codMuni, None)
+
+  def findMuniByINE(self, ine):
+    self.loadMunis()
+    return self.munisByINE.get(ine, None)
+
+  def getMunis(self):
+    self.loadMunis()
+    return self.munis.values()
+
+  def loadMunis(self):
+    if self.munis == None:
+      storeM = self.repo.getStore("ARENA2_TR_INE_MUNICIPIO")
+      self.munis = dict()
+      self.munisByINE = dict()
+      for f in storeM:
+        feat = f.getCopy()
+        self.munis[f.get("MUNICIPIO")] = feat
+        self.munisByINE[f.get("MUN_INE")] = feat
+      storeM.dispose()
+
+  def findProv(self, codProv):
+    self.loadProvs()
+    return self.provs.get(codProv, None)
+  
+  def findProvByINE(self, ine):
+    self.loadProvs()
+    return self.provsByINE.get(ine, None)
+  
+  def getProvs(self):
+    self.loadProvs()
+    return self.provs.values()
+  
+  def loadProvs(self):
+    if self.provs == None:
+      storeP = self.repo.getStore("ARENA2_TR_INE_PROVINCIA")
+      self.provs = dict()
+      self.provsByINE = dict()
+      for f in storeP:
+        feat = f.getCopy()
+        self.provs[f.get("PROVINCIA")] = feat
+        self.provsByINE[f.get("PROV_INE")] = feat
+      storeP.dispose()
+  
+  def restartMunisAndProvsCache(self):
+    self.munis = None
+    self.munisByINE = None
+    self.provs = None
+    self.provsByINE = None
+  
+
   
 def main(*args):
   

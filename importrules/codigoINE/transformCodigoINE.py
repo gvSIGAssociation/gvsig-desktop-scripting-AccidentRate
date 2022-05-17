@@ -7,7 +7,7 @@ from gvsig import LOGGER_WARN,LOGGER_INFO,LOGGER_ERROR
 
 import unicodedata
 
-from addons.AccidentRate.importrules.codigoINE import codigoINE
+from addons.AccidentRate.importrules.codigoINE.codigoINE import IneUtils, selfConfigureCodigoINE
 #from addons.AccidentRate.importrules.codigoINE.codigoINE import add_attribute_INE_PROVINCIA
 #from addons.AccidentRate.importrules.codigoINE.codigoINE import add_attribute_INE_MUNICIPIO
 
@@ -34,6 +34,8 @@ class CodigoINETransform(Transform):
     Transform.__init__(self, factory)
     self.workspace = args.get("workspace",None)
     self.repo = self.workspace.getStoresRepository()
+    self.ineUtils = IneUtils(self.repo)
+
 
   def apply(self, feature, *args):
     #mirar que tiene los campos provincia y municipio, si no los tiene return
@@ -62,20 +64,15 @@ class CodigoINETransform(Transform):
         
       prov=feature.get("COD_PROVINCIA")
       
-      storeP = self.repo.getStore("ARENA2_TR_INE_PROVINCIA")
-
       provOptions=prov.split("/")
       provOptions.append(prov)
       for i in provOptions:
-        builder = ExpressionUtils.createExpressionBuilder()
-        expression = builder.eq(builder.lower(builder.variable("PROVINCIA")), builder.lower(builder.constant(i))).toString()
-        provData = storeP.findFirst(expression)
+        self.ineUtils.findProv(i)
         if provData == None:
           logger("La provincia "+i+" no se encuentra en la tabla ARENA2_TR_INE_PROVINCIA" , LOGGER_INFO)
           continue
         feature.set("INE_PROVINCIA",provData.get("PROV_INE"))
         break
-      storeP.dispose()
     except:
       ex = sys.exc_info()[1]
       logger("Error importando archivos." + str(ex), gvsig.LOGGER_WARN, ex)
@@ -88,28 +85,20 @@ class CodigoINETransform(Transform):
 
       mun=feature.get("COD_MUNICIPIO")
 
-      storeM = self.repo.getStore("ARENA2_TR_INE_MUNICIPIO")
-
-      #munOptions=mun.split("/")
-      #munOptions.append(mun)
-      #for j in munOptions:
-      builder = ExpressionUtils.createExpressionBuilder()
-      expression = builder.eq(builder.lower(builder.variable("MUNICIPIO")), builder.lower(builder.constant(mun))).toString()
-      munData = storeM.findFirst(expression)
+      munData = self.ineUtils.findMuni(mun)
       if munData == None:
         logger("El municipio "+mun+" no se encuentra en la tabla ARENA2_TR_INE_MUNICIPIO" , LOGGER_INFO)
       else:
         feature.set("INE_MUNICIPIO",munData.get("MUN_INE"))
         logger("El municipio "+mun+" actualizado con: "+str(munData.get("MUN_INE")) , LOGGER_INFO)
       
-      storeM.dispose()
     except:
       ex = sys.exc_info()[1]
       logger("Error importando archivos." + str(ex), gvsig.LOGGER_WARN, ex)
       return
 
-
-
+  def restart(self):
+    self.ineUtils.restartMunisAndProvsCache()
           
 class CodigoINETransformFactory(TransformFactory):
   def __init__(self):
@@ -125,7 +114,7 @@ class CodigoINETransformFactory(TransformFactory):
     return CodigoINETransform(self,**args)
 
   def selfConfigure(self, ws): #, explorer):
-    codigoINE.selfConfigureCodigoINE(ws)
+    selfConfigureCodigoINE(ws)
 
 def updateWorkspace():
   dataManager = DALLocator.getDataManager()
