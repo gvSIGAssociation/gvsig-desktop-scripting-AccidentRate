@@ -97,7 +97,7 @@ def getVigentStretchesQuery(store, fecha):
         builder.is_null(builder.variable("fecha_entrada"))
     )),
     builder.group( builder.or( 
-        builder.le(builder.variable("fecha_salida"), builder.date(fecha)),
+        builder.ge(builder.variable("fecha_salida"), builder.date(fecha)),
         builder.is_null(builder.variable("fecha_salida"))
     ))
   ).toString()
@@ -160,10 +160,10 @@ def findOwnership(fecha, carretera, pk):
     return None
   return feature.get("titularidad")
 
-def main(*args):
+def main0(*args):
   print checkRequirements()  
 
-def main0(*args):
+def main(*args):
     from java.util import Date
     fecha = Date()
     builder = ExpressionUtils.createExpressionBuilder()
@@ -173,13 +173,15 @@ def main0(*args):
           builder.is_null(builder.variable("fecha_entrada"))
       )),
       builder.group( builder.or( 
-          builder.le(builder.variable("fecha_salida"), builder.date(fecha)),
+          builder.ge(builder.variable("fecha_salida"), builder.date(fecha)),
           builder.is_null(builder.variable("fecha_salida"))
       ))
     ).toString()      
     print builder.toString()
+    """
     print getStretchFeatureStore()
     
     print "f",findOwnership(fecha, 'CV301', 10)
     
     print "f",findOwnership(fecha, 'CV-70', 49.7)
+    """
