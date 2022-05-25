@@ -45,7 +45,7 @@ class DateLockRule(Rule):
     #print "Test:", self.fechaDeCierre, fecha, fecha <= self.fechaDeCierre
     #print type(self.fechaDeCierre), type(fecha)
     if fecha <= self.fechaDeCierre:
-      print ".. added"
+      #print ".. added"
       report.add(
               feature.get("ID_ACCIDENTE"),
               CODERR_VALUES_FECHA_CIERRE,
