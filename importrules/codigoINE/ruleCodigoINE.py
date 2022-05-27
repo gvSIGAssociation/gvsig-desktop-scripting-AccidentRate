@@ -13,8 +13,6 @@ from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, R
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.AccidentRate.roadcatalog import checkRequirements
 
-#from addons.AccidentRate.importrules.codigoINE import codigoINE
-
 from org.gvsig.fmap.dal import DALLocator
 from org.gvsig.expressionevaluator import ExpressionUtils
 from org.gvsig.tools.dynobject.DynField import RELATION_TYPE_COLLABORATION, RELATION_TYPE_AGGREGATE
@@ -57,7 +55,7 @@ class CodigoINERule(Rule):
 
     except:
       ex = sys.exc_info()[1]
-      logger("Error al ejecutar la regla codigo INE, " + str(ex), gvsig.LOGGER_WARN, ex)
+      logger(u"Error al ejecutar la regla codigo INE, " + ex, gvsig.LOGGER_WARN, ex)
       return
 
   def preprocess (self, report, feature): #process without INE fields
@@ -77,8 +75,8 @@ class CodigoINERule(Rule):
       elif provData == None and munData != None:
         report.add(
           feature.get("ID_ACCIDENTE"), 
-          codigoINE.CODERR_CODIGO_INE_NO_ENCONTRADO,
-          "Imposible asignar el codigo INE de la provincia "+str(prov),
+          CODERR_CODIGO_INE_NO_ENCONTRADO,
+          u"Imposible asignar el codigo INE de la provincia "+prov,
           fixerID="FixCodigoINEProvError",
           selected=False #,
           #INE_MUNICIPIO=munData.get("MUN_INE"),
@@ -88,8 +86,8 @@ class CodigoINERule(Rule):
       elif provData != None and munData == None:
         report.add(
           feature.get("ID_ACCIDENTE"), 
-          codigoINE.CODERR_CODIGO_INE_NO_ENCONTRADO,
-          "Imposible asignar el codigo INE del municipio "+ str(mun),
+          CODERR_CODIGO_INE_NO_ENCONTRADO,
+          u"Imposible asignar el codigo INE del municipio "+ mun,
           fixerID="FixCodigoINEMuniError",
           selected=False #,
           #INE_PROVINCIA=provData.get("PROV_INE"),
@@ -99,8 +97,8 @@ class CodigoINERule(Rule):
       else:
         report.add(
           feature.get("ID_ACCIDENTE"), 
-          codigoINE.CODERR_CODIGO_INE_NO_ENCONTRADO,
-          "Imposible asignar los codigos INE de la provincia "+str(prov)+" y el municipio "+ str(mun),
+          CODERR_CODIGO_INE_NO_ENCONTRADO,
+          u"Imposible asignar los codigos INE de la provincia "+prov+u" y el municipio "+ mun,
           fixerID="FixCodigoINEProvMuniError",
           selected=False #,
           #INE_PROVINCIA=None,
@@ -111,7 +109,7 @@ class CodigoINERule(Rule):
 
     except:
       ex = sys.exc_info()[1]
-      logger("Error al ejecutar la regla codigo INE (Antes de la importacion)" + str(ex), gvsig.LOGGER_WARN, ex)
+      logger(u"Error al ejecutar la regla codigo INE (Antes de la importacion)" + ex, gvsig.LOGGER_WARN, ex)
       return
 
   def postprocess (self, report, feature): #process with INE fields
@@ -129,8 +127,8 @@ class CodigoINERule(Rule):
         if possibleProvData["possible"]:
           report.add(
             feature.get("ID_ACCIDENTE"), 
-            codigoINE.CODERR_CODIGO_INE_PROV_NO_ENCONTRADO,
-            "No se ha podido asignar el codigo INE de la provincia "+ str(prov),
+            CODERR_CODIGO_INE_PROV_NO_ENCONTRADO,
+            u"No se ha podido asignar el codigo INE de la provincia "+ prov,
             fixerID="FixCodigoINEProvError",
             selected=True,
             INE_PROVINCIA=possibleProvData["INEProv"],
@@ -145,8 +143,8 @@ class CodigoINERule(Rule):
         if possibleMunData["possible"]:
           report.add(
             feature.get("ID_ACCIDENTE"), 
-            codigoINE.CODERR_CODIGO_INE_MUNI_NO_ENCONTRADO,
-            "No se ha podido asignar el codigo INE del municipio "+ str(mun),
+            CODERR_CODIGO_INE_MUNI_NO_ENCONTRADO,
+            u"No se ha podido asignar el codigo INE del municipio "+ mun,
             fixerID="FixCodigoINEMuniError",
             selected=True,
             INE_MUNICIPIO=possibleMunData["INEMun"],
@@ -165,8 +163,8 @@ class CodigoINERule(Rule):
           if possibleProvData["possible"]:
             issueINEProv = report.add(
               feature.get("ID_ACCIDENTE"), 
-              codigoINE.CODERR_CODIGO_INE_PROV_ERRONEO,
-              "El codigo INE de la provincia "+str(prov)+" es erroneo ",
+              CODERR_CODIGO_INE_PROV_ERRONEO,
+              u"El codigo INE de la provincia "+prov+u" es erroneo ",
               fixerID="FixCodigoINEProvError",
               selected=True,
               INE_PROVINCIA=possibleProvData["INEProv"],
@@ -181,8 +179,8 @@ class CodigoINERule(Rule):
           if possibleProvData["possible"]:
             issueProv = report.add(
               feature.get("ID_ACCIDENTE"), 
-              codigoINE.CODERR_CODIGO_INE_PROV_ERRONEO,
-              "El codigo INE de la provincia "+str(prov)+" es erroneo ",
+              CODERR_CODIGO_INE_PROV_ERRONEO,
+              u"El codigo INE de la provincia "+prov+u" es erroneo ",
               fixerID="FixCodigoINEProvError",
               selected=True,
               INE_PROVINCIA=possibleProvData["INEProv"],
@@ -209,8 +207,8 @@ class CodigoINERule(Rule):
           if possibleMunData["possible"]:
             issueINEMuni=report.add(
               feature.get("ID_ACCIDENTE"), 
-              codigoINE.CODERR_CODIGO_INE_MUNI_ERRONEO,
-              "El codigo INE del municipio "+str(mun)+" es erroneo ",
+              CODERR_CODIGO_INE_MUNI_ERRONEO,
+              u"El codigo INE del municipio "+mun+u" es erroneo ",
               fixerID="FixCodigoINEMuniError",
               selected=True,
               INE_MUNICIPIO=possibleMunData["INEMun"],
@@ -225,8 +223,8 @@ class CodigoINERule(Rule):
           if possibleMunData["possible"]:
             issueMuni=report.add(
               feature.get("ID_ACCIDENTE"), 
-              codigoINE.CODERR_CODIGO_INE_MUNI_ERRONEO,
-              "El codigo INE del municipio "+str(mun)+" es erroneo ",
+              CODERR_CODIGO_INE_MUNI_ERRONEO,
+              u"El codigo INE del municipio "+mun+u" es erroneo ",
               fixerID="FixCodigoINEMuniError",
               selected=True,
               INE_MUNICIPIO=possibleMunData["INEMun"],
@@ -246,7 +244,7 @@ class CodigoINERule(Rule):
 
     except:
       ex = sys.exc_info()[1]
-      logger("Error al ejecutar la regla codigo INE (Despues de la importacion)" + str(ex), gvsig.LOGGER_WARN, ex)
+      logger(u"Error al ejecutar la regla codigo INE (Despues de la importacion)" + ex, gvsig.LOGGER_WARN, ex)
       return
 
   def possibleProv(self, prov):
@@ -274,7 +272,7 @@ class CodigoINERule(Rule):
               possibleProvData["INEProv"]=j.get("PROV_INE")
               possibleProvData["possible"]=True
           else:
-            logger("El campo provincia "+str(prov)+" o el campo "+str(j.get("PROVINCIA"))+" del diccionario tienen problemas", LOGGER_WARN) #CAMBIAR
+            logger(u"El campo provincia "+prov+u" o el campo "+j.get("PROVINCIA")+u" del diccionario tienen problemas", LOGGER_WARN) #CAMBIAR
             continue
 
     return possibleProvData
@@ -303,7 +301,7 @@ class CodigoINERule(Rule):
               possibleMunData["INEMun"]=j.get("MUN_INE")
               possibleMunData["possible"]=True
           else:
-            logger("El campo municipio "+str(mun)+" o el campo "+str(j.get("MUNICIPIO"))+" del diccionario tienen problemas", LOGGER_WARN) #CAMBIAR
+            logger(u"El campo municipio "+mun+u" o el campo "+j.get("MUNICIPIO")+u" del diccionario tienen problemas", LOGGER_WARN) #CAMBIAR
             continue
             
     return possibleMunData
