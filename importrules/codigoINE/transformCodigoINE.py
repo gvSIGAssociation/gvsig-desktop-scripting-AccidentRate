@@ -67,7 +67,7 @@ class CodigoINETransform(Transform):
       provOptions=prov.split("/")
       provOptions.append(prov)
       for i in provOptions:
-        self.ineUtils.findProv(i)
+        provData = self.ineUtils.findProv(i)
         if provData == None:
           logger("La provincia "+i+" no se encuentra en la tabla ARENA2_TR_INE_PROVINCIA" , LOGGER_INFO)
           continue
