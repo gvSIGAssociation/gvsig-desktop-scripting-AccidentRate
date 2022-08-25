@@ -22,6 +22,7 @@ from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 
 from addons.AccidentRate.accidentrateutils import AccidentRateConfig, disableArena2
 from addons.AccidentRate.fechadecierre import FechaDeCierreDialog
+from addons.AccidentRate.cargadetramosdecarreteras import CargaDeTramosDeCarreteras
 
 class AccidentRateExtension(ScriptingExtension):
   def __init__(self):
@@ -46,6 +47,8 @@ class AccidentRateExtension(ScriptingExtension):
       self.closingDate()
     elif actionCommand == "accidentrate-addlayer":
       self.addAccidentsLayer()
+    elif actionCommand == "accidentrate-addstretcheslayer":
+      self.addStretchesLayer()
     elif actionCommand == "accidentrate-search":
       self.showAccidentsSearch()
     elif actionCommand == "accidentrate-importer-showvalidator":
@@ -86,20 +89,34 @@ class AccidentRateExtension(ScriptingExtension):
     dataManager = DALLocator.getDataManager()
     workspace = dataManager.getDatabaseWorkspace("ARENA2_DB")
     if workspace == None:
-      msgbox("Debera conectarse al espacio de trabajo de ARENA2_DB")
+      msgbox(u"Deberá conectarse al espacio de trabajo de ARENA2_DB")
       return
     repo = workspace.getStoresRepository()
     store = repo.getStore("ARENA2_ACCIDENTES")
     layer = MapContextLocator.getMapContextManager().createLayer("Accidentes", store)
     gvsig.currentView().getMainWindow().getMapControl().addLayer(layer)
-  
+
+  def addStretchesLayer(self):
+    dataManager = DALLocator.getDataManager()
+    workspace = dataManager.getDatabaseWorkspace("ARENA2_DB")
+    if workspace == None:
+      msgbox(u"Deberá conectarse al espacio de trabajo de ARENA2_DB")
+      return
+    dialog = CargaDeTramosDeCarreteras()
+    dialog.showWindow(u"Añadir capa de tramos de carretera")
+    #TODO:
+    repo = workspace.getStoresRepository()
+    store = repo.getStore("ARENA2_ACCIDENTES")
+    #layer = MapContextLocator.getMapContextManager().createLayer("Accidentes", store)
+    #gvsig.currentView().getMainWindow().getMapControl().addLayer(layer)
+
   def showAccidentsSearch(self):
     dataSwingManager = DALSwingLocator.getSwingManager()
     dataManager = DALLocator.getDataManager()
     winManager = ToolsSwingLocator.getWindowManager()
     workspace = dataManager.getDatabaseWorkspace("ARENA2_DB")
     if workspace == None:
-      msgbox("Debera conectarse al espacio de trabajo de ARENA2_DB")
+      msgbox(u"Deberá conectarse al espacio de trabajo de ARENA2_DB")
       return
     repo = workspace.getStoresRepository()
     store = repo.getStore("ARENA2_ACCIDENTES")
@@ -135,6 +152,9 @@ def registerActions():
 
   icon = File(getResource(__file__,"images","accidentrate-addlayer.png")).toURI().toURL()
   iconTheme.registerDefault("scripting.AccidentRateExtension", "action", "accidentrate-addlayer", None, icon)
+  
+  icon = File(getResource(__file__,"images","accidentrate-addstretcheslayer.png")).toURI().toURL()
+  iconTheme.registerDefault("scripting.AccidentRateExtension", "action", "accidentrate-addstretcheslayer", None, icon)
   
   icon = File(getResource(__file__,"images","arena2-importer-showvalidator.png")).toURI().toURL()
   iconTheme.registerDefault("scripting.AccidentRateExtension", "action", "accidentrate-importer-showvalidator", None, icon)
@@ -199,7 +219,19 @@ def registerActions():
     "accidentrate-addlayer", # Icon name
     None, # Accelerator
     1009000200, # Position 
-    "Añadir capa de accidentes" # Tooltip
+    u"Añadir capa de accidentes" # Tooltip
+  )
+  action = actionManager.registerAction(action, True)
+  
+  action = actionManager.createAction(
+    extension, 
+    "accidentrate-addstretcheslayer", # Action name
+    u"Añadir capa de tramos de carreteras", # Text
+    "accidentrate-addstretcheslayer", # Action command
+    "accidentrate-addstretcheslayer", # Icon name
+    None, # Accelerator
+    1009000300, # Position 
+    u"Añadir capa de tramos de carreteras" # Tooltip
   )
   action = actionManager.registerAction(action, True)
   
@@ -242,7 +274,10 @@ def selfRegister():
   application.addMenu(action, u"tools/_AccidentRate/Busqueda de accidentes")
 
   action = actionManager.getAction("accidentrate-addlayer")
-  application.addMenu(action, u"tools/_AccidentRate/A\u00F1adir capa de accidentes")
+  application.addMenu(action, u"tools/_AccidentRate/Añadir capa de accidentes")
+  
+  action = actionManager.getAction("accidentrate-addstretcheslayer")
+  application.addMenu(action, u"tools/_AccidentRate/Añadir capa de tramos de carreteras")
   
   action = actionManager.getAction("accidentrate-importer-showvalidator")
   application.addMenu(action, u"tools/_AccidentRate/Administration/Validador de accidentes")

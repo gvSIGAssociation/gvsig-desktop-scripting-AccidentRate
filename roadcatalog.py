@@ -91,6 +91,14 @@ def checkRequirements():
 
 def getVigentStretchesQuery(store, fecha):
   builder = ExpressionUtils.createExpressionBuilder()
+  filtro = getVigentStretchesFilter(fecha)
+  
+  query = store.createFeatureQuery()
+  query.addFilter(filtro)
+  return query
+
+def getVigentStretchesFilter(fecha):
+  builder = ExpressionUtils.createExpressionBuilder()
   filtro = builder.and( 
     builder.group( builder.or( 
         builder.le(builder.variable("fecha_entrada"), builder.date(fecha)),
@@ -102,9 +110,8 @@ def getVigentStretchesQuery(store, fecha):
     ))
   ).toString()
   
-  query = store.createFeatureQuery()
-  query.addFilter(filtro)
-  return query
+  return filtro
+
 
 def iif(cond, ontrue, onfalse):
   if cond:
