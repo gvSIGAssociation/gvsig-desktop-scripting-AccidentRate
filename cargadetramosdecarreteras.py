@@ -43,9 +43,14 @@ class CargaDeTramosDeCarreteras(FormPanel):
       filtro = getVigentStretchesFilter(fecha);
       parameters = self.workspace.getStoresRepository().get("TRAMOS_CARRETERAS").getCopy();
       parameters.setBaseFilter(filtro)
+      strFecha = SimpleDateFormat("dd/MM/yyyy").format(fecha)
 
       action = PluginsLocator.getActionInfoManager().getAction("view-layer-add")
-      action.execute(((parameters,),))
+      action.execute((
+        "--ignoreVisibilityScaleCheck",
+        "--dataParameters=",(parameters,),
+        "--layerNames=",("TRAMOS_CARRETERAS"+"_"+strFecha,)
+      ))
     
 def main(*args):
   x = CargaDeTramosDeCarreteras()
