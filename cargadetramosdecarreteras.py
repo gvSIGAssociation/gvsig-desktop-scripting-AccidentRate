@@ -41,7 +41,8 @@ class CargaDeTramosDeCarreteras(FormPanel):
     if fecha != None:
       #fecha = SimpleDateFormat("dd/MM/yyyy").format(fecha)
       filtro = getVigentStretchesFilter(fecha);
-      parameters = self.workspace.getStoresRepository().get("TRAMOS_CARRETERAS").getCopy();
+      s = ""
+      parameters = self.workspace.getStoresRepository().get("SIGCAR_TRAMOS_CARRETERAS").getCopy();
       parameters.setBaseFilter(filtro)
       strFecha = SimpleDateFormat("dd/MM/yyyy").format(fecha)
 
@@ -49,10 +50,10 @@ class CargaDeTramosDeCarreteras(FormPanel):
       action.execute((
         "--ignoreVisibilityScaleCheck",
         "--dataParameters=",(parameters,),
-        "--layerNames=",("TRAMOS_CARRETERAS"+"_"+strFecha,)
+        "--layerNames=",("SIGCAR_TRAMOS_CARRETERAS"+"_"+strFecha,)
       ))
     
 def main(*args):
   x = CargaDeTramosDeCarreteras()
   x.showWindow("Carga de capa de tramos de carreteras")
-  
+ 

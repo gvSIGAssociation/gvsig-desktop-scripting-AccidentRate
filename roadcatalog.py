@@ -22,19 +22,9 @@ except:
 class StretchFeatureStoreCache(CachedValue):
   def reload(self):
     dataManager = DALLocator.getDataManager()
-    ws = dataManager.getDatabaseWorkspace("ARENA2_DB")
+    repo = dataManager.getStoresRepository().getSubrepository("ARENA2_DB")
+    self.setValue(repo.getStore("SIGCAR_TRAMOS_CARRETERAS"))
 
-    tramosSchemaName = ws.get("TRAMOS_CARRETERAS_SCHEMA")
-    tramosTableName = ws.get("TRAMOS_CARRETERAS_NAME")
-    
-    repo = ws.getStoresRepository()
-    server_explorer = ws.getServerExplorer()
-    explorer_params = server_explorer.get(tramosTableName)
-    explorer_params.setSchema(tramosSchemaName)
-    explorer_name = explorer_params.getProviderName()
-
-    store = dataManager.openStore(explorer_name, explorer_params)
-    self.setValue(store)
 
 lrsManager = None
 stretchFeatureStore = StretchFeatureStoreCache(5000);
@@ -63,28 +53,8 @@ def checkRequirements():
     else:
       if not ws.isConnected():
         s += u"No se está conectado a un espacio de trabajo de ARENA2_DB.\n"
-      else:
-        tramosSchemaName = ws.get("TRAMOS_CARRETERAS_SCHEMA")
-        if tramosSchemaName in ("", None):
-          s += u"No se ha encontrado la variable de configuración 'TRAMOS_CARRETERAS_SCHEMA'.\n"
-          
-        tramosTableName = ws.get("TRAMOS_CARRETERAS_NAME")
-        if tramosTableName in ("", None):
-          s += u"No se ha encontrado la variable de configuración 'TRAMOS_CARRETERAS_NAME'.\n"
-        else:
-          try:
-            repo = ws.getStoresRepository()
-            server_explorer = ws.getServerExplorer()
-            explorer_params = server_explorer.get(tramosTableName)
-            explorer_params.setSchema(tramosSchemaName)
-            explorer_name = explorer_params.getProviderName()
-        
-            store = dataManager.openStore(explorer_name, explorer_params)
-            store.dispose()
-          except:
-            s += u"No se ha podido acceder a la tabla '%s', revise las variable de configuración 'TRAMOS_CARRETERAS_SCHEMA' y 'TRAMOS_CARRETERAS_NAME'.\n"%tramosTableName
   except:
-    s += u"No se ha podido acceder a la tabla de tramos de carreteras.\n"
+    s += u"No se ha podido acceder al espacio de trabajo ARENA2_DB.\n"
   if s.strip() == "":
     return None
   return s
@@ -101,12 +71,12 @@ def getVigentStretchesFilter(fecha):
   builder = ExpressionUtils.createExpressionBuilder()
   filtro = builder.and( 
     builder.group( builder.or( 
-        builder.le(builder.variable("fecha_entrada"), builder.date(fecha)),
-        builder.is_null(builder.variable("fecha_entrada"))
+        builder.le(builder.variable("TC_FECHA_ENTRADA"), builder.date(fecha)),
+        builder.is_null(builder.variable("TC_FECHA_ENTRADA"))
     )),
     builder.group( builder.or( 
-        builder.ge(builder.variable("fecha_salida"), builder.date(fecha)),
-        builder.is_null(builder.variable("fecha_salida"))
+        builder.ge(builder.variable("TC_FECHA_SALIDA"), builder.date(fecha)),
+        builder.is_null(builder.variable("TC_FECHA_SALIDA"))
     ))
   ).toString()
   
@@ -130,7 +100,7 @@ def geocodificar(fecha, carretera, pk):
   query = getVigentStretchesQuery(strechesStore, fecha) 
 
   builder = ExpressionUtils.createExpressionBuilder()
-  expression = builder.eq(builder.variable("matricula"), builder.constant(carretera)).toString()
+  expression = builder.eq(builder.variable("TC_MATRICULA"), builder.constant(carretera)).toString()
   streches = None  
   try:
     query.addFilter(expression)
@@ -156,16 +126,16 @@ def findOwnership(fecha, carretera, pk):
   query = getVigentStretchesQuery(strechesStore, fecha) 
   pk = pk * 1000 
   builder = ExpressionUtils.createExpressionBuilder()
-  builder.and( builder.eq(builder.variable("matricula"), builder.constant(carretera)))
-  builder.and( builder.le(builder.variable("pk_i"), builder.constant(pk)))
-  builder.and( builder.ge(builder.variable("pk_f"), builder.constant(pk)))
+  builder.and( builder.eq(builder.variable("TC_MATRICULA"), builder.constant(carretera)))
+  builder.and( builder.le(builder.variable("TC_PK_I"), builder.constant(pk)))
+  builder.and( builder.ge(builder.variable("TC_PK_F"), builder.constant(pk)))
   expression = builder.toString()
   query.addFilter(expression)
   query.retrievesAllAttributes()
   feature = strechesStore.findFirst(query)
   if feature == None:
     return None
-  return feature.get("titularidad")
+  return feature.get("TC_TITULARIDAD")
 
 def main0(*args):
   print checkRequirements()  
@@ -176,12 +146,12 @@ def main(*args):
     builder = ExpressionUtils.createExpressionBuilder()
     print builder.and( 
       builder.group( builder.or( 
-          builder.le(builder.variable("fecha_entrada"), builder.date(fecha)),
-          builder.is_null(builder.variable("fecha_entrada"))
+          builder.le(builder.variable("TC_FECHA_ENTRADA"), builder.date(fecha)),
+          builder.is_null(builder.variable("TC_FECHA_ENTRADA"))
       )),
       builder.group( builder.or( 
-          builder.ge(builder.variable("fecha_salida"), builder.date(fecha)),
-          builder.is_null(builder.variable("fecha_salida"))
+          builder.ge(builder.variable("TC_FECHA_SALIDA"), builder.date(fecha)),
+          builder.is_null(builder.variable("TC_FECHA_SALIDA"))
       ))
     ).toString()      
     print builder.toString()

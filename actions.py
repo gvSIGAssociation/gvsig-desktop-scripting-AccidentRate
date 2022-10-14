@@ -3,7 +3,8 @@
 import gvsig
 from gvsig import getResource
 from gvsig.commonsdialog import msgbox
-
+from gvsig.uselib import use_plugin
+use_plugin("org.gvsig.pdf.app.mainplugin")
 
 from java.io import File
 from org.gvsig.andami import PluginsLocator
@@ -11,6 +12,8 @@ from org.gvsig.app import ApplicationLocator
 from org.gvsig.scripting.app.extension import ScriptingExtension
 from org.gvsig.tools import ToolsLocator
 from org.gvsig.tools.swing.api import ToolsSwingLocator
+from org.gvsig.pdf.lib.api import PDFLocator
+from org.gvsig.pdf.swing.api import PDFSwingLocator
 
 from org.gvsig.tools.swing.api.windowmanager import WindowManager
 
@@ -23,6 +26,8 @@ from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.AccidentRate.accidentrateutils import AccidentRateConfig, disableArena2
 from addons.AccidentRate.fechadecierre import FechaDeCierreDialog
 from addons.AccidentRate.cargadetramosdecarreteras import CargaDeTramosDeCarreteras
+from addons.AccidentRate.locatebyroadpkanddate import LocateByRoadPKAndDate
+from addons.AccidentRate.locatebyroadpkanddate import cleanLocations
 
 class AccidentRateExtension(ScriptingExtension):
   def __init__(self):
@@ -53,6 +58,12 @@ class AccidentRateExtension(ScriptingExtension):
       self.showAccidentsSearch()
     elif actionCommand == "accidentrate-importer-showvalidator":
       self.validatorData()
+    elif actionCommand == "accidentrate-show-roads-interchange-format":
+      self.showPDF(getResource(__file__,"docs_pdfs","Formato de intercambio de tramos de carreteras.pdf"),"Formato de intercambio de tramos de carreteras")
+    elif actionCommand == "accidentrate-locatebyroadpkanddate":
+      self.locateByRoadPkAndDate()
+    elif actionCommand == "accidentrate-clean-locations":
+      self.cleanLocations()
 
   def validatorData(self):
     manager = getArena2ImportManager()
@@ -104,11 +115,18 @@ class AccidentRateExtension(ScriptingExtension):
       return
     dialog = CargaDeTramosDeCarreteras()
     dialog.showWindow(u"Añadir capa de tramos de carretera")
-    #TODO:
-    repo = workspace.getStoresRepository()
-    store = repo.getStore("ARENA2_ACCIDENTES")
-    #layer = MapContextLocator.getMapContextManager().createLayer("Accidentes", store)
-    #gvsig.currentView().getMainWindow().getMapControl().addLayer(layer)
+
+  def locateByRoadPkAndDate(self):
+    dataManager = DALLocator.getDataManager()
+    workspace = dataManager.getDatabaseWorkspace("ARENA2_DB")
+    if workspace == None:
+      msgbox(u"Deberá conectarse al espacio de trabajo de ARENA2_DB")
+      return
+    dialog = LocateByRoadPKAndDate()
+    dialog.showWindow(u"Localizar por carretera, kilómetro y fecha")
+
+  def cleanLocations(self):
+    cleanLocations()
 
   def showAccidentsSearch(self):
     dataSwingManager = DALSwingLocator.getSwingManager()
@@ -124,6 +142,19 @@ class AccidentRateExtension(ScriptingExtension):
     winManager.showWindow(
       panel.asJComponent(), 
       "Busqueda de accidentes", 
+      WindowManager.MODE.WINDOW
+    )
+
+  def showPDF(self, filename, title):
+    pdfManager = PDFLocator.getPDFManager()
+    pdf = pdfManager.createPDFDocument(File(filename))
+    pdfSwingManager = PDFSwingLocator.getPDFSwingManager()
+    viewer = pdfSwingManager.createPDFViewer()
+    viewer.put(pdf)
+    winManager = ToolsSwingLocator.getWindowManager()
+    winManager.showWindow(
+      viewer.asJComponent(), 
+      title, 
       WindowManager.MODE.WINDOW
     )
 
@@ -158,6 +189,16 @@ def registerActions():
   
   icon = File(getResource(__file__,"images","arena2-importer-showvalidator.png")).toURI().toURL()
   iconTheme.registerDefault("scripting.AccidentRateExtension", "action", "accidentrate-importer-showvalidator", None, icon)
+
+  icon = File(getResource(__file__,"images","document-pdf.png")).toURI().toURL()
+  iconTheme.registerDefault("scripting.AccidentRateExtension", "action", "document-pdf", None, icon)
+
+  icon = File(getResource(__file__,"images","accidentrate-locatebyroadpkanddate.png")).toURI().toURL()
+  iconTheme.registerDefault("scripting.AccidentRateExtension", "action", "accidentrate-locatebyroadpkanddate", None, icon)
+  
+  icon = File(getResource(__file__,"images","accidentrate-clean-locations.png")).toURI().toURL()
+  iconTheme.registerDefault("scripting.AccidentRateExtension", "action", "accidentrate-clean-locations", None, icon)
+  
   #
   # Creamos la accion 
   actionManager = PluginsLocator.getActionInfoManager()
@@ -207,7 +248,7 @@ def registerActions():
     "accidentrate-search", # Icon name
     None, # Accelerator
     1009000100, # Position 
-    "Busqueda de accidentes" # Tooltip
+    u"Búsqueda de accidentes" # Tooltip
   )
   action = actionManager.registerAction(action, True)
 
@@ -246,7 +287,43 @@ def registerActions():
     "_Show_the_ARENA2_validator_tool" # Tooltip
   )
   action = actionManager.registerAction(action, True)
-  
+
+  action = actionManager.createAction(
+    extension, 
+    "accidentrate-show-roads-interchange-format", # Action name
+    "Formato de intercambio de tramos de carreteras", # Text
+    "accidentrate-show-roads-interchange-format", # Action command
+    "document-pdf", # Icon name
+    None, # Accelerator
+    1009000905, # Position 
+    u"Formato de intercambio de tramos de carreteras" # Tooltip
+  )
+  action = actionManager.registerAction(action, True)
+
+  action = actionManager.createAction(
+    extension, 
+    "accidentrate-locatebyroadpkanddate", # Action name
+    u"Localizar por carretera, kilómetro y fecha", # Text
+    "accidentrate-locatebyroadpkanddate", # Action command
+    "accidentrate-locatebyroadpkanddate", # Icon name
+    None, # Accelerator
+    1009000300, # Position 
+    u"Localizar por carretera, kilómetro y fecha" # Tooltip
+  )
+  action = actionManager.registerAction(action, True)
+
+  action = actionManager.createAction(
+    extension, 
+    "accidentrate-clean-locations", # Action name
+    "Limpiar localizaciones", # Text
+    "accidentrate-clean-locations", # Action command
+    "accidentrate-clean-locations", # Icon name
+    None, # Accelerator
+    1009000400, # Position 
+    u"Limpiar localizaciones de la vista" # Tooltip
+  )
+  action = actionManager.registerAction(action, True)
+
 def selfRegister():
 
   config = AccidentRateConfig()
@@ -281,6 +358,17 @@ def selfRegister():
   
   action = actionManager.getAction("accidentrate-importer-showvalidator")
   application.addMenu(action, u"tools/_AccidentRate/Administration/Validador de accidentes")
+  
+  action = actionManager.getAction("accidentrate-show-roads-interchange-format")
+  application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/Formato de intercambio de tramos de carreteras")
+
+  action = actionManager.getAction("accidentrate-locatebyroadpkanddate")
+  application.addMenu(action, u"tools/_AccidentRate/Localizar por carretera, kilómetro y fecha")
+
+  action = actionManager.getAction("accidentrate-clean-locations")
+  application.addMenu(action, u"tools/_AccidentRate/Limpiar localizaciones")
+
+
   
 def main(*args):
   #selfRegister()

@@ -39,7 +39,7 @@ class GeocodeTransform(Transform):
     else:
       #print "GeocodeTransform.apply: update MAPA to ", p
       feature.set("MAPA",p)
-      feature.set("ID_TRAMO", f.get("id_tramo"))
+      feature.set("ID_TRAMO_CARRETERA", f.get("ID_TRAMO_CARRETERA"))
     
       
 
@@ -57,19 +57,19 @@ class GeocodeTransformFactory(TransformFactory):
     return GeocodeTransform(self, **args)
     
   def selfConfigure(self, ws):
-    # crear campo ID_TRAMO
+    # crear campo ID_TRAMO_CARRETERA
     server = ws.getServerExplorer()
     accidentesParameters = server.get("ARENA2_ACCIDENTES")
     dataManager = DALLocator.getDataManager()
     store = dataManager.openStore(accidentesParameters.getProviderName(),accidentesParameters)
     ft = store.getDefaultFeatureType()
     eft = None #store.getDefaultFeatureType().getEditable()
-    if ft.get("ID_TRAMO")==None: 
+    if ft.get("ID_TRAMO_CARRETERA")==None: 
       if not store.isEditing():
         store.edit()
       if eft==None: 
         eft = store.getDefaultFeatureType().getEditable()
-      add_attribute_ID_TRAMO(eft)
+      add_attribute_ID_TRAMO_CARRETERA(eft)
     
     if eft!=None:
       store.update(eft)
@@ -78,13 +78,13 @@ class GeocodeTransformFactory(TransformFactory):
     DisposeUtils.dispose(store)
     return
     
-def add_attribute_ID_TRAMO(ft):
-    attr = ft.add("ID_TRAMO",DataTypes.INT)
+def add_attribute_ID_TRAMO_CARRETERA(ft):
+    attr = ft.add("ID_TRAMO_CARRETERA",DataTypes.INT)
     attr.setSize(10)
     attr.setAllowIndexDuplicateds(True)
     attr.setAllowNull(True)
     attr.setDataProfileName(None)
-    attr.setDescription(u'ID_TRAMO')
+    attr.setDescription(u'ID_TRAMO_CARRETERA')
     attr.setGroup(None)
     attr.setHidden(False)
     attr.setIsAutomatic(False)
@@ -93,7 +93,7 @@ def add_attribute_ID_TRAMO(ft):
     attr.setIsPrimaryKey(False)
     attr.setIsReadOnly(False)
     attr.setIsTime(False)
-    attr.setLabel(u'_ID_Tramo')
+    attr.setLabel(u'_ID_TRAMO_CARRETERA')
     attr.setOrder(140)
     attr.setPrecision(0)
     attr.setReadOnly(False)
