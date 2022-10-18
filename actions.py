@@ -60,6 +60,8 @@ class AccidentRateExtension(ScriptingExtension):
       self.validatorData()
     elif actionCommand == "accidentrate-show-roads-interchange-format":
       self.showPDF(getResource(__file__,"docs_pdfs","Formato de intercambio de tramos de carreteras.pdf"),"Formato de intercambio de tramos de carreteras")
+    elif actionCommand == "accidentrate-show-road-loading-procedure":
+      self.showPDF(getResource(__file__,"docs_pdfs","Procedimiento de carga de tramos carreteras.pdf"),"Procedimiento de carga de tramos carreteras")
     elif actionCommand == "accidentrate-locatebyroadpkanddate":
       self.locateByRoadPkAndDate()
     elif actionCommand == "accidentrate-clean-locations":
@@ -302,6 +304,18 @@ def registerActions():
 
   action = actionManager.createAction(
     extension, 
+    "accidentrate-show-road-loading-procedure", # Action name
+    "Procedimiento de carga de tramos de carreteras", # Text
+    "accidentrate-show-road-loading-procedure", # Action command
+    "document-pdf", # Icon name
+    None, # Accelerator
+    1009000905, # Position 
+    u"Procedimiento de carga de tramos de carreteras" # Tooltip
+  )
+  action = actionManager.registerAction(action, True)
+
+  action = actionManager.createAction(
+    extension, 
     "accidentrate-locatebyroadpkanddate", # Action name
     u"Localizar por carretera, kilómetro y fecha", # Text
     "accidentrate-locatebyroadpkanddate", # Action command
@@ -361,6 +375,9 @@ def selfRegister():
   
   action = actionManager.getAction("accidentrate-show-roads-interchange-format")
   application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/Formato de intercambio de tramos de carreteras")
+
+  action = actionManager.getAction("accidentrate-show-road-loading-procedure")
+  application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/Procedimiento de carga de tramos de carreteras")
 
   action = actionManager.getAction("accidentrate-locatebyroadpkanddate")
   application.addMenu(action, u"tools/_AccidentRate/Localizar por carretera, kilómetro y fecha")
