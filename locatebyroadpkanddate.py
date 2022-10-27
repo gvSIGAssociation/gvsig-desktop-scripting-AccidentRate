@@ -3,6 +3,7 @@
 import gvsig
 from java.util import Date
 from java.text import DecimalFormat
+from java.text import DateFormat
 from java.awt import Color
 from java.io import File
 
@@ -44,6 +45,7 @@ class LocateByRoadPKAndDate(FormPanel):
       self.fechaPicker.setEnabled(False)
       self.txtCarretera.setEnabled(False)
       self.txtKm.setEnabled(False)
+      self.txtMeters.setEnabled(False)
       self.btnLocalizar.setEnabled(False)
       self.btnCentrar.setEnabled(False)
       self.chkClear.setEnabled(False)
@@ -52,6 +54,7 @@ class LocateByRoadPKAndDate(FormPanel):
       self.fechaPicker.setEnabled(False)
       self.txtCarretera.setEnabled(False)
       self.txtKm.setEnabled(False)
+      self.txtMeters.setEnabled(False)
       self.btnLocalizar.setEnabled(False)
       self.btnCentrar.setEnabled(False)
       self.chkClear.setEnabled(False)
@@ -61,6 +64,7 @@ class LocateByRoadPKAndDate(FormPanel):
       self.btnFecha
     )
     self.fechaPicker.set(Date())
+
     self.setPreferredSize(450, 140)
 
   def btnCancelar_click(self, *e):
@@ -135,20 +139,58 @@ class LocateByRoadPKAndDate(FormPanel):
 
   def locate(self):
     lrsManager = LrsAlgorithmsLocator.getLrsAlgorithmsManager()
-    fecha = self.fechaPicker.get()
+    points = []
+    fecha = None
+    try:
+      fecha = self.fechaPicker.get()
+    except:
+      return points
     carretera = self.txtCarretera.getText()
     kmStr = self.txtKm.getText()
+    mStr = self.txtMeters.getText()
+    m = None
     km = None
+    meters = None
     try:
-      km = float(kmStr)
+      km = int(kmStr)
     except:
-      pass
-    points = []
-    if fecha != None and carretera and km and km>=0:
-      msg = fecha.toString() +" "+carretera+" "+str(km)
-      m = km*1000
+        gvsig.commonsdialog.msgbox("'"+kmStr+u"' No es un valor válido.",
+          u"Localizar tramo por PK y fecha",
+          gvsig.commonsdialog.WARNING
+        )
+    if km and km  < 0:
+      gvsig.commonsdialog.msgbox("'"+kmStr+u"' No es un valor válido.",
+        u"Localizar tramo por PK y fecha",
+        gvsig.commonsdialog.WARNING
+      )
+    try:
+      meters = int(mStr)
+    except:
+        gvsig.commonsdialog.msgbox("'"+mStr+u"' No es un valor válido.",
+          u"Localizar tramo por PK y fecha",
+          gvsig.commonsdialog.WARNING
+        )
+    if meters and meters < 0:
+      gvsig.commonsdialog.msgbox("'"+mStr+u"' No es un valor válido.",
+        u"Localizar tramo por PK y fecha",
+        gvsig.commonsdialog.WARNING
+      )
+    if fecha == None:
+      gvsig.commonsdialog.msgbox(u" Por favor, introduzca una fecha.",
+        u"Localizar tramo por PK y fecha",
+        gvsig.commonsdialog.WARNING
+      )
+    
+    if fecha != None and carretera and km and km>=0 and meters and meters>=0:
+      m = 1000*int(kmStr)+int(mStr)
       filtro = getStretchFilter(fecha, carretera, m);
       featureSet = self.table.getFeatureSet(filtro);
+      if featureSet.getSize() == 0:
+        gvsig.commonsdialog.msgbox(u"No se ha podido encontrar el punto kilométrico con\n carretera "+carretera+u",\n fecha "+DateFormat.getDateInstance().format(fecha) +u",\n y punto kilométrico "+str(int(kmStr))+" + "+str(int(mStr)),
+          u"Localizar tramo por PK y fecha",
+          gvsig.commonsdialog.WARNING
+        )
+        
       itera = featureSet.iterable()
       for feature in itera:
         geometry = feature.getDefaultGeometry()
