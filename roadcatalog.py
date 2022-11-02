@@ -68,6 +68,7 @@ def getVigentStretchesQuery(store, fecha):
   return query
 
 def getVigentStretchesFilter(fecha):
+  # [ TC_FECHA_ENTRADA, TC_FECHA_SALIDA [
   builder = ExpressionUtils.createExpressionBuilder()
   filtro = builder.and( 
     builder.group( builder.or( 
@@ -75,12 +76,43 @@ def getVigentStretchesFilter(fecha):
         builder.is_null(builder.variable("TC_FECHA_ENTRADA"))
     )),
     builder.group( builder.or( 
-        builder.ge(builder.variable("TC_FECHA_SALIDA"), builder.date(fecha)),
+        builder.gt(builder.variable("TC_FECHA_SALIDA"), builder.date(fecha)),
         builder.is_null(builder.variable("TC_FECHA_SALIDA"))
     ))
   ).toString()
   
   return filtro
+
+
+def getStretchFilter(fecha, carretera, m):
+  # [ TC_FECHA_ENTRADA, TC_FECHA_SALIDA [
+  builder = ExpressionUtils.createExpressionBuilder()
+  builder.and(builder.or( 
+            builder.le(builder.variable("TC_FECHA_ENTRADA"), builder.date(fecha)),
+            builder.is_null(builder.variable("TC_FECHA_ENTRADA"))
+          ))
+  builder.and(builder.or( 
+            builder.gt(builder.variable("TC_FECHA_SALIDA"), builder.date(fecha)),
+            builder.is_null(builder.variable("TC_FECHA_SALIDA"))
+          ))
+  builder.and( 
+    builder.eq(builder.variable("TC_MATRICULA"), builder.constant(carretera))
+  )
+  builder.and(builder.or(
+    builder.and( 
+      builder.le(builder.variable("TC_PK_I"), builder.constant(m)),
+      builder.ge(builder.variable("TC_PK_F"), builder.constant(m))
+    ),
+    builder.and( 
+      builder.le(builder.variable("TC_PK_F"), builder.constant(m)),
+      builder.ge(builder.variable("TC_PK_I"), builder.constant(m))
+    )))
+
+
+  
+  filtro = builder.toString()
+  return filtro
+  
 
 
 def iif(cond, ontrue, onfalse):
@@ -150,7 +182,7 @@ def main(*args):
           builder.is_null(builder.variable("TC_FECHA_ENTRADA"))
       )),
       builder.group( builder.or( 
-          builder.ge(builder.variable("TC_FECHA_SALIDA"), builder.date(fecha)),
+          builder.gt(builder.variable("TC_FECHA_SALIDA"), builder.date(fecha)),
           builder.is_null(builder.variable("TC_FECHA_SALIDA"))
       ))
     ).toString()      

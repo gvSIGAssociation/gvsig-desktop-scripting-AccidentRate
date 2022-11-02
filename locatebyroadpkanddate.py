@@ -32,7 +32,7 @@ from org.gvsig.expressionevaluator import ExpressionUtils
 
 from org.gvsig.lrs.lib.api import LrsAlgorithmsLocator
 
-from addons.AccidentRate.roadcatalog import getVigentStretchesFilter
+from addons.AccidentRate.roadcatalog import getVigentStretchesFilter, getStretchFilter
 
 class LocateByRoadPKAndDate(FormPanel):
   ACCIDENTRATE_LOCATE_BY_ROAD_PK_AND_DATE_GRAPHICS_ID="AccidentRateLocateByRoadPkAndDate"
@@ -40,6 +40,11 @@ class LocateByRoadPKAndDate(FormPanel):
   def __init__(self):
     FormPanel.__init__(self, getResource(__file__, "locatebyroadpkanddate.xml"))
     toolsSwingManager = ToolsSwingLocator.getToolsSwingManager()
+    self.fechaPicker = toolsSwingManager.createDatePickerController(
+      self.txtFecha,
+      self.btnFecha
+    )
+    self.fechaPicker.set(Date())
     self.workspace = DALLocator.getDataManager().getDatabaseWorkspace('ARENA2_DB')
     if self.workspace == None:
       self.fechaPicker.setEnabled(False)
@@ -59,11 +64,6 @@ class LocateByRoadPKAndDate(FormPanel):
       self.btnCentrar.setEnabled(False)
       self.chkClear.setEnabled(False)
 
-    self.fechaPicker = toolsSwingManager.createDatePickerController(
-      self.txtFecha,
-      self.btnFecha
-    )
-    self.fechaPicker.set(Date())
 
     self.setPreferredSize(450, 140)
 
@@ -124,12 +124,12 @@ class LocateByRoadPKAndDate(FormPanel):
     textSymbol.setDrawWithHalo(True)
 
     carretera = self.txtCarretera.getText()
-
+    fecha = self.fechaPicker.get()
     formato = DecimalFormat("0.000")
     for point in points:
       m = point.getCoordinateAt(2);
       km = m/1000
-      textSymbol.setText("  "+carretera + " [" + formato.format(km).replace(",", " + ")+"]")
+      textSymbol.setText(u"  "+carretera + u" [" + formato.format(km).replace(",", " + ")+u"] ("+DateFormat.getDateInstance().format(fecha)+u")")
       idMarkerSymbol = graphics.addSymbol(markerSymbol)
       idTextSymbol = graphics.addSymbol(textSymbol)
       clonedPoint = geomManager.createFrom(point)
@@ -209,34 +209,6 @@ def cleanLocations():
   graphics = mapContext.getGraphicsLayer();
   graphics.removeGraphics(LocateByRoadPKAndDate.ACCIDENTRATE_LOCATE_BY_ROAD_PK_AND_DATE_GRAPHICS_ID)
   view.refresh()
-
-def getStretchFilter(fecha, carretera, m):
-  builder = ExpressionUtils.createExpressionBuilder()
-  builder.and(builder.or( 
-            builder.le(builder.variable("TC_FECHA_ENTRADA"), builder.date(fecha)),
-            builder.is_null(builder.variable("TC_FECHA_ENTRADA"))
-          ))
-  builder.and(builder.or( 
-            builder.ge(builder.variable("TC_FECHA_SALIDA"), builder.date(fecha)),
-            builder.is_null(builder.variable("TC_FECHA_SALIDA"))
-          ))
-  builder.and( 
-    builder.eq(builder.variable("TC_MATRICULA"), builder.constant(carretera))
-  )
-  builder.and(builder.or(
-    builder.and( 
-      builder.le(builder.variable("TC_PK_I"), builder.constant(m)),
-      builder.ge(builder.variable("TC_PK_F"), builder.constant(m))
-    ),
-    builder.and( 
-      builder.le(builder.variable("TC_PK_F"), builder.constant(m)),
-      builder.ge(builder.variable("TC_PK_I"), builder.constant(m))
-    )))
-
-
-  
-  filtro = builder.toString()
-  return filtro
 
 def getSymbol(name):
   symbolManager = MapContextLocator.getSymbolManager();
