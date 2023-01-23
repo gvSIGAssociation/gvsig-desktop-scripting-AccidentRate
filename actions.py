@@ -62,6 +62,8 @@ class AccidentRateExtension(ScriptingExtension):
       self.showPDF(getResource(__file__,"docs_pdfs","Formato de intercambio de tramos de carreteras.pdf"),"Formato de intercambio de tramos de carreteras")
     elif actionCommand == "accidentrate-show-road-loading-procedure":
       self.showPDF(getResource(__file__,"docs_pdfs","Procedimiento de carga de tramos carreteras.pdf"),"Procedimiento de carga de tramos carreteras")
+    elif actionCommand == "accidentrate-show-gaugings-interchange-format":
+      self.showPDF(getResource(__file__,"docs_pdfs","Formato de intercambio de aforos.pdf"),"Formato de intercambio de aforos")
     elif actionCommand == "accidentrate-locatebyroadpkanddate":
       self.locateByRoadPkAndDate()
     elif actionCommand == "accidentrate-clean-locations":
@@ -316,6 +318,18 @@ def registerActions():
 
   action = actionManager.createAction(
     extension, 
+    "accidentrate-show-gaugings-interchange-format", # Action name
+    "Formato de intercambio de aforos", # Text
+    "accidentrate-show-gaugings-interchange-format", # Action command
+    "document-pdf", # Icon name
+    None, # Accelerator
+    1009000905, # Position 
+    u"Formato de intercambio de aforos" # Tooltip
+  )
+  action = actionManager.registerAction(action, True)
+
+  action = actionManager.createAction(
+    extension, 
     "accidentrate-locatebyroadpkanddate", # Action name
     u"Localizar por carretera, kilómetro y fecha", # Text
     "accidentrate-locatebyroadpkanddate", # Action command
@@ -378,6 +392,9 @@ def selfRegister():
 
   action = actionManager.getAction("accidentrate-show-road-loading-procedure")
   application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/Procedimiento de carga de tramos de carreteras")
+
+  action = actionManager.getAction("accidentrate-show-gaugings-interchange-format")
+  application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/Formato de intercambio de aforos")
 
   action = actionManager.getAction("accidentrate-locatebyroadpkanddate")
   application.addMenu(action, u"tools/_AccidentRate/Localizar por carretera, kilómetro y fecha")

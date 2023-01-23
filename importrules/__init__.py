@@ -11,6 +11,7 @@ from addons.AccidentRate.importrules import valoresDisponibles
 from addons.AccidentRate.importrules import fechaCierre
 from addons.AccidentRate.importrules import geocode
 from addons.AccidentRate.importrules.codigoINE import codigoINE
+from addons.AccidentRate.importrules import asignarMedidasAforos
 
 def selfRegister():
   geocode.selfRegister()
@@ -21,6 +22,7 @@ def selfRegister():
   valoresDisponibles.selfRegister()
   fechaCierre.selfRegister()
   codigoINE.selfRegister()
+  asignarMedidasAforos.selfRegister()
 
 def main(*args):
   selfRegister()
