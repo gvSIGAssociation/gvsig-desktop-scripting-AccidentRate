@@ -3,10 +3,6 @@
 import gvsig
 
 from addons.AccidentRate.aforos import findMedidaAforo, checkRequirements
-from addons.AccidentRate.importrules.titularidad import CODERR_CARRETERAKM_NO_ENCONTRADA
-from addons.AccidentRate.importrules.titularidad import CODERR_KM_NO_ENCONTRADO
-from addons.AccidentRate.importrules.titularidad import CODERR_CARRETERA_NO_INDICADA, TITULARIDAD_AUTONOMICA
-
 
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory, RuleFixer

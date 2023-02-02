@@ -307,12 +307,24 @@ def registerActions():
   action = actionManager.createAction(
     extension, 
     "accidentrate-show-road-loading-procedure", # Action name
-    "Procedimiento de carga de tramos de carreteras", # Text
+    u"Procedimiento de carga de tramos de carreteras", # Text
     "accidentrate-show-road-loading-procedure", # Action command
     "document-pdf", # Icon name
     None, # Accelerator
     1009000905, # Position 
     u"Procedimiento de carga de tramos de carreteras" # Tooltip
+  )
+  action = actionManager.registerAction(action, True)
+
+  action = actionManager.createAction(
+    extension, 
+    "accidentrate-show-gaugings-loading-procedure", # Action name
+    u"Procedimiento de carga de aforos", # Text
+    "accidentrate-show-gaugings-loading-procedure", # Action command
+    "document-pdf", # Icon name
+    None, # Accelerator
+    1009000905, # Position 
+    u"Procedimiento de carga de aforos" # Tooltip
   )
   action = actionManager.registerAction(action, True)
 
@@ -395,6 +407,9 @@ def selfRegister():
 
   action = actionManager.getAction("accidentrate-show-gaugings-interchange-format")
   application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/Formato de intercambio de aforos")
+
+  action = actionManager.getAction("accidentrate-show-gaugings-loading-procedure")
+  application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/Procedimiento de carga de aforos")
 
   action = actionManager.getAction("accidentrate-locatebyroadpkanddate")
   application.addMenu(action, u"tools/_AccidentRate/Localizar por carretera, kilómetro y fecha")
