@@ -2,10 +2,11 @@
 
 import gvsig
 
+from java.lang import String, Integer, Double
+
 from addons.AccidentRate.roadcatalog import geocodificar, checkRequirements
-from addons.AccidentRate.importrules.titularidad import CODERR_CARRETERAKM_NO_ENCONTRADA
-from addons.AccidentRate.importrules.titularidad import CODERR_KM_NO_ENCONTRADO
-from addons.AccidentRate.importrules.titularidad import CODERR_CARRETERA_NO_INDICADA, TITULARIDAD_AUTONOMICA
+from addons.AccidentRate.importrules.titularidad import TITULARIDAD_AUTONOMICA
+from addons.AccidentRate.roadcatalog import CODERR_CARRETERA_FECHA_O_PK_NO_INDICADOS, CODERR_CARRETERAKM_NO_ENCONTRADA, CODERR_KM_NO_ENCONTRADO, CODERR_SENTIDO_NO_VALIDO
 
 
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
@@ -29,13 +30,15 @@ class GeocodeTransform(Transform):
     if carretera in ("",None):
       feature.set("MAPA",None)
       return
-    p, f, msg = geocodificar(
+    p, f, msg, errcode = geocodificar(
       feature.get("FECHA_ACCIDENTE"), 
       feature.get("CARRETERA"), 
-      feature.get("KM")
+      feature.get("KM"),
+      feature.get("SENTIDO")
     )
     if p==None:
       feature.set("MAPA",None)
+      feature.set("ID_TRAMO_CARRETERA", None)
     else:
       #print "GeocodeTransform.apply: update MAPA to ", p
       feature.set("MAPA",p)
@@ -119,8 +122,10 @@ class GeocodeRule(Rule):
     calleNombre = feature.get("CALLE_NOMBRE")
     if not (calleNombre in ("",None)):
       return
+    if titularidad_accidente != TITULARIDAD_AUTONOMICA:
+      return
     if carretera in ("",None):
-      errcode = CODERR_CARRETERA_NO_INDICADA
+      errcode = CODERR_CARRETERA_FECHA_O_PK_NO_INDICADOS
       report.add(
         feature.get("ID_ACCIDENTE"), 
         errcode,
@@ -134,19 +139,17 @@ class GeocodeRule(Rule):
         PROVINCIA=feature.get("COD_PROVINCIA")
       )      
       return
-    p, f, msg = geocodificar(
+    p, f, errmsg, errcode= geocodificar(
       feature.get("FECHA_ACCIDENTE"), 
       carretera, 
-      feature.get("KM")
+      feature.get("KM"),
+      feature.get("SENTIDO")
     )
-    if p==None and titularidad_accidente == TITULARIDAD_AUTONOMICA:
-      errcode = CODERR_CARRETERAKM_NO_ENCONTRADA
-      if msg.lower().startswith("kilometro"):
-        errcode = CODERR_KM_NO_ENCONTRADO
+    if p==None:
       report.add(
         feature.get("ID_ACCIDENTE"), 
         errcode,
-        msg,
+        errmsg,
         fixerID="IgnoreGeocodeError",
         selected=True,
         CARRETERA=feature.get("CARRETERA"),
@@ -180,7 +183,32 @@ def selfRegister():
   manager.addTransformFactory(GeocodeTransformFactory())
   manager.addRuleFactory(GeocodeRuleFactory())
   manager.addRuleFixer(IgnoreGeocodeErrorAction())
-  manager.addRuleErrorCode(100,"100 - Carretera/km no encontrada")
+  manager.addRuleErrorCode(
+    CODERR_CARRETERAKM_NO_ENCONTRADA,
+    "%s - Carretera/km no encontrada"%CODERR_CARRETERAKM_NO_ENCONTRADA
+  )
+  manager.addRuleErrorCode(
+    CODERR_KM_NO_ENCONTRADO,
+    "%s - km no encontrado" % CODERR_KM_NO_ENCONTRADO
+  )
+  manager.addRuleErrorCode(
+    CODERR_CARRETERA_FECHA_O_PK_NO_INDICADOS,
+    "%s - Carretera, fecha o pk no indicados" % CODERR_CARRETERA_FECHA_O_PK_NO_INDICADOS
+  )
+  manager.addRuleErrorCode(
+    CODERR_SENTIDO_NO_VALIDO,
+    "%s - Sentido no valido" % CODERR_SENTIDO_NO_VALIDO
+  )
+
+
+  
+
+  manager.addReportAttribute("CARRETERA",String, size=45, label="Carretera", isEditable=True)
+  manager.addReportAttribute("PK",Double, label="PK", isEditable=True)
+  manager.addReportAttribute("TITULARIDAD_ACCIDENTE",Integer, size=10, label="Titularidad acc.")
+  manager.addReportAttribute("FECHA",String, size=45, label="Fecha")
+  manager.addReportAttribute("PROVINCIA",String, size=45, label="Provincia")
+
   
 def test():
   from java.util import Date
@@ -205,7 +233,8 @@ def updateWorkspace():
   
 def main(*args):
   #test()
-  updateWorkspace()
+  ##updateWorkspace()
   #selfRegister()
+  pass
   
   

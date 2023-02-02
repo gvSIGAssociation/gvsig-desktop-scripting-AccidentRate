@@ -14,10 +14,19 @@ from org.gvsig.fmap.dal import DALLocator
 from org.gvsig.fmap.geom import GeometryUtils
 from org.gvsig.expressionevaluator import ExpressionUtils
 
+CODERR_CARRETERAKM_NO_ENCONTRADA = 100
+CODERR_KM_NO_ENCONTRADO = 101
+CODERR_SENTIDO_NO_VALIDO = 103
+CODERR_CARRETERA_FECHA_O_PK_NO_INDICADOS = 104
+
 try:
   from org.gvsig.lrs.lib.api import LrsAlgorithmsLocator
 except:
   LrsAlgorithmsLocator = None
+
+SENTIDO_ASCENDENTE = 1
+SENTIDO_DESCENDENTE = 2
+SENTIDO_MIXTO = 3
 
 class StretchFeatureStoreCache(CachedValue):
   def reload(self):
@@ -25,9 +34,20 @@ class StretchFeatureStoreCache(CachedValue):
     repo = dataManager.getStoresRepository().getSubrepository("ARENA2_DB")
     self.setValue(repo.getStore("SIGCAR_TRAMOS_CARRETERAS"))
 
+class DicSentidoCache(CachedValue):
+  def reload(self):
+    dataManager = DALLocator.getDataManager()
+    repo = dataManager.getStoresRepository().getSubrepository("ARENA2_DB")
+    store = repo.getStore("ARENA2_DIC_SENTIDO")
+    d = dict()
+    for f in store.getFeatureSet():
+      d[f.get('ID')] = f.get('DESCRIPCION')
+    DisposeUtils.dispose(store)
+    self.setValue(d)
 
 lrsManager = None
 stretchFeatureStore = StretchFeatureStoreCache(5000);
+dicSentido = DicSentidoCache(30000);
 
 def getLRSManager():
   if LrsAlgorithmsLocator == None:
@@ -40,7 +60,6 @@ def getLRSManager():
 def getStretchFeatureStore():
   return stretchFeatureStore.get()
   
-
 def checkRequirements():
   dataManager = DALLocator.getDataManager()
   s = u""
@@ -120,37 +139,93 @@ def iif(cond, ontrue, onfalse):
     return ontrue
   return onfalse
   
-def geocodificar(fecha, carretera, pk):
+def geocodificar(fecha, carretera, pk, sentido=None):
   if fecha == None or carretera == None or pk == None:
     return (None, None, "Fecha%s, carretera%s o pk%s nulo" % (
         iif(fecha==None, "*",""),
         iif(carretera==None, "*",""),
         iif(pk==None, "*","")
-      )
+      ),
+      CODERR_CARRETERA_FECHA_O_PK_NO_INDICADOS
     )
-  strechesStore = getStretchFeatureStore()
-  query = getVigentStretchesQuery(strechesStore, fecha) 
+  sentidoStr = None
+  if sentido != None:
+    sentidoStr = dicSentido.get().get(sentido, None)
+    if sentidoStr==None:
+      #Incidencia de sentido no válido en el accidente [SENTIDO NO VALIDO]
+      return (None, None, "Sentido '%s' no válido." %(sentido), CODERR_SENTIDO_NO_VALIDO)
+  
+  stretchesStore = getStretchFeatureStore()
+  query = getVigentStretchesQuery(stretchesStore, fecha) 
 
   builder = ExpressionUtils.createExpressionBuilder()
   expression = builder.eq(builder.variable("TC_MATRICULA"), builder.constant(carretera)).toString()
-  streches = None  
+  stretches = None  
+  it = None
   try:
     query.addFilter(expression)
     query.retrievesAllAttributes()
-    streches = strechesStore.getFeatureSet(query).iterable()
-    if streches.isEmpty():
-      return (None, None, "Carretera '%s' no encontrada" % carretera)
+    stretches = stretchesStore.getFeatureSet(query)
+    if stretches.isEmpty():
+        #Incidencia de carretera no encontrada [CARRETERA NO ENCONTRADA]
+        return (None, None, "Carretera '%s' no encontrada" % carretera, CODERR_CARRETERAKM_NO_ENCONTRADA)
+        
     pk = pk * 1000 
-    for strech in streches:
-      location = getLRSManager().getMPointFromGeometry(strech.getDefaultGeometry(), pk)
+    bestStretch = None
+    bestLocation = None
+    it = stretches.iterable()
+    for stretch in it:
+      location = getLRSManager().getMPointFromGeometry(stretch.getDefaultGeometry(), pk)
       if location != None:
-        # LRS devuelve un Point2DM y falla al guardarse en la BBDD (H2 por lo menos)
+          # LRS devuelve un Point2DM y falla al guardarse en la BBDD (H2 por lo menos)
         location = GeometryUtils.createPoint(location.getX(), location.getY())
-        return (location, strech, None)
-    return (None, None, "kilometro %.3f no encontrado a fecha %s en '%s'." % (pk/1000,String.format("%td/%tm/%tY",fecha,fecha,fecha),carretera))
-  finally:
-    DisposeUtils.disposeQuietly(streches)
 
+        # TODO: Ver si todo coincide y darlo por bueno
+        if sentido != None and sentido == stretch.get('TC_SENTIDO'):
+          return (location, stretch, None, None)
+         
+        if bestStretch == None:
+          bestStretch = stretch
+          bestLocation = location
+        else:
+         if isBetterStretch(bestStretch, stretch, sentido):
+            bestStretch = stretch
+            bestLocation = location
+    if bestStretch == None: #Punto kilometrico no encontrado
+      if sentido==None:
+        #Incidencia de punto kilometrico no encontrado en la carretera [PUNTO KM NO ENCONTRADO]
+        return (None, None, "kilometro %.3f no encontrado a fecha %s en '%s'." % (pk/1000,String.format("%td/%tm/%tY",fecha,fecha,fecha),carretera), CODERR_KM_NO_ENCONTRADO)
+      else:
+        sentidoStr = dicSentido.get().get(sentido, None)
+        #Incidencia de punto kilometrico no encontrado en la carretera en el sentido [PUNTO KM NO ENCONTRADO]
+        return (None, None, "kilometro %.3f no encontrado a fecha %s en '%s' en sentido '%s'." % (pk/1000,String.format("%td/%tm/%tY",fecha,fecha,fecha),carretera,sentidoStr), CODERR_KM_NO_ENCONTRADO)
+    else:
+      if sentido == None:
+        return (bestLocation, bestStretch, None, None)
+      else: 
+        if bestStretch.get("TC_SENTIDO") in (None, SENTIDO_MIXTO, sentido):
+          return (bestLocation, bestStretch, None, None)
+        else:
+          #Incidencia el sentido del accidente no coincide con el sentido del tramo encontrado  [SENTIDO NO VALIDO]
+          return (None, None, "kilometro %.3f no encontrado a fecha %s en '%s' en sentido '%s'." % (pk/1000,String.format("%td/%tm/%tY",fecha,fecha,fecha),carretera,sentidoStr), CODERR_SENTIDO_NO_VALIDO)
+    return (bestLocation, bestStretch, None, None)
+  finally:
+    DisposeUtils.disposeQuietly(it)
+    DisposeUtils.disposeQuietly(stretches)
+
+def isBetterStretch(bestStretch, stretch, sentido):
+  s = sentido
+  if sentido == None:
+    s = SENTIDO_ASCENDENTE
+
+  if s == bestStretch.get('TC_SENTIDO'):
+    return False
+  if s == stretch.get('TC_SENTIDO'):
+    return True
+  if stretch.get('TC_SENTIDO') == SENTIDO_MIXTO:
+    return True
+  return False
+ 
 def findOwnership(fecha, carretera, pk):
   if fecha == None or carretera == None or pk == None:
     return None
@@ -173,6 +248,9 @@ def main0(*args):
   print checkRequirements()  
 
 def main(*args):
+  pass
+
+def main1(*args):
     from java.util import Date
     fecha = Date()
     builder = ExpressionUtils.createExpressionBuilder()

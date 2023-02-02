@@ -12,12 +12,9 @@ from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory, RuleFixer
 import pdb
 
-CODERR_CARRETERAKM_NO_ENCONTRADA = 100
-CODERR_KM_NO_ENCONTRADO = 101
-CODERR_TITULARIDADCARRETERAKM_NO_ENCONTRADA = 102
-CODERR_TITULARIDAD_INCORRECTA = 103
-CODERR_TITULARIDAD_AUTONOMICA_SIN_CARETERA = 104
-CODERR_CARRETERA_NO_INDICADA = 105
+CODERR_TITULARIDADCARRETERAKM_NO_ENCONTRADA = 150
+CODERR_TITULARIDAD_INCORRECTA = 151
+CODERR_TITULARIDAD_AUTONOMICA_SIN_CARETERA = 152
 
 TITULARIDAD_DESCONOCIDA = 0
 TITULARIDAD_ESTATAL = 1
@@ -182,18 +179,6 @@ def selfRegister():
   manager.addRuleFactory(OwnershipRuleFactory())
   manager.addRuleFixer(SetOwnershipRuleFixer())
   manager.addRuleErrorCode(
-    CODERR_CARRETERAKM_NO_ENCONTRADA,
-    "%s - Carretera/km no encontrada" % CODERR_CARRETERAKM_NO_ENCONTRADA
-  )
-  manager.addRuleErrorCode(
-    CODERR_KM_NO_ENCONTRADO,
-    "%s - km no encontrado" % CODERR_KM_NO_ENCONTRADO
-  )
-  manager.addRuleErrorCode(
-    CODERR_CARRETERA_NO_INDICADA,
-    "%s - Carretera no indicada" % CODERR_CARRETERA_NO_INDICADA
-  )
-  manager.addRuleErrorCode(
     CODERR_TITULARIDADCARRETERAKM_NO_ENCONTRADA,
     "%s - Titularidad autonomica y carretera/km no encontrada" % CODERR_TITULARIDADCARRETERAKM_NO_ENCONTRADA
   )
@@ -221,5 +206,5 @@ def selfRegister():
     
 def main(*args):
   #test()
-  selfRegister()
+  #selfRegister()
   pass
