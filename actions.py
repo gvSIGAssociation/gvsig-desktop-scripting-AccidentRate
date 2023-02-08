@@ -64,6 +64,8 @@ class AccidentRateExtension(ScriptingExtension):
       self.showPDF(getResource(__file__,"docs_pdfs","Procedimiento de carga de tramos carreteras.pdf"),"Procedimiento de carga de tramos carreteras")
     elif actionCommand == "accidentrate-show-gaugings-interchange-format":
       self.showPDF(getResource(__file__,"docs_pdfs","Formato de intercambio de aforos.pdf"),"Formato de intercambio de aforos")
+    elif actionCommand == "accidentrate-show-gaugings-loading-procedure":
+      self.showPDF(getResource(__file__,"docs_pdfs","Procedimiento de carga de aforos.pdf"),"Procedimiento de carga de aforos")
     elif actionCommand == "accidentrate-locatebyroadpkanddate":
       self.locateByRoadPkAndDate()
     elif actionCommand == "accidentrate-clean-locations":
