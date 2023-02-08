@@ -72,6 +72,7 @@ def getMedidasAforosFilter(fecha, carretera, pk):
       - si la fecha es igual o posterior a MAFO_REKI_FECHA que el pk esté entre MAFO_REKI_PK_I y MAFO_REKI_PK_F
    
   '''
+  pk = pk * 1000 #el pk viene en km y en la tabla de aforos está en metros
   builder = ExpressionUtils.createExpressionBuilder()
   builder.and(builder.eq(builder.variable("MAFO_CARRETERA"), builder.constant(carretera)))
   builder.and(builder.eq(builder.variable("MAFO_ANO"), builder.constant(DataTypeUtils.toLocalDate(fecha).year)))
@@ -120,15 +121,15 @@ def findMedidaAforo(fecha, carretera, pk):
   medidasAforosStore = getMedidasAforoFeatureStore()
   query = getMedidasAforosQuery(medidasAforosStore, fecha, carretera, pk) 
 
-  medidasAforos = None  
   try:
     query.retrievesAllAttributes()
     medidaAforo = medidasAforosStore.findFirst(query)
+    #print medidaAforo
     if(medidaAforo == None):
       return (None, "kilometro %.3f no encontrado a fecha %s en '%s'." % (pk/1000,String.format("%td/%tm/%tY",fecha,fecha,fecha),carretera))
     return (medidaAforo, None)
   finally:
-    DisposeUtils.disposeQuietly(medidasAforos)
+    pass
 
 def main(*args):
   print checkRequirements()  

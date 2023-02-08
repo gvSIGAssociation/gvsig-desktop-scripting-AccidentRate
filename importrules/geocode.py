@@ -230,9 +230,25 @@ def updateWorkspace():
   f = GeocodeTransformFactory()
   f.create(workspace=ws)
   f.selfConfigure(ws)
+
+def test2():
+  from java.util import Date
+  try:
+    dataManager = DALLocator.getDataManager()
+    workspace = dataManager.getDatabaseWorkspace("ARENA2_DB")
+    store = workspace.getStoresRepository().getStore("ARENA2_ACCIDENTES")
+    f = store.findFirst("ID_ACCIDENTE =  '201503002000001'").getEditable()
+    factory = GeocodeTransformFactory()
+    transform = factory.create(workspace=workspace)
+    transform.apply(f)
+    print f.get("ID_TRAMO_CARRETERA")
+  finally:
+   store.dispose()
+
   
 def main(*args):
-  #test()
+  test2()
+  
   ##updateWorkspace()
   #selfRegister()
   pass

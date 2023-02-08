@@ -30,9 +30,12 @@ class AsignarMedidasAforosTransform(Transform):
       feature.get("CARRETERA"), 
       feature.get("KM")
     )
-    if f==None:
+    #print repr(f)
+    if f == None:
+      #print "NADA"
       feature.set("COD_AFORO",None)
     else:
+      #print repr(f.get("LID_MEDIDA_AFORO"))
       feature.set("COD_AFORO", f.get("LID_MEDIDA_AFORO"))
 
 class AsignarMedidasAforosTransformFactory(TransformFactory):
@@ -55,19 +58,21 @@ def selfRegister():
   
 def test():
   from java.util import Date
-
-  transform = AsignarMedidasAforosTransform()
-  datos = (
-    { "FECHA_ACCIDENTE":Date("22/12/2018") , "CARRETERA":"CV-95" , "KM": 181 },
-    { "FECHA_ACCIDENTE":Date("12/12/2018") , "CARRETERA":"CV-921" , "KM": 23 },
-    { "FECHA_ACCIDENTE":Date("21/12/2018") , "CARRETERA":"CV-84" , "KM": 145 },
-    { "FECHA_ACCIDENTE":Date("21/12/2018") , "CARRETERA":"N-332" , "KM": 908 },
-  )
-  for dato in datos:
-    transform.apply(dato)
-    print dato.get("COD_AFORO",None)
+  try:
+    dataManager = DALLocator.getDataManager()
+    workspace = dataManager.getDatabaseWorkspace("ARENA2_DB")
+    store = workspace.getStoresRepository().getStore("ARENA2_ACCIDENTES")
+    f = store.findFirst("ID_ACCIDENTE =  '1993030000089'").getEditable()
+    factory = AsignarMedidasAforosTransformFactory()
+    transform = factory.create(workspace = workspace)
+    transform.apply(f)
+    print f.get("COD_AFORO")
+    print f
+  finally:
+   store.dispose()
     
 def main(*args):
-  selfRegister()
+  #selfRegister()
+  test()
   
   

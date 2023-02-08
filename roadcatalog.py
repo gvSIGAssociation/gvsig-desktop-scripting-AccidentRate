@@ -81,7 +81,6 @@ def checkRequirements():
 def getVigentStretchesQuery(store, fecha):
   builder = ExpressionUtils.createExpressionBuilder()
   filtro = getVigentStretchesFilter(fecha)
-  
   query = store.createFeatureQuery()
   query.addFilter(filtro)
   return query
@@ -102,6 +101,14 @@ def getVigentStretchesFilter(fecha):
   
   return filtro
 
+
+def getStretchesQuery(store, fecha, carretera, m):
+  builder = ExpressionUtils.createExpressionBuilder()
+  filtro = getStretchFilter(fecha, carretera, m)
+  #print filtro
+  query = store.createFeatureQuery()
+  query.addFilter(filtro)
+  return query
 
 def getStretchFilter(fecha, carretera, m):
   # [ TC_FECHA_ENTRADA, TC_FECHA_SALIDA [
@@ -156,21 +163,21 @@ def geocodificar(fecha, carretera, pk, sentido=None):
       return (None, None, "Sentido '%s' no válido." %(sentido), CODERR_SENTIDO_NO_VALIDO)
   
   stretchesStore = getStretchFeatureStore()
-  query = getVigentStretchesQuery(stretchesStore, fecha) 
+  pk = pk * 1000 
+  query = getStretchesQuery(stretchesStore, fecha, carretera, pk) 
 
   builder = ExpressionUtils.createExpressionBuilder()
-  expression = builder.eq(builder.variable("TC_MATRICULA"), builder.constant(carretera)).toString()
+  #expression = builder.eq(builder.variable("TC_MATRICULA"), builder.constant(carretera)).toString()
   stretches = None  
   it = None
   try:
-    query.addFilter(expression)
+    #query.addFilter(expression)
     query.retrievesAllAttributes()
     stretches = stretchesStore.getFeatureSet(query)
     if stretches.isEmpty():
         #Incidencia de carretera no encontrada [CARRETERA NO ENCONTRADA]
         return (None, None, "Carretera '%s' no encontrada" % carretera, CODERR_CARRETERAKM_NO_ENCONTRADA)
         
-    pk = pk * 1000 
     bestStretch = None
     bestLocation = None
     it = stretches.iterable()
