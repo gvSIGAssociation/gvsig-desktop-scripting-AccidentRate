@@ -66,6 +66,8 @@ class AccidentRateExtension(ScriptingExtension):
       self.showPDF(getResource(__file__,"docs_pdfs","Formato de intercambio de aforos.pdf"),"Formato de intercambio de aforos")
     elif actionCommand == "accidentrate-show-gaugings-loading-procedure":
       self.showPDF(getResource(__file__,"docs_pdfs","Procedimiento de carga de aforos.pdf"),"Procedimiento de carga de aforos")
+    elif actionCommand == "accidentrate-show-the-holiday-management-document":
+      self.showPDF(getResource(__file__,"docs_pdfs","Gestion de festivos.pdf"),"Gestión de festivos")
     elif actionCommand == "accidentrate-locatebyroadpkanddate":
       self.locateByRoadPkAndDate()
     elif actionCommand == "accidentrate-clean-locations":
@@ -329,7 +331,23 @@ def registerActions():
     u"Procedimiento de carga de aforos" # Tooltip
   )
   action = actionManager.registerAction(action, True)
+  
+  action = actionManager.createAction(
+    extension, 
+    "accidentrate-show-the-holiday-management-document", # Action name
+    u"Gestión de festivos", # Text
+    "accidentrate-show-the-holiday-management-document", # Action command
+    "document-pdf", # Icon name
+    None, # Accelerator
+    1009000905, # Position 
+    u"Gestión de festivos" # Tooltip
+  )
+  action = actionManager.registerAction(action, True)
 
+
+  
+  
+  
   action = actionManager.createAction(
     extension, 
     "accidentrate-show-gaugings-interchange-format", # Action name
@@ -412,6 +430,9 @@ def selfRegister():
 
   action = actionManager.getAction("accidentrate-show-gaugings-loading-procedure")
   application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/Procedimiento de carga de aforos")
+
+  action = actionManager.getAction("accidentrate-show-the-holiday-management-document")
+  application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/Gestión de festivos")
 
   action = actionManager.getAction("accidentrate-locatebyroadpkanddate")
   application.addMenu(action, u"tools/_AccidentRate/Localizar por carretera, kilómetro y fecha")
