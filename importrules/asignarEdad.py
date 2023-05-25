@@ -2,6 +2,7 @@
 
 import gvsig
 
+from gvsig import logger, LOGGER_WARN, LOGGER_ERROR
 from addons.AccidentRate.aforos import findMedidaAforo, checkRequirements
 
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
@@ -28,6 +29,7 @@ class AsignarEdadTransform(Transform):
     if (feature.getType().get("FECHA_NACIMIENTO") != None) :
       accidente = feature.getForeignFeature("ID_ACCIDENTE")
       if(accidente == None):
+        logger("No se ha encontrado el accidente '%s'."%feature.get("ID_ACCIDENTE"), LOGGER_WARN)
         return
       fechaAccidente = accidente.get("FECHA_ACCIDENTE")
       if(fechaAccidente == None):

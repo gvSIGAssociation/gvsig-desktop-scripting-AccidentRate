@@ -2,6 +2,8 @@
 
 import gvsig
 
+
+from gvsig import logger, LOGGER_WARN, LOGGER_ERROR
 from addons.AccidentRate.aforos import findMedidaAforo, checkRequirements
 
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
@@ -43,9 +45,12 @@ class AsignarTipoDiaCitTransform(Transform):
   
       if storeName in ( "ARENA2_VEHICULOS", "ARENA2_CONDUCTORES", "ARENA2_PASAJEROS", "ARENA2_PEATONES"):
         accidente = feature.getForeignFeature("ID_ACCIDENTE")
-        extra = feature.get("EXTRA")
-        extra = addDataToJsonExtra(extra, accidente.get("DIA_CIT"), accidente.get("TIPO_DIA_CIT"))
-        feature.set("EXTRA", extra)
+        if accidente == None:
+          logger("No se ha encontrado el accidente '%s'."%feature.get("ID_ACCIDENTE"), LOGGER_WARN)
+        else:
+          extra = feature.get("EXTRA")
+          extra = addDataToJsonExtra(extra, accidente.get("DIA_CIT"), accidente.get("TIPO_DIA_CIT"))
+          feature.set("EXTRA", extra)
         return
       print "Skip feature %r" %storeName
     finally:
