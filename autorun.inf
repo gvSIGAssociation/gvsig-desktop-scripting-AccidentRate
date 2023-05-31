@@ -11,7 +11,7 @@ createdBy =
 version = 
 
 [properties]
-autorun.group.name = gvsig-gva
-autorun.group.order = 2000
-autorun.order = 3000
+autorun.group.name = sigcar
+autorun.group.order = 3000
+autorun.order = 1000
 
