@@ -68,6 +68,8 @@ class AccidentRateExtension(ScriptingExtension):
       self.showPDF(getResource(__file__,"docs_pdfs","Procedimiento de carga de aforos.pdf"),"Procedimiento de carga de aforos")
     elif actionCommand == "accidentrate-show-the-holiday-management-document":
       self.showPDF(getResource(__file__,"docs_pdfs","Gestion de festivos.pdf"),"Gestión de festivos")
+    elif actionCommand == "accidentrate-show-sigcar-data-model":
+      self.showPDF(getResource(__file__,"docs_pdfs","SIGCAR_EER","SIGCAR_EER.pdf"),"SIGCAR - Modelo de datos")
     elif actionCommand == "accidentrate-locatebyroadpkanddate":
       self.locateByRoadPkAndDate()
     elif actionCommand == "accidentrate-clean-locations":
@@ -344,6 +346,17 @@ def registerActions():
   )
   action = actionManager.registerAction(action, True)
 
+  action = actionManager.createAction(
+    extension, 
+    "accidentrate-show-sigcar-data-model", # Action name
+    u"SIGCAR - Modelo de datos", # Text
+    "accidentrate-show-sigcar-data-model", # Action command
+    "document-pdf", # Icon name
+    None, # Accelerator
+    1009000906, # Position 
+    u"SIGCAR - Modelo de datos" # Tooltip
+  )
+  action = actionManager.registerAction(action, True)
 
   
   
@@ -433,6 +446,9 @@ def selfRegister():
 
   action = actionManager.getAction("accidentrate-show-the-holiday-management-document")
   application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/Gestión de festivos")
+
+  action = actionManager.getAction("accidentrate-show-sigcar-data-model")
+  application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/SIGCAR - Modelo de datos")
 
   action = actionManager.getAction("accidentrate-locatebyroadpkanddate")
   application.addMenu(action, u"tools/_AccidentRate/Localizar por carretera, kilómetro y fecha")
