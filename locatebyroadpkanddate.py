@@ -74,6 +74,7 @@ class LocateByRoadPKAndDate(FormPanel):
     cleanLocations()
   
   def btnLocalizar_click(self, *e):
+    print "CLICK"
     points = []
     points = self.locate()
     view = currentView()
@@ -144,6 +145,10 @@ class LocateByRoadPKAndDate(FormPanel):
     try:
       fecha = self.fechaPicker.get()
     except:
+      gvsig.commonsdialog.msgbox(u"' No es un fecha válida.",
+        u"Localizar tramo por PK y fecha",
+        gvsig.commonsdialog.WARNING
+      )
       return points
     carretera = self.txtCarretera.getText()
     kmStr = self.txtKm.getText()
@@ -158,7 +163,7 @@ class LocateByRoadPKAndDate(FormPanel):
           u"Localizar tramo por PK y fecha",
           gvsig.commonsdialog.WARNING
         )
-    if km and km  < 0:
+    if km!=None and km  < 0:
       gvsig.commonsdialog.msgbox("'"+kmStr+u"' No es un valor válido.",
         u"Localizar tramo por PK y fecha",
         gvsig.commonsdialog.WARNING
@@ -170,7 +175,7 @@ class LocateByRoadPKAndDate(FormPanel):
           u"Localizar tramo por PK y fecha",
           gvsig.commonsdialog.WARNING
         )
-    if meters and meters < 0:
+    if meters!=None and meters < 0:
       gvsig.commonsdialog.msgbox("'"+mStr+u"' No es un valor válido.",
         u"Localizar tramo por PK y fecha",
         gvsig.commonsdialog.WARNING
@@ -180,8 +185,7 @@ class LocateByRoadPKAndDate(FormPanel):
         u"Localizar tramo por PK y fecha",
         gvsig.commonsdialog.WARNING
       )
-    
-    if fecha != None and carretera and km and km>=0 and meters and meters>=0:
+    if fecha != None and carretera!=None and km!=None and km>=0 and meters!=None and meters>=0:
       m = 1000*int(kmStr)+int(mStr)
       filtro = getStretchFilter(fecha, carretera, m);
       featureSet = self.table.getFeatureSet(filtro);
