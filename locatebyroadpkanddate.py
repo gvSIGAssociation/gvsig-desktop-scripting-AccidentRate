@@ -74,7 +74,6 @@ class LocateByRoadPKAndDate(FormPanel):
     cleanLocations()
   
   def btnLocalizar_click(self, *e):
-    print "CLICK"
     points = []
     points = self.locate()
     view = currentView()
@@ -217,13 +216,13 @@ def cleanLocations():
 def getSymbol(name):
   symbolManager = MapContextLocator.getSymbolManager();
   folder = File(getResource(__file__, "symbols"))
-  print folder
+  #  print folder
   symbols = symbolManager.loadSymbols(folder, lambda x:str(x.getName()).lower().endswith(".gvssym"))
   for symbol in symbols:
-    print symbol
+    #  print symbol
     symbolId = getattr(symbol, "getID", None)
     if symbolId != None:
-      print symbolId()
+      #  print symbolId()
       if symbolId() == name:
         return symbol
 
