@@ -23,7 +23,7 @@ class TotalVictimsRuleFixer(RuleFixer):
       # Si no es la tabla de accidentes no hacenos nada
       return
     victimas = issue.get("TOTAL_VICTIMAS")
-    feature["TOTAL_VICTIMAS"] = victimasí
+    feature["TOTAL_VICTIMAS"] = victimas
 
 class TotalVictimsRule(Rule):
   def __init__(self, factory, **args):

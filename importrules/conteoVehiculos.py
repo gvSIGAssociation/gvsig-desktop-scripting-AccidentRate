@@ -23,7 +23,7 @@ AGRUPACIONES = {'NUM_TURISMOS' : [1,3],
      'NUM_CICLOMOTORES' : [5],
      'NUM_MOTOCICLETAS' : [6,7],
      'NUM_BICICLETAS' : [4,30],
-     'NUM_OTROS_VEHI' : [8,9,10,11,12,13,14,18,22,23,24,25,26,27,28,29]
+     'NUM_OTROS_VEHI' : [8,9,10,11,12,13,14,18,22,23,24,25,26,27]
      }
 
 class UpdateCountVehicles(RuleFixer):
@@ -97,6 +97,9 @@ class CountVehiclesRule(Rule):
         keyValue = self.getKeyFromTypeVehicle(tipoVehiculo)
         if keyValue!=None:
           conteoPorTablas[keyValue]+=1
+        elif tipoVehiculo > 31:
+          conteoPorTablas['NUM_OTROS_VEHI']+=1
+          
       DisposeUtils.dispose(fset)
       DisposeUtils.dispose(storeVehiculos)
       toReport = False
@@ -128,6 +131,7 @@ class CountVehiclesRule(Rule):
                   NUM_BICICLETAS=conteoPorTablas['NUM_BICICLETAS'],
                   NUM_OTROS_VEHI=conteoPorTablas['NUM_OTROS_VEHI']
                 )
+
 class CountVehiclesRuleFactory(RuleFactory):
   def __init__(self):
     RuleFactory.__init__(self,"[GVA] Numero de vehiculos")
@@ -166,12 +170,97 @@ class NumVehiclesTransformFactory(TransformFactory):
     
   def create(self,  **args):
     return NumVehiclesTransform(self, **args)
+
+
+class CountVehiclesTransform(Transform):
+  def __init__(self, factory, **args):
+    Transform.__init__(self, factory)
+    self.agrupaciones = {'NUM_VMP' : [28],
+     'NUM_BICICLETASELECTRICAS' : [31],
+     'NUM_DESCONOCIDO' : [29]
+     }
+
+  def apply(self, feature, *args):
+    if feature.getType().get("LID_ACCIDENTE") == None:
+      # Si no es la tabla de accidentes no hacenos nada
+      return
+    storeVehiculos= feature.getStore().getStoresRepository().getStore("ARENA2_VEHICULOS")
+    accidente = feature.get("ID_ACCIDENTE")
+
+    if accidente !=None:
+      ## Rellenar por campos de la feature
+      # Mantiene el none
+      # no es lo mismo que llegue un None 
+      # a que se confirme porque no tiene valores en la tabla
+      # de vehiculos con que es 0
+      conteo = { 'NUM_VMP': None,
+        'NUM_BICICLETASELECTRICAS': None,
+        'NUM_DESCONOCIDO': None
+      }
+
+      ## Conteo por la tabla asociada de vehiculos
+      builder = ExpressionUtils.createExpressionBuilder()
+      expression = builder.eq(builder.variable("ID_ACCIDENTE"), builder.constant(accidente)).toString()
+      fset = storeVehiculos.getFeatureSet(expression).iterable()
+      for f in fset:
+        tipoVehiculo = f.get("TIPO_VEHICULO")
+        keyValue = self.getKeyFromTypeVehicle(tipoVehiculo, conteo.keys())
+        if keyValue!=None:
+          conteoPorTablas[keyValue]+=1
+        else:
+          conteoPorTablas[NUM_DESCONOCIDO]+=1
+          
+      DisposeUtils.dispose(fset)
+      DisposeUtils.dispose(storeVehiculos)
+
+      for key in conteo.keys():
+        feature.set(key, conteo[key]
+
+      descuadre = feature.getInt('TOTAL_VEHICULOS_DGT')-(
+        feature.getInt('NUM_TURISMOS') + 
+        feature.getInt('NUM_FURGONETAS') + 
+        feature.getInt('NUM_CAMIONES') + 
+        feature.getInt('NUM_AUTOBUSES') + 
+        feature.getInt('NUM_CICLOMOTORES') + 
+        feature.getInt('NUM_MOTOCICLETAS') + 
+        feature.getInt('NUM_BICICLETAS') + 
+        feature.getInt('NUM_OTROS_VEHI') + 
+        feature.getInt('NUM_VMP') + 
+        feature.getInt('NUM_BICICLETASELECTRICAS') + 
+        feature.getInt('NUM_DESCONOCIDO')
+        )
+
+      feature.set('TOTAL_VEHICULOS_DESCUADRE',descuadre)
+  
+  def getKeyFromTypeVehicle(self, value, keys):
+    if value==None:
+        return None
+    for key in keys:
+      toAssign = value in self.agrupaciones[key]
+      if toAssign:
+        return key
+    return None
+
+class CountVehiclesTransformFactory(TransformFactory):
+  def __init__(self):
+    TransformFactory.__init__(self,u"[GVA] Conteo de biciletas eléctricas, VMP y cálculo del descuadre")
+
+  def checkRequirements(self):
+    s = checkRequirements()
+    if s != None:
+      return self.getName()+".\nNo  es posible realizar las transformaciones en el conteo de biciletas eléctricas, VMP y cálculo del descuadre\n"+s
+    return None
+    
+  def create(self,  **args):
+    return NumVehiclesTransform(self, **args)
+
     
 def selfRegister():
   manager = getArena2ImportManager()
   manager.addRuleFactory(CountVehiclesRuleFactory())
   manager.addRuleFixer(UpdateCountVehicles())
   manager.addTransformFactory(NumVehiclesTransformFactory())
+  manager.addTransformFactory(CountVehiclesTransformFactory())
   manager.addRuleErrorCode(
     CODERR_VEHICULOS_NO_COINCIDEN,
     "%s - Numero vehiculos no coinciden" % CODERR_VEHICULOS_NO_COINCIDEN
