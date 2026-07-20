@@ -14,6 +14,7 @@ from addons.AccidentRate.importrules.codigoINE import codigoINE
 from addons.AccidentRate.importrules import asignarMedidasAforos
 from addons.AccidentRate.importrules import asignarTipoDiaCit
 from addons.AccidentRate.importrules import asignarEdad
+from addons.AccidentRate.importrules import victimas
 
 def selfRegister():
   geocode.selfRegister()
@@ -27,6 +28,7 @@ def selfRegister():
   asignarMedidasAforos.selfRegister()
   asignarTipoDiaCit.selfRegister()
   asignarEdad.selfRegister()
+  victimas.selfRegister()
 
 def main(*args):
   selfRegister()

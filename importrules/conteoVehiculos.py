@@ -156,7 +156,7 @@ class NumVehiclesTransform(Transform):
 
 class NumVehiclesTransformFactory(TransformFactory):
   def __init__(self):
-    TransformFactory.__init__(self,"[GVA] Sustituir nulls por ceros en NUM_XXX")
+    TransformFactory.__init__(self,"[GVA] Sustituir nulos por ceros en NUM_XXX")
 
   def checkRequirements(self):
     s = checkRequirements()
@@ -167,8 +167,6 @@ class NumVehiclesTransformFactory(TransformFactory):
   def create(self,  **args):
     return NumVehiclesTransform(self, **args)
     
-
-
 def selfRegister():
   manager = getArena2ImportManager()
   manager.addRuleFactory(CountVehiclesRuleFactory())
