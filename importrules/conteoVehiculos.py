@@ -16,24 +16,25 @@ from org.gvsig.tools.dispose import DisposeUtils
 
 CODERR_VEHICULOS_NO_COINCIDEN = 450
 
+AGRUPACIONES = {'NUM_TURISMOS' : [1,3],
+     'NUM_FURGONETAS' : [2],
+     'NUM_CAMIONES' : [19,20,21],
+     'NUM_AUTOBUSES' : [15,16,17],
+     'NUM_CICLOMOTORES' : [5],
+     'NUM_MOTOCICLETAS' : [6,7],
+     'NUM_BICICLETAS' : [4,30],
+     'NUM_OTROS_VEHI' : [8,9,10,11,12,13,14,18,22,23,24,25,26,27,28,29]
+     }
+
 class UpdateCountVehicles(RuleFixer):
   def __init__(self, **args):
     RuleFixer.__init__(self, "UpdateCountVehicles", "Corregir vehiculos", True)
-    self.agrupacion = {'NUM_TURISMOS' : [1,3],
-         'NUM_FURGONETAS' : [2],
-         'NUM_CAMIONES' : [19,20,21],
-         'NUM_AUTOBUSES' : [15,16,17],
-         'NUM_CICLOMOTORES' : [5],
-         'NUM_MOTOCICLETAS' : [6,7],
-         'NUM_BICICLETAS' : [4,30],
-         'NUM_OTROS_VEHI' : [8,9,10,11,12,13,14,18,22,23,24,25,26,27,28,29]
-         }
 
   def fix(self,feature, issue):
     if feature.getType().get("LID_ACCIDENTE") == None:
       # Si no es la tabla de accidentes no hacenos nada
       return
-    for key in self.agrupacion.keys():
+    for key in AGRUPACIONES.keys():
       valueToChange = issue.get(key)
       if feature.get(key)!=issue.get(key):
         feature.set(key, valueToChange)
@@ -41,20 +42,12 @@ class UpdateCountVehicles(RuleFixer):
 class CountVehiclesRule(Rule):
   def __init__(self, factory, **args):
     Rule.__init__(self, factory)
-    self.agrupacion = {'NUM_TURISMOS' : [1,3],
-         'NUM_FURGONETAS' : [2],
-         'NUM_CAMIONES' : [19,20,21],
-         'NUM_AUTOBUSES' : [15,16,17],
-         'NUM_CICLOMOTORES' : [5],
-         'NUM_MOTOCICLETAS' : [6,7],
-         'NUM_BICICLETAS' : [4,30],
-         'NUM_OTROS_VEHI' : [8,9,10,11,12,13,14,18,22,23,24,25,26,27,28,29]
-         }
+
   def getKeyFromTypeVehicle(self, value):
     if value==None:
         return None
-    for key in self.agrupacion.keys():
-      toAssign = value in self.agrupacion[key]
+    for key in AGRUPACIONES.keys():
+      toAssign = value in AGRUPACIONES[key]
       if toAssign:
         return key
       
@@ -148,10 +141,39 @@ class CountVehiclesRuleFactory(RuleFactory):
   def create(self, **args):
     return CountVehiclesRule(self, **args)
 
+
+class NumVehiclesTransform(Transform):
+  def __init__(self, factory, **args):
+    Transform.__init__(self, factory)
+
+  def apply(self, feature, *args):
+    if feature.getType().get("LID_ACCIDENTE") == None:
+      # Si no es la tabla de accidentes no hacenos nada
+      return
+    for key in AGRUPACIONES.keys():
+      if feature.get(key) == None:
+        feature.set(key, 0)
+
+class NumVehiclesTransformFactory(TransformFactory):
+  def __init__(self):
+    TransformFactory.__init__(self,"[GVA] Sustituir nulls por ceros en NUM_XXX")
+
+  def checkRequirements(self):
+    s = checkRequirements()
+    if s != None:
+      return self.getName()+".\nNo  es posible realizar las transformaciones en el numero de vehiculos\n"+s
+    return None
+    
+  def create(self,  **args):
+    return NumVehiclesTransform(self, **args)
+    
+
+
 def selfRegister():
   manager = getArena2ImportManager()
   manager.addRuleFactory(CountVehiclesRuleFactory())
   manager.addRuleFixer(UpdateCountVehicles())
+  manager.addTransformFactory(NumVehiclesTransformFactory())
   manager.addRuleErrorCode(
     CODERR_VEHICULOS_NO_COINCIDEN,
     "%s - Numero vehiculos no coinciden" % CODERR_VEHICULOS_NO_COINCIDEN
