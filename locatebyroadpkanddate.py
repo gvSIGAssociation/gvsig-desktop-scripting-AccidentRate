@@ -30,7 +30,10 @@ from org.gvsig.tools.swing.api import ToolsSwingLocator
 from org.gvsig.app.extension.AddLayer import createAddLayerDialog
 from org.gvsig.expressionevaluator import ExpressionUtils
 
-from org.gvsig.lrs.lib.api import LrsAlgorithmsLocator
+try:
+  from org.gvsig.lrs.lib.api import LrsAlgorithmsLocator
+except:
+  LrsAlgorithmsLocator = None
 
 from addons.AccidentRate.roadcatalog import getVigentStretchesFilter, getStretchFilter
 

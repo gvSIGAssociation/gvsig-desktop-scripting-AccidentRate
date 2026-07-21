@@ -2,6 +2,7 @@
 
 import gvsig
 
+from gvsig.commonsdialog import msgbox
 
 from gvsig import logger, LOGGER_WARN, LOGGER_ERROR
 from addons.AccidentRate.aforos import findMedidaAforo, checkRequirements
@@ -101,21 +102,24 @@ class AsignarTipoDiaCitTransformFactory(TransformFactory):
     s = checkRequirements()
     if s != None:
       return self.getName()+".\nNo es posible realizar la asignacion del día y del tipo de día\n"+s
-    if !self.hayFestivosDelAnyoActual():
-      gvsig.msgbox(u"No se han introducido festivos en el año actual")
+    if not self.hayFestivosDelAnyoActual():
+      msgbox(u"No se han introducido festivos en el año actual.\nSi carga accidentes de este año (o de diciembre del año anterior) los tipos de día de los accidentes no se asignarán correctamente.")
     return None
 
   def hayFestivosDelAnyoActual(self):
-    self.workspace = args.get("workspace",None)
-    self.repo = self.workspace.getStoresRepository()
-    festivosStore = self.repo.getStore("SIGCAR_FESTIVOS")
+    dataManager = DALLocator.getDataManager()
+    workspace = dataManager.getDatabaseWorkspace("ARENA2_DB")
+    repo = workspace.getStoresRepository()
+    festivosStore = repo.getStore("SIGCAR_FESTIVOS")
     try:
       builder = ExpressionUtils.createExpressionBuilder()
+      currentDate = builder.current_date()
+      #currentDate = builder.date_add(builder.constant("YEAR"), builder.constant(1), builder.current_date())
       filter = builder.eq(
-        builder.extract("YEAR", builder.variable("FES_FECHA")),
-        builder.extract("YEAR", builder.current_date())
+        builder.extract(builder.constant("YEAR"), builder.variable("FES_FECHA")),
+        builder.extract(builder.constant("YEAR"), currentDate)
       )
-      
+      print filter.toString()
       festivo = festivosStore.findFirst(filter.toString())
       if festivo != None:
         return True
@@ -123,9 +127,6 @@ class AsignarTipoDiaCitTransformFactory(TransformFactory):
     finally:
       DisposeUtils.disposeQuietly(festivosStore)
       
-
-
-
   
   def create(self,  **args):
     return AsignarTipoDiaCitTransform(self, **args)
@@ -181,8 +182,13 @@ def test():
    store.dispose()
    trans.dispose()
 
+def test2():
+  f = AsignarTipoDiaCitTransformFactory()
+  f.checkRequirements()
+  print f.hayFestivosDelAnyoActual()
+
 def main(*args):
   #selfRegister()
-  test()
+  test2()
   
   

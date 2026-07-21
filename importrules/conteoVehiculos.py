@@ -214,7 +214,7 @@ class CountVehiclesTransform(Transform):
       DisposeUtils.dispose(storeVehiculos)
 
       for key in conteo.keys():
-        feature.set(key, conteo[key]
+        feature.set(key, conteo[key])
 
       descuadre = feature.getInt('TOTAL_VEHICULOS_DGT')-(
         feature.getInt('NUM_TURISMOS') + 
@@ -248,7 +248,7 @@ class CountVehiclesTransformFactory(TransformFactory):
   def checkRequirements(self):
     s = checkRequirements()
     if s != None:
-      return self.getName()+".\nNo  es posible realizar las transformaciones en el conteo de biciletas eléctricas, VMP y cálculo del descuadre\n"+s
+      return self.getName()+u".\nNo  es posible realizar las transformaciones en el conteo de biciletas eléctricas, VMP y cálculo del descuadre\n"+s
     return None
     
   def create(self,  **args):
