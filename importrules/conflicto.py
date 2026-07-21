@@ -11,6 +11,8 @@ from addons.AccidentRate.roadcatalog import findOwnership, checkRequirements
 from addons.Arena2Importer.Arena2ImportLocator import getArena2ImportManager
 from addons.Arena2Importer.integrity import Transform, TransformFactory, Rule, RuleFactory, RuleFixer
 
+CODERR_CARRETERA_TIPO_VIA_KM_TITULARIDAD_VIA_NO_COINCIDEN = 200
+
 class ConflictRule(Rule):
   def __init__(self, factory, **args):
     Rule.__init__(self, factory)
@@ -44,7 +46,7 @@ class ConflictRule(Rule):
       return
     report.add(
       feature.get("ID_ACCIDENTE"), 
-      200,
+      CODERR_CARRETERA_TIPO_VIA_KM_TITULARIDAD_VIA_NO_COINCIDEN,
       "Conflicto en %s." % str(conflictos),
       selected=True,
       CARRETERA=feature.get("CARRETERA"),
@@ -72,7 +74,7 @@ class ConflictRuleFactory(RuleFactory):
 def selfRegister():
   manager = getArena2ImportManager()
   manager.addRuleFactory(ConflictRuleFactory())
-  manager.addRuleErrorCode(200,"200 - Conflicto en CARRETERA/TIPO_VIA/KM/TITULARIDAD_VIA")
+  manager.addRuleErrorCode(CODERR_CARRETERA_TIPO_VIA_KM_TITULARIDAD_VIA_NO_COINCIDEN,str(CODERR_CARRETERA_TIPO_VIA_KM_TITULARIDAD_VIA_NO_COINCIDEN)+" - Conflicto en CARRETERA/TIPO_VIA/KM/TITULARIDAD_VIA")
     
 def main(*args):
   pass

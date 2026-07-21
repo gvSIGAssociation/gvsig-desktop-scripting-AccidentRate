@@ -15,6 +15,7 @@ from addons.AccidentRate.importrules import asignarMedidasAforos
 from addons.AccidentRate.importrules import asignarTipoDiaCit
 from addons.AccidentRate.importrules import asignarEdad
 from addons.AccidentRate.importrules import victimas
+from addons.AccidentRate.importrules import tipoAnimal
 
 def selfRegister():
   geocode.selfRegister()
@@ -29,6 +30,7 @@ def selfRegister():
   asignarTipoDiaCit.selfRegister()
   asignarEdad.selfRegister()
   victimas.selfRegister()
+  tipoAnimal.selfRegister()
 
 def main(*args):
   selfRegister()
