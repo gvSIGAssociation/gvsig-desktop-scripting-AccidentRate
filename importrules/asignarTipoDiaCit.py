@@ -101,8 +101,32 @@ class AsignarTipoDiaCitTransformFactory(TransformFactory):
     s = checkRequirements()
     if s != None:
       return self.getName()+".\nNo es posible realizar la asignacion del día y del tipo de día\n"+s
+    if !self.hayFestivosDelAnyoActual():
+      gvsig.msgbox(u"No se han introducido festivos en el año actual")
     return None
-    
+
+  def hayFestivosDelAnyoActual(self):
+    self.workspace = args.get("workspace",None)
+    self.repo = self.workspace.getStoresRepository()
+    festivosStore = self.repo.getStore("SIGCAR_FESTIVOS")
+    try:
+      builder = ExpressionUtils.createExpressionBuilder()
+      filter = builder.eq(
+        builder.extract("YEAR", builder.variable("FES_FECHA")),
+        builder.extract("YEAR", builder.current_date())
+      )
+      
+      festivo = festivosStore.findFirst(filter.toString())
+      if festivo != None:
+        return True
+      return False
+    finally:
+      DisposeUtils.disposeQuietly(festivosStore)
+      
+
+
+
+  
   def create(self,  **args):
     return AsignarTipoDiaCitTransform(self, **args)
     

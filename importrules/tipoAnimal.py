@@ -99,7 +99,7 @@ def selfRegister():
   manager.addRuleFixer(TipoAnimalRuleFixer())
   manager.addRuleErrorCode(CODERR_TIPO_ANIMAL_NO_COINCIDE,str(CODERR_TIPO_ANIMAL_NO_COINCIDE)+" - Conflicto en el tipo de animal")
   manager.addReportAttribute("TIPO_ACC_ANIMAL",Integer, size=10, label=u"Tipo animal", isEditable=True)
-  manager.addReportAttribute("FC_IRRUPCION_ANIMAL",Boolean, size=6, label=u"Irrupción animal", iósEditable=True)
+  manager.addReportAttribute("FC_IRRUPCION_ANIMAL",Boolean, size=6, label=u"Irrupción animal", isEditable=True)
     
 def main(*args):
   pass
