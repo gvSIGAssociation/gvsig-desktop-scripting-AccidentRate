@@ -119,7 +119,6 @@ class AsignarTipoDiaCitTransformFactory(TransformFactory):
         builder.extract(builder.constant("YEAR"), builder.variable("FES_FECHA")),
         builder.extract(builder.constant("YEAR"), currentDate)
       )
-      print filter.toString()
       festivo = festivosStore.findFirst(filter.toString())
       if festivo != None:
         return True
