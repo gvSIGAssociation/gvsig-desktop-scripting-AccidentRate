@@ -61,7 +61,7 @@ def selfRegister():
     "%s - Valor no es un valor disponible del campo" % CODERR_VALUES_NO_DISPONIBLES
   )
 
-  manager.addReportAttribute("FIELD_NO_AVAILABLE",String, size=120, label="Campo con valor no disponible", isEditable=True)
+  manager.addReportAttribute("FIELD_NO_AVAILABLE",String, size=120, label="Campo con valor no disponible", isEditable=True, group=u"Valores disponibles")
   
 
 

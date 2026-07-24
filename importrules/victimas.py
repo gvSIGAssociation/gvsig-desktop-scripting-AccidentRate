@@ -45,7 +45,7 @@ class TotalVictimsRule(Rule):
         ),
         fixerId = "TotalVictimsRuleFixer", 
         selected=True,
-        TOTAL_VICTIMAS=totalVictimas
+        TOTAL_VICTIMAS=suma
       )
 
 class TotalVictimsRuleFactory(RuleFactory):
@@ -70,7 +70,7 @@ def selfRegister():
     "%s - Victimas no coinciden" % CODERR_VICTIMAS_NO_COINCIDEN
   )
 
-  manager.addReportAttribute("TOTAL_VICTIMAS",Integer, size=10, label=u"Total Víctimas", isEditable=True)
+  manager.addReportAttribute("TOTAL_VICTIMAS",Integer, size=10, label=u"Total Víctimas", isEditable=True, group=u"Víctimas")
 
   
 
@@ -79,4 +79,7 @@ def selfRegister():
 def main(*args):
   #test()
   #selfRegister()
+  manager = getArena2ImportManager()
+  print dir(manager)
+  print manager.getFixer("TotalVictimsRuleFixer")
   pass

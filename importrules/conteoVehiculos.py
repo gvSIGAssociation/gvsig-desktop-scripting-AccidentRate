@@ -26,6 +26,15 @@ AGRUPACIONES = {'NUM_TURISMOS' : [1,3],
      'NUM_OTROS_VEHI' : [8,9,10,11,12,13,14,18,22,23,24,25,26,27]
      }
 
+def getFieldNameFromTypeVehicle(value):
+  if value==None:
+      return None
+  for fieldName,grupo in AGRUPACIONES.items():
+    toAssign = value in grupo
+    if toAssign:
+      return fieldName
+  return None
+
 class UpdateCountVehicles(RuleFixer):
   def __init__(self, **args):
     RuleFixer.__init__(self, "UpdateCountVehicles", "Corregir vehiculos", True)
@@ -43,14 +52,6 @@ class CountVehiclesRule(Rule):
   def __init__(self, factory, **args):
     Rule.__init__(self, factory)
 
-  def getKeyFromTypeVehicle(self, value):
-    if value==None:
-        return None
-    for key in AGRUPACIONES.keys():
-      toAssign = value in AGRUPACIONES[key]
-      if toAssign:
-        return key
-      
   def execute(self, report, feature):
     if feature.getType().get("LID_ACCIDENTE") == None:
       # Si no es la tabla de accidentes no hacenos nada
@@ -94,7 +95,7 @@ class CountVehiclesRule(Rule):
       fset = storeVehiculos.getFeatureSet(expression).iterable()
       for f in fset:
         tipoVehiculo = f.get("TIPO_VEHICULO")
-        keyValue = self.getKeyFromTypeVehicle(tipoVehiculo)
+        keyValue = getFieldNameFromTypeVehicle(tipoVehiculo)
         if keyValue!=None:
           conteoPorTablas[keyValue]+=1
         elif tipoVehiculo > 31:
@@ -177,14 +178,14 @@ class CountVehiclesTransform(Transform):
     Transform.__init__(self, factory)
     self.agrupaciones = {'NUM_VMP' : [28],
      'NUM_BICICLETASELECTRICAS' : [31],
-     'NUM_DESCONOCIDO' : [29]
+     'NUM_DESCONOCIDOS' : [29]
      }
 
   def apply(self, feature, *args):
     if feature.getType().get("LID_ACCIDENTE") == None:
       # Si no es la tabla de accidentes no hacenos nada
       return
-    storeVehiculos= feature.getStore().getStoresRepository().getStore("ARENA2_VEHICULOS")
+    storeVehiculos= self.getSourceRepository().getStore("ARENA2_VEHICULOS")
     accidente = feature.get("ID_ACCIDENTE")
 
     if accidente !=None:
@@ -193,9 +194,9 @@ class CountVehiclesTransform(Transform):
       # no es lo mismo que llegue un None 
       # a que se confirme porque no tiene valores en la tabla
       # de vehiculos con que es 0
-      conteo = { 'NUM_VMP': None,
-        'NUM_BICICLETASELECTRICAS': None,
-        'NUM_DESCONOCIDO': None
+      conteo = { 'NUM_VMP': 0,
+        'NUM_BICICLETASELECTRICAS': 0,
+        'NUM_DESCONOCIDOS': 0
       }
 
       ## Conteo por la tabla asociada de vehiculos
@@ -204,11 +205,11 @@ class CountVehiclesTransform(Transform):
       fset = storeVehiculos.getFeatureSet(expression).iterable()
       for f in fset:
         tipoVehiculo = f.get("TIPO_VEHICULO")
-        keyValue = self.getKeyFromTypeVehicle(tipoVehiculo, conteo.keys())
+        keyValue = self.getFieldNameFromTypeVehicle(tipoVehiculo)
         if keyValue!=None:
-          conteoPorTablas[keyValue]+=1
-        else:
-          conteoPorTablas[NUM_DESCONOCIDO]+=1
+          conteo[keyValue]+=1
+        elif getFieldNameFromTypeVehicle(tipoVehiculo)==None:
+          conteo["NUM_DESCONOCIDOS"]+=1
           
       DisposeUtils.dispose(fset)
       DisposeUtils.dispose(storeVehiculos)
@@ -227,32 +228,32 @@ class CountVehiclesTransform(Transform):
         feature.getInt('NUM_OTROS_VEHI') + 
         feature.getInt('NUM_VMP') + 
         feature.getInt('NUM_BICICLETASELECTRICAS') + 
-        feature.getInt('NUM_DESCONOCIDO')
+        feature.getInt('NUM_DESCONOCIDOS')
         )
 
       feature.set('TOTAL_VEHICULOS_DESCUADRE',descuadre)
   
-  def getKeyFromTypeVehicle(self, value, keys):
+  def getFieldNameFromTypeVehicle(self, value):
     if value==None:
         return None
-    for key in keys:
-      toAssign = value in self.agrupaciones[key]
+    for fieldName, grupo in self.agrupaciones.items():
+      toAssign = value in grupo
       if toAssign:
-        return key
+        return fieldName
     return None
 
 class CountVehiclesTransformFactory(TransformFactory):
   def __init__(self):
-    TransformFactory.__init__(self,u"[GVA] Conteo de biciletas eléctricas, VMP y cálculo del descuadre")
+    TransformFactory.__init__(self,u"[GVA] Conteo de bicicletas eléctricas, VMP y cálculo del descuadre")
 
   def checkRequirements(self):
     s = checkRequirements()
     if s != None:
-      return self.getName()+u".\nNo  es posible realizar las transformaciones en el conteo de biciletas eléctricas, VMP y cálculo del descuadre\n"+s
+      return self.getName()+u".\nNo  es posible realizar las transformaciones en el conteo de bicicletas eléctricas, VMP y cálculo del descuadre\n"+s
     return None
     
   def create(self,  **args):
-    return NumVehiclesTransform(self, **args)
+    return CountVehiclesTransform(self, **args)
 
     
 def selfRegister():
@@ -266,14 +267,14 @@ def selfRegister():
     "%s - Numero vehiculos no coinciden" % CODERR_VEHICULOS_NO_COINCIDEN
   )
 
-  manager.addReportAttribute("NUM_TURISMOS",Integer, size=10, label="Turismos", isEditable=True)
-  manager.addReportAttribute("NUM_FURGONETAS",Integer, size=10, label="Furgonetas", isEditable=True)
-  manager.addReportAttribute("NUM_CAMIONES",Integer, size=10, label="Camiones", isEditable=True)
-  manager.addReportAttribute("NUM_AUTOBUSES",Integer, size=10, label="Autobus", isEditable=True)
-  manager.addReportAttribute("NUM_CICLOMOTORES",Integer, size=10, label="Ciclomotor", isEditable=True)
-  manager.addReportAttribute("NUM_MOTOCICLETAS",Integer, size=10, label="Motocileta", isEditable=True)
-  manager.addReportAttribute("NUM_BICICLETAS",Integer, size=10, label="Bicicleta", isEditable=True)
-  manager.addReportAttribute("NUM_OTROS_VEHI",Integer, size=10, label="Otros Vehiculos", isEditable=True)
+  manager.addReportAttribute("NUM_TURISMOS",Integer, size=10, label="Turismos", isEditable=True, group=u"Conteo vehículos")
+  manager.addReportAttribute("NUM_FURGONETAS",Integer, size=10, label="Furgonetas", isEditable=True, group=u"Conteo vehículos")
+  manager.addReportAttribute("NUM_CAMIONES",Integer, size=10, label="Camiones", isEditable=True, group=u"Conteo vehículos")
+  manager.addReportAttribute("NUM_AUTOBUSES",Integer, size=10, label="Autobus", isEditable=True, group=u"Conteo vehículos")
+  manager.addReportAttribute("NUM_CICLOMOTORES",Integer, size=10, label="Ciclomotor", isEditable=True, group=u"Conteo vehículos")
+  manager.addReportAttribute("NUM_MOTOCICLETAS",Integer, size=10, label="Motocileta", isEditable=True, group=u"Conteo vehículos")
+  manager.addReportAttribute("NUM_BICICLETAS",Integer, size=10, label="Bicicleta", isEditable=True, group=u"Conteo vehículos")
+  manager.addReportAttribute("NUM_OTROS_VEHI",Integer, size=10, label="Otros Vehiculos", isEditable=True, group=u"Conteo vehículos")
 
 
   

@@ -40,7 +40,6 @@ class GeocodeTransform(Transform):
       feature.set("MAPA",None)
       feature.set("ID_TRAMO_CARRETERA", None)
     else:
-      #print "GeocodeTransform.apply: update MAPA to ", p
       feature.set("MAPA",p)
       feature.set("ID_TRAMO_CARRETERA", f.get("ID_TRAMO_CARRETERA"))
     
@@ -113,7 +112,6 @@ class GeocodeRule(Rule):
     Rule.__init__(self, factory)
     
   def execute(self, report, feature):
-    #print "GeocodeRule.execute: ", self.getFactory().getName(), feature
     if feature.getType().get("LID_ACCIDENTE") == None:
       # Si no es la tabla de accidentes no hacenos nada
       return
@@ -166,7 +164,6 @@ class GeocodeRuleFactory(RuleFactory):
 
   def create(self, **args):
     rule = GeocodeRule(self, **args)
-    #print "GeocodeRuleFactory.create: ", rule
     return rule
 
   def checkRequirements(self):
@@ -200,14 +197,11 @@ def selfRegister():
     "%s - Sentido no valido" % CODERR_SENTIDO_NO_VALIDO
   )
 
-
-  
-
-  manager.addReportAttribute("CARRETERA",String, size=45, label="Carretera", isEditable=True)
-  manager.addReportAttribute("PK",Double, label="PK", isEditable=True)
-  manager.addReportAttribute("TITULARIDAD_ACCIDENTE",Integer, size=10, label="Titularidad acc.")
-  manager.addReportAttribute("FECHA",String, size=45, label="Fecha")
-  manager.addReportAttribute("PROVINCIA",String, size=45, label="Provincia")
+  manager.addReportAttribute("CARRETERA",String, size=45, label="Carretera", isEditable=True, group=u"Geocode")
+  manager.addReportAttribute("PK",Double, label="PK", isEditable=True, group=u"Geocode")
+  manager.addReportAttribute("TITULARIDAD_ACCIDENTE",Integer, size=10, label="Titularidad acc.", group=u"Geocode")
+  manager.addReportAttribute("FECHA",String, size=45, label="Fecha", group=u"Geocode")
+  manager.addReportAttribute("PROVINCIA",String, size=45, label="Provincia", group=u"Geocode")
 
   
 def test():

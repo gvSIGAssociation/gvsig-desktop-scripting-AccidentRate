@@ -63,13 +63,7 @@ class OwnershipRule(Rule):
       # Si no es la tabla de accidentes no hacenos nada
       return
     #pdb.set_trace()
-    #if feature.getType().get("TITULARIDAD_VIA_DGT"):
-    # print "tiene dgt:", feature.get("TITULARIDAD_VIA_DGT")
-    #else:
-    #  print "no tiene dgt"
-    #return
     titularidad_accidente = feature.get("TITULARIDAD_VIA")
-    #print "Feature:",feature.get("ID_ACCIDENTE"), feature.get("CARRETERA"), feature.get("TITULARIDAD_VIA"),feature.get("TITULARIDAD_VIA_DGT"), feature.get("KM")
     if feature.get("CARRETERA") == None:
       if titularidad_accidente==TITULARIDAD_AUTONOMICA: 
         # No se ha indicado carretera y titularidad en el acidente a Autonomica
@@ -127,8 +121,6 @@ class OwnershipRule(Rule):
     # de la GVA a la de la DGT
     if titularidad_tramo not in [1,2,3,4,5]:
       titularidad_tramo = self.__titularidadGVA2DGT.get(titularidad_tramo,TITULARIDAD_DESCONOCIDA)
-    else:
-      print "notin: no se tiene que transformar ya es correcta", titularidad_tramo
 
     if titularidad_tramo == titularidad_accidente:
       return
@@ -191,15 +183,15 @@ def selfRegister():
     "%s - Titularidad autonomica sin especificar carretera" % CODERR_TITULARIDAD_AUTONOMICA_SIN_CARETERA
   )
 
-  manager.addReportAttribute("CARRETERA",String, size=45, label="Carretera", isEditable=True)
-  manager.addReportAttribute("PK",Double, label="PK", isEditable=True)
-  manager.addReportAttribute("TITULARIDAD",Integer, size=10, label="Titularidad", isEditable=True, availableValues=valoresTitularidad)
-  manager.addReportAttribute("CARRETERA_ACCIDENTE",String, size=45, label="Carretera acc.")
-  manager.addReportAttribute("PK_ACCIDENTE",Double, label="PK acc.")
-  manager.addReportAttribute("TITULARIDAD_ACCIDENTE",Integer, size=10, label="Titularidad acc.", availableValues=valoresTitularidad)
-  manager.addReportAttribute("TITULARIDAD_TRAMO",Integer, size=10, label="Titularidad tramo", availableValues=valoresTitularidad)
-  manager.addReportAttribute("FECHA",String, size=45, label="Fecha")
-  manager.addReportAttribute("PROVINCIA",String, size=45, label="Provincia")
+  manager.addReportAttribute("CARRETERA",String, size=45, label="Carretera", isEditable=True, group=u"Titularidad")
+  manager.addReportAttribute("PK",Double, label="PK", isEditable=True, group=u"Titularidad")
+  manager.addReportAttribute("TITULARIDAD",Integer, size=10, label="Titularidad", isEditable=True, availableValues=valoresTitularidad, group=u"Titularidad")
+  manager.addReportAttribute("CARRETERA_ACCIDENTE",String, size=45, label="Carretera acc.", group=u"Titularidad")
+  manager.addReportAttribute("PK_ACCIDENTE",Double, label="PK acc.", group=u"Titularidad")
+  manager.addReportAttribute("TITULARIDAD_ACCIDENTE",Integer, size=10, label="Titularidad acc.", availableValues=valoresTitularidad, group=u"Titularidad")
+  manager.addReportAttribute("TITULARIDAD_TRAMO",Integer, size=10, label="Titularidad tramo", availableValues=valoresTitularidad, group=u"Titularidad")
+  manager.addReportAttribute("FECHA",String, size=45, label="Fecha", group=u"Titularidad")
+  manager.addReportAttribute("PROVINCIA",String, size=45, label="Provincia", group=u"Titularidad")
   
 
 

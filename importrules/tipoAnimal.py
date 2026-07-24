@@ -21,12 +21,9 @@ class TipoAnimalRuleFixer(RuleFixer):
     if feature.getType().get("LID_ACCIDENTE") == None:
       # Si no es la tabla de accidentes no hacenos nada
       return
-    tipoAccAnimalSugerido = issue.get("TIPO_ACC_ANIMAL")
-    irrupcionAnimalSugerido = issue.get("FC_IRRUPCION_ANIMAL")
-    if tipoAccAnimalSugerido != None:
-      feature["TIPO_ACC_ANIMAL"] = tipoAccAnimalSugerido
-    if irrupcionAnimalSugerido != None:
-      feature["FC_IRRUPCION_ANIMAL"] = irrupcionAnimalSugerido
+    feature["TIPO_ACC_COLISION"] = issue.get("TIPO_ACC_COLISION")
+    feature["TIPO_ACC_ANIMAL"] = issue.get("TIPO_ACC_ANIMAL")
+    feature["FC_IRRUPCION_ANIMAL"] = issue.get("FC_IRRUPCION_ANIMAL")
 
 class TipoAnimalRule(Rule):
   def __init__(self, factory, **args):
@@ -42,11 +39,10 @@ class TipoAnimalRule(Rule):
     tipoAccColision = feature.get('TIPO_ACC_COLISION')
     tipoAccAnimal = feature.get('TIPO_ACC_ANIMAL')
     irrupcionAnimal = feature.get('FC_IRRUPCION_ANIMAL')
-
     mensaje = None
     selected = False
-    tipoAccAnimalSugerido = None
-    irrupcionAnimalSugerido = None
+    tipoAccAnimalSugerido = tipoAccAnimal
+    irrupcionAnimalSugerido = irrupcionAnimal
     if tipoAccColision == 8:
       if tipoAccAnimal == None:
         if irrupcionAnimal == None:
@@ -76,6 +72,8 @@ class TipoAnimalRule(Rule):
         CODERR_TIPO_ANIMAL_NO_COINCIDE,
         "Conflicto en tipo animal %s." % mensaje,
         selected=selected,
+        fixerId = "TipoAnimalRuleFixer", 
+        TIPO_ACC_COLISION=tipoAccColision,
         TIPO_ACC_ANIMAL=tipoAccAnimalSugerido,
         FC_IRRUPCION_ANIMAL=irrupcionAnimalSugerido
       )
@@ -98,8 +96,10 @@ def selfRegister():
   manager.addRuleFactory(TipoAnimalRuleFactory())
   manager.addRuleFixer(TipoAnimalRuleFixer())
   manager.addRuleErrorCode(CODERR_TIPO_ANIMAL_NO_COINCIDE,str(CODERR_TIPO_ANIMAL_NO_COINCIDE)+" - Conflicto en el tipo de animal")
-  manager.addReportAttribute("TIPO_ACC_ANIMAL",Integer, size=10, label=u"Tipo animal", isEditable=True)
-  manager.addReportAttribute("FC_IRRUPCION_ANIMAL",Boolean, size=6, label=u"Irrupción animal", isEditable=True)
-    
+  manager.addReportAttribute("TIPO_ACC_COLISION",Integer, size=10, label=u"Tipo colisión", isEditable=True, availableValues="ARENA2_DIC_TIPO_ACCIDENTE_COLISION", group=u"Tipo animal")
+  manager.addReportAttribute("TIPO_ACC_ANIMAL",Integer, size=10, label=u"Tipo animal", isEditable=True, availableValues="ARENA2_DIC_TIPO_ACCIDENTE_ANIMAL", group=u"Tipo animal")
+  manager.addReportAttribute("FC_IRRUPCION_ANIMAL",Boolean, size=6, label=u"Irrupción animal", isEditable=True, group=u"Tipo animal")
+
+
 def main(*args):
   pass

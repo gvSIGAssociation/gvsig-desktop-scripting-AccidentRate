@@ -79,7 +79,7 @@ def selfRegister():
     "%s - Peatones no coinciden" % CODERR_PEATONES_NO_COINCIDEN
   )
 
-  manager.addReportAttribute("TOTAL_PEATONES",Integer, size=10, label="Total Peatones", isEditable=True)
+  manager.addReportAttribute("TOTAL_PEATONES",Integer, size=10, label="Total Peatones", isEditable=True, group=u"Peatones")
 
   
 

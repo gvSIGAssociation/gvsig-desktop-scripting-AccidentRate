@@ -38,14 +38,7 @@ class DateLockRule(Rule):
     if ftype.get("FECHA_ACCIDENTE")==None:
         return
     fecha = DataTypeUtils.toDate(feature.get("FECHA_ACCIDENTE"))
-    #print ". f. fecha:", fecha, type(fecha)
-    #print DataTypeUtils.toDate(self.fechaDeCierreString), type(DataTypeUtils.toDate(self.fechaDeCierreString))
-    #print DataTypeUtils.toDate(self.fechaDeCierre)
-    #print ".. compare:", fecha <= self.fechaDeCierre
-    #print "Test:", self.fechaDeCierre, fecha, fecha <= self.fechaDeCierre
-    #print type(self.fechaDeCierre), type(fecha)
     if fecha <= self.fechaDeCierre:
-      #print ".. added"
       report.add(
               feature.get("ID_ACCIDENTE"),
               CODERR_VALUES_FECHA_CIERRE,
@@ -78,7 +71,7 @@ def selfRegister():
     u"%s - está fuera de la fecha de cierre" % CODERR_VALUES_FECHA_CIERRE
   )
 
-  manager.addReportAttribute("DATE_LOCK_CONSTRAINT",Date, size=40, label="Valor anterior a la fecha de cierre", isEditable=True)
+  manager.addReportAttribute("DATE_LOCK_CONSTRAINT",Date, size=40, label="Valor anterior a la fecha de cierre", isEditable=True, group=u"Fecha de cierre")
   
 
 
