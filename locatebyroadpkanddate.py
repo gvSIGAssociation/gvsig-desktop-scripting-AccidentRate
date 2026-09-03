@@ -10,7 +10,8 @@ from java.io import File
 from gvsig.uselib import use_plugin
 use_plugin("org.gvsig.lrs.app.mainplugin")
 
-
+from org.gvsig.app import ApplicationLocator
+from org.gvsig.app.project.documents.view import ViewManager
 from gvsig import currentView
 from gvsig import getResource
 from org.gvsig.andami import PluginsLocator
@@ -79,7 +80,10 @@ class LocateByRoadPKAndDate(FormPanel):
   def btnLocalizar_click(self, *e):
     points = []
     points = self.locate()
-    view = currentView()
+    view = ApplicationLocator.getApplicationManager().getActiveDocument(ViewManager.TYPENAME)
+    if view == None:
+      gvsig.commonsdialog.msgbox("No hay una vista activa")
+      return
     self.paintPoints(view, points)
     view.refresh()
 
