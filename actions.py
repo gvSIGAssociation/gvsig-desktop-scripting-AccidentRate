@@ -483,8 +483,8 @@ def selfRegister():
   action = actionManager.getAction("accidentrate-show-create-grafically-filtered-layer")
   application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/SIGCAR - Procedimiento para crear una capa filtrada gráficamente")
 
-  #action = actionManager.getAction("accidentrate-show-export-accidents-to-shape")
-  #application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/SIGCAR - Procedimiento para exportar los accidentes seleccionados a un SHP")
+  action = actionManager.getAction("accidentrate-show-export-accidents-to-shape")
+  application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/SIGCAR - Procedimiento para exportar los accidentes seleccionados a un SHP")
 
   action = actionManager.getAction("accidentrate-locatebyroadpkanddate")
   application.addMenu(action, u"tools/_AccidentRate/Localizar por carretera, kilómetro y fecha")
