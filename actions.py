@@ -11,6 +11,7 @@ from org.gvsig.andami import PluginsLocator
 from org.gvsig.app import ApplicationLocator
 from org.gvsig.scripting.app.extension import ScriptingExtension
 from org.gvsig.tools import ToolsLocator
+from org.gvsig.tools.dispose import DisposeUtils
 from org.gvsig.tools.swing.api import ToolsSwingLocator
 from org.gvsig.pdf.lib.api import PDFLocator
 from org.gvsig.pdf.swing.api import PDFSwingLocator
@@ -70,6 +71,10 @@ class AccidentRateExtension(ScriptingExtension):
       self.showPDF(getResource(__file__,"docs_pdfs","Gestion de festivos.pdf"),"Gestión de festivos")
     elif actionCommand == "accidentrate-show-sigcar-data-model":
       self.showPDF(getResource(__file__,"docs_pdfs","SIGCAR_EER","SIGCAR_EER.pdf"),"SIGCAR - Modelo de datos")
+    elif actionCommand == "accidentrate-show-create-grafically-filtered-layer":
+      self.showPDF(getResource(__file__,"docs_pdfs","Crear graficamente capa filtrada.pdf"),u"SIGCAR - Crear gráficamente capa filtrada")
+    elif actionCommand == "accidentrate-show-export-accidents-to-shape":
+      self.showPDF(getResource(__file__,"docs_pdfs","Exportar a SHP los accidentes seleccionados.pdf"),u"SIGCAR - Exportar a SHP los accidentes seleccionados")
     elif actionCommand == "accidentrate-locatebyroadpkanddate":
       self.locateByRoadPkAndDate()
     elif actionCommand == "accidentrate-clean-locations":
@@ -149,6 +154,7 @@ class AccidentRateExtension(ScriptingExtension):
     repo = workspace.getStoresRepository()
     store = repo.getStore("ARENA2_ACCIDENTES")
     panel = dataSwingManager.createFeatureStoreSearchPanel(store)
+    DisposeUtils.disposeQuietly(store)
     winManager.showWindow(
       panel.asJComponent(), 
       "Busqueda de accidentes", 
@@ -375,6 +381,30 @@ def registerActions():
 
   action = actionManager.createAction(
     extension, 
+    "accidentrate-show-create-grafically-filtered-layer", # Action name
+    u"Crear gráficamente capa filtrada", # Text
+    "accidentrate-show-create-grafically-filtered-layer", # Action command
+    "document-pdf", # Icon name
+    None, # Accelerator
+    1009001001, # Position 
+    u"Procedimiento para crear una capa filtrada gráficamente" # Tooltip
+  )
+  action = actionManager.registerAction(action, True)
+
+  action = actionManager.createAction(
+    extension, 
+    "accidentrate-show-export-accidents-to-shape", # Action name
+    u"Exportar accidentes seleccionados a un SHP", # Text
+    "accidentrate-show-export-accidents-to-shape", # Action command
+    "document-pdf", # Icon name
+    None, # Accelerator
+    1009001002, # Position 
+    u"Procedimiento para exportar accidentes seleccionados a un SHP" # Tooltip
+  )
+  action = actionManager.registerAction(action, True)
+
+  action = actionManager.createAction(
+    extension, 
     "accidentrate-locatebyroadpkanddate", # Action name
     u"Localizar por carretera, kilómetro y fecha", # Text
     "accidentrate-locatebyroadpkanddate", # Action command
@@ -449,6 +479,12 @@ def selfRegister():
 
   action = actionManager.getAction("accidentrate-show-sigcar-data-model")
   application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/SIGCAR - Modelo de datos")
+
+  action = actionManager.getAction("accidentrate-show-create-grafically-filtered-layer")
+  application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/SIGCAR - Procedimiento para crear una capa filtrada gráficamente")
+
+  #action = actionManager.getAction("accidentrate-show-export-accidents-to-shape")
+  #application.addMenu(action, u"tools/_AccidentRate/Administration/Documentación/SIGCAR - Procedimiento para exportar los accidentes seleccionados a un SHP")
 
   action = actionManager.getAction("accidentrate-locatebyroadpkanddate")
   application.addMenu(action, u"tools/_AccidentRate/Localizar por carretera, kilómetro y fecha")
