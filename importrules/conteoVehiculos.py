@@ -58,6 +58,7 @@ class CountVehiclesRule(Rule):
       return
     titularidad_accidente = feature.get("TITULARIDAD_VIA")
     storeVehiculos= feature.getStore().getStoresRepository().getStore("ARENA2_VEHICULOS")
+    #storeVehiculos= self.getSourceRepository().getStore("ARENA2_VEHICULOS")
     accidente = feature.get("ID_ACCIDENTE")
 
     if accidente !=None:
@@ -82,7 +83,6 @@ class CountVehiclesRule(Rule):
       ## Conteo por la tabla asociada de vehiculos
       builder = ExpressionUtils.createExpressionBuilder()
       expression = builder.eq(builder.variable("ID_ACCIDENTE"), builder.constant(accidente)).toString()
-      #fset = storeVehiculos.getFeatureSet(expression)
       conteoPorTablas = { 'NUM_TURISMOS': 0,
         'NUM_FURGONETAS': 0,
         'NUM_CAMIONES': 0,
@@ -92,7 +92,9 @@ class CountVehiclesRule(Rule):
         'NUM_BICICLETAS': 0,
         'NUM_OTROS_VEHI': 0
         }
-      fset = storeVehiculos.getFeatureSet(expression).iterable()
+      fset = storeVehiculos.getFeatureSet(expression)
+      totalVehiculos = fset.getSize()
+      fsetIterable = fset.iterable()
       for f in fset:
         tipoVehiculo = f.get("TIPO_VEHICULO")
         keyValue = getFieldNameFromTypeVehicle(tipoVehiculo)
@@ -101,6 +103,7 @@ class CountVehiclesRule(Rule):
         elif tipoVehiculo > 31:
           conteoPorTablas['NUM_OTROS_VEHI']+=1
           
+      DisposeUtils.dispose(fsetIterable)
       DisposeUtils.dispose(fset)
       DisposeUtils.dispose(storeVehiculos)
       toReport = False
@@ -116,7 +119,7 @@ class CountVehiclesRule(Rule):
           builder.append(key+" valor:"+str(conteoPorFeature[key])+" correccion:"+str(conteoPorTablas[key]))
 
       if toReport:
-       report.add( feature.get("ID_ACCIDENTE"),
+        report.add( feature.get("ID_ACCIDENTE"),
                   CODERR_VEHICULOS_NO_COINCIDEN,
                   "Vehiculos no coinciden: %s." % (
                     builder.toString(),
@@ -131,6 +134,15 @@ class CountVehiclesRule(Rule):
                   NUM_MOTOCICLETAS=conteoPorTablas['NUM_MOTOCICLETAS'],
                   NUM_BICICLETAS=conteoPorTablas['NUM_BICICLETAS'],
                   NUM_OTROS_VEHI=conteoPorTablas['NUM_OTROS_VEHI']
+                )
+
+      if feature.get("TOTAL_VEHICULOS") != totalVehiculos:
+        report.add( feature.get("ID_ACCIDENTE"),
+                  CODERR_VEHICULOS_NO_COINCIDEN,
+                  "Total vehiculos no coincide, entidad: %s, correccion: %s." % (feature.get("TOTAL_VEHICULOS"), totalVehiculos),
+                  fixerId = "UpdateCountVehicles", 
+                  selected=True,
+                  TOTAL_VEHICULOS=totalVehiculos
                 )
 
 class CountVehiclesRuleFactory(RuleFactory):
@@ -186,6 +198,7 @@ class CountVehiclesTransform(Transform):
       # Si no es la tabla de accidentes no hacenos nada
       return
     storeVehiculos= self.getSourceRepository().getStore("ARENA2_VEHICULOS")
+    
     accidente = feature.get("ID_ACCIDENTE")
 
     if accidente !=None:
@@ -205,10 +218,10 @@ class CountVehiclesTransform(Transform):
       fset = storeVehiculos.getFeatureSet(expression).iterable()
       for f in fset:
         tipoVehiculo = f.get("TIPO_VEHICULO")
-        keyValue = self.getFieldNameFromTypeVehicle(tipoVehiculo)
+        keyValue = self.getFieldNameFromTypeVehicle(tipoVehiculo) # propio
         if keyValue!=None:
           conteo[keyValue]+=1
-        elif getFieldNameFromTypeVehicle(tipoVehiculo)==None:
+        elif getFieldNameFromTypeVehicle(tipoVehiculo)==None: # global
           conteo["NUM_DESCONOCIDOS"]+=1
           
       DisposeUtils.dispose(fset)
@@ -217,8 +230,7 @@ class CountVehiclesTransform(Transform):
       for key in conteo.keys():
         feature.set(key, conteo[key])
 
-      descuadre = feature.getInt('TOTAL_VEHICULOS_DGT')-(
-        feature.getInt('NUM_TURISMOS') + 
+      totalVehiculos = (feature.getInt('NUM_TURISMOS') + 
         feature.getInt('NUM_FURGONETAS') + 
         feature.getInt('NUM_CAMIONES') + 
         feature.getInt('NUM_AUTOBUSES') + 
@@ -231,6 +243,8 @@ class CountVehiclesTransform(Transform):
         feature.getInt('NUM_DESCONOCIDOS')
         )
 
+      descuadre = feature.getInt('TOTAL_VEHICULOS_DGT') - totalVehiculos
+      feature.set('TOTAL_VEHICULOS',totalVehiculos)
       feature.set('TOTAL_VEHICULOS_DESCUADRE',descuadre)
   
   def getFieldNameFromTypeVehicle(self, value):
@@ -270,11 +284,12 @@ def selfRegister():
   manager.addReportAttribute("NUM_TURISMOS",Integer, size=10, label="Turismos", isEditable=True, group=u"Conteo vehículos")
   manager.addReportAttribute("NUM_FURGONETAS",Integer, size=10, label="Furgonetas", isEditable=True, group=u"Conteo vehículos")
   manager.addReportAttribute("NUM_CAMIONES",Integer, size=10, label="Camiones", isEditable=True, group=u"Conteo vehículos")
-  manager.addReportAttribute("NUM_AUTOBUSES",Integer, size=10, label="Autobus", isEditable=True, group=u"Conteo vehículos")
+  manager.addReportAttribute("NUM_AUTOBUSES",Integer, size=10, label=u"Autobús", isEditable=True, group=u"Conteo vehículos")
   manager.addReportAttribute("NUM_CICLOMOTORES",Integer, size=10, label="Ciclomotor", isEditable=True, group=u"Conteo vehículos")
-  manager.addReportAttribute("NUM_MOTOCICLETAS",Integer, size=10, label="Motocileta", isEditable=True, group=u"Conteo vehículos")
+  manager.addReportAttribute("NUM_MOTOCICLETAS",Integer, size=10, label="Motocicleta", isEditable=True, group=u"Conteo vehículos")
   manager.addReportAttribute("NUM_BICICLETAS",Integer, size=10, label="Bicicleta", isEditable=True, group=u"Conteo vehículos")
-  manager.addReportAttribute("NUM_OTROS_VEHI",Integer, size=10, label="Otros Vehiculos", isEditable=True, group=u"Conteo vehículos")
+  manager.addReportAttribute("NUM_OTROS_VEHI",Integer, size=10, label=u"Otros Vehículos", isEditable=True, group=u"Conteo vehículos")
+  manager.addReportAttribute("TOTAL_VEHICULOS",Integer, size=10, label=u"Total Vehículos", isEditable=True, group=u"Conteo vehículos")
 
 
   
