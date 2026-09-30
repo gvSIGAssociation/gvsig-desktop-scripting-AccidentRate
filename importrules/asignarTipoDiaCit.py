@@ -101,7 +101,7 @@ class AsignarTipoDiaCitTransformFactory(TransformFactory):
   def checkRequirements(self):
     s = checkRequirements()
     if s != None:
-      return self.getName()+".\nNo es posible realizar la asignacion del día y del tipo de día\n"+s
+      return self.getName()+u".\nNo es posible realizar la asignación del día y del tipo de día\n"+s
     if not self.hayFestivosDelAnyoActual():
       msgbox(u"No se han introducido festivos en el año actual.\nSi carga accidentes de este año (o de diciembre del año anterior) los tipos de día de los accidentes no se asignarán correctamente.")
     return None
