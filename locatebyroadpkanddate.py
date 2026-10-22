@@ -90,8 +90,11 @@ class LocateByRoadPKAndDate(FormPanel):
   def btnCentrar_click(self, *e):
     points = []
     points = self.locate()
+    view = currentView()
+    if view == None:
+      gvsig.commonsdialog.msgbox("No hay una vista activa")
+      return
     if len(points) > 0 :
-      view = currentView()
       ct = self.getCT(view)
       self.paintPoints(view, points)
       geomManager = GeometryLocator.getGeometryManager();
@@ -214,6 +217,7 @@ class LocateByRoadPKAndDate(FormPanel):
 def cleanLocations():
   view = currentView()
   if view == None :
+    gvsig.commonsdialog.msgbox("No hay una vista activa")
     return
   mapContext = view.getMapContext();
   graphics = mapContext.getGraphicsLayer();
