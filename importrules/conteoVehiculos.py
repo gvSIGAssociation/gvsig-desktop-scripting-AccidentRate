@@ -43,6 +43,12 @@ class UpdateCountVehicles(RuleFixer):
     if feature.getType().get("LID_ACCIDENTE") == None:
       # Si no es la tabla de accidentes no hacenos nada
       return
+    totalVehiculos = issue.get("TOTAL_VEHICULOS")
+    if totalVehiculos != None:
+      descuadre = feature.getInt('TOTAL_VEHICULOS_DGT') - totalVehiculos
+      feature.set('TOTAL_VEHICULOS',totalVehiculos)
+      feature.set('TOTAL_VEHICULOS_DESCUADRE',descuadre)
+    
     for key in AGRUPACIONES.keys():
       valueToChange = issue.get(key)
       if feature.get(key)!=issue.get(key):
