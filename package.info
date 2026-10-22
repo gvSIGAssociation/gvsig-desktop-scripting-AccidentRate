@@ -1,11 +1,11 @@
 #
-#Wed Sep 30 14:04:41 CEST 2026
+#Thu Oct 22 11:21:16 CEST 2026
 owner=Asociacion gvSIG
 code=AccidentRate
 java-version=j1_8
 official=true
 type=Script
-version=1.0.0-33
+version=1.0.0-34
 state=testing
 operating-system=all
 dependencies=
@@ -16,6 +16,6 @@ model-version=1.0.1
 categories=
 description=
 owner-url=http\://www.gvsig.com
-buildNumber=33
+buildNumber=34
 gvSIG-version=2.7.1
 name=AccidentRate
